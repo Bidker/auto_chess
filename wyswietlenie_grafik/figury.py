@@ -29,7 +29,7 @@ class Figury(object):
     def nadaj_ikone(self):
         nazwa_ikony = 'wyswietlenie_grafik/Grafiki/'
         nazwa_ikony += self.sprawdz_kolor_po_pozycji() + '_'
-        nazwa_ikony += self.nazwa + '.png'
+        nazwa_ikony += self.nazwa + '.jpg'
         return nazwa_ikony
 
     def sprawdz_kolor_po_pozycji(self):
