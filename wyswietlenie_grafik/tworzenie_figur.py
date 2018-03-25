@@ -2,15 +2,15 @@ from .figury import Figury
 
 def pokaz_figury():
     figury = stworz_liste_figur()
-    for figura in figury:
-        obiekty_figur = stworz_obiekty_figur(figura)
-    wyswietl_figury_na_ekranie(obiekty_figur)
+#    for figura in figury:
+#        obiekty_figur = stworz_obiekty_figur(figura)
+#    wyswietl_figury_na_ekranie(obiekty_figur)
 
 def stworz_liste_figur():
-    slowniki_figur = Figury()
+    #slowniki_figur = Figury()
     figury = []
-    figury.append(slowniki_figur.poczatkowe_pozycje.get('biale'))
-    figury.append(slowniki_figur.poczatkowe_pozycje.get('czarne'))
+    #figury.append(slowniki_figur.poczatkowe_pozycje.get('biale'))
+    #figury.append(slowniki_figur.poczatkowe_pozycje.get('czarne'))
     return figury
 
 def stworz_obiekty_figur(figura_i_pozycja):
