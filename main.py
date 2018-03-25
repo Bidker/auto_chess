@@ -4,6 +4,7 @@
 from PyQt5.QtWidgets import QMessageBox, QApplication, QMainWindow, QWidget
 from wyswietlenie_grafik.screen import rozpocznijGre
 from PyQt5.QtCore import Qt
+<<<<<<< HEAD
 from PyQt5 import QtGui
 
 class ImageWidget(QWidget):
@@ -35,6 +36,13 @@ class OknoGlowne(QMainWindow):
         fileMenu = mainMenu.addMenu('&Otwarcia')
         helpMenu = mainMenu.addMenu('&Pomoc')
 
+=======
+
+class OknoGlowne(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        
+>>>>>>> c8849a5618a63435a98e92127312d4952823a0fd
     def closeEvent(self, event):
         odpowiedz = QMessageBox.question(
             self, 'Komunikat',
@@ -56,13 +64,26 @@ class OknoGlowne(QMainWindow):
         else:
             event.ignore()
 
+<<<<<<< HEAD
+=======
+    def konfiguracjaOkna(self, tytulOkna):
+          self.resize(793, 798)
+          self.setWindowTitle(tytulOkna)
+
+
+>>>>>>> c8849a5618a63435a98e92127312d4952823a0fd
 
 if __name__ == '__main__':
+    from okno_startowe.okno_startowe import OknoStartowe
     import sys
 
     surface = rozpocznijGre()
 
     aplikacja = QApplication(sys.argv)
+<<<<<<< HEAD
     okno = OknoGlowne(surface)
+=======
+    okno = OknoStartowe()
+>>>>>>> c8849a5618a63435a98e92127312d4952823a0fd
     okno.show()
     sys.exit(aplikacja.exec_())
