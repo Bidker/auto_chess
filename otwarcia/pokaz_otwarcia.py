@@ -2,9 +2,12 @@
 
 from PyQt5.QtWidgets import QTableView, QPushButton
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
-from funkcje_wyswietlania import konfiguracjaOkna
+from main import OknoGlowne
 
-class PokazOtwarcia(object):
+class PokazOtwarcia(OknoGlowne):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi
 
     def setupUi(self, Widget):
         Widget.setObjectName("Widget")
@@ -15,6 +18,4 @@ class PokazOtwarcia(object):
         # główny układ okna ###
         ukladV = QVBoxLayout(self)
         ukladV.addWidget(self.widok)
-
-        # właściwości widżetu ###
-        konfiguracjaOkna(self, "Księga otwarć")
+        sel.show()
