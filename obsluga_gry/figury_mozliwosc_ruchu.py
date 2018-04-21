@@ -2,10 +2,10 @@ from .figury_ruchy import RuchFigur
 
 class FiguryMozliwoscRuchu(Object):
     def __init__(self):
-        ruchFigury = RuchFigury()
-        zajete_pola = stworz_zajete_pola()
+        self.ruchFigury = RuchFigur()
+        self.zajete_pola = stworzZajetePola()
 
-    def stworz_zajete_pola(self):
+    def stworzZajetePola(self):
         pola = []
         biale_figury = self.ruchFigury.pola_figur_w_trakcie_gry.get('biale')
         czarne_figury = self.ruchFigury.pola_figur_w_trakcie_gry.get('czarne')
@@ -14,39 +14,36 @@ class FiguryMozliwoscRuchu(Object):
             pola.extend(czarne_figury.get(figura))
         return pola
 
-    def sprawdz_mozliwe_ruchy(self, figura, pozycja, kolor):
-        return self.sprawdz_mozliwe_ruchy_dla_figury(figura, pozycja, kolor)
+    def sprawdzMozliweRuchy(self, obiektBierki, pozycja, kolor):
+        if 'pion' in obiektBierki.nazwa:
+            return self.ruchDlaPiona(pozycja, obiektBierki)
+        elif 'skoczek' in obiektBierki.nazwa:
+            return self.ruchDlaSkoczka(pozycja, obiektBierki)
+        elif 'goniec' in obiektBierki.nazwa:
+            return self.ruchPoprzeczny(pozycja, obiektBierki)
+        elif 'wieża' in obiektBierki.nazwa:
+            return self.ruchKrzyzowy(pozycja, obiektBierki)
+        elif 'hetman' in obiektBierki.nazwa:
+            return self.ruchKrzyzowy(pozycja, obiektBierki).extend(self.ruchPoprzeczny(pozycja, obiektBierki))
+        elif 'krol' in obiektBierki.nazwa:
+            return self.ruchDlaKrola(kpozycja, obiektBierki)
 
-    def sprawdz_mozliwe_ruchy_dla_figury(self, figura, pozycja, kolor):
-        if figura == 'pion':
-            return self.ruch_dla_piona(pozycja, kolor)
-        elif figura == 'skoczek':
-            return self.ruch_dla_skoczka(pozycja)
-        elif figura == 'goniec':
-            return self.ruch_poprzeczny(pozycja)
-        elif figura == 'wieża':
-            return self.ruch_krzyzowy(pozycja)
-        elif figura == 'hetman':
-            return self.ruch_krzyzowy(pozycja).extend(self.ruch_poprzeczny(pozycja))
-        elif figura == 'krol':
-            return self.ruch_dla_krola(kpozycja, kolor)
-
-    def ruch_dla_piona(self, kolor, pozycja):
+    def ruchDlaPiona(self, pozycja, obiektBierki):
         mozliwy_ruch = []
         return mozliwy_ruch
 
-    def ruch_dla_skoczka(self, pozycja):
+    def ruchDlaSkoczka(self, pozycja, obiektBierki):
         mozliwy_ruch = []
         return mozliwy_ruch
 
-    def ruch_poprzeczny(self, pozycja):
+    def ruchPoprzeczny(self, pozycja, obiektBierki):
         mozliwy_ruch = []
         return mozliwy_ruch
 
-    def ruch_krzyzowy(self, pozycja):
+    def ruchKrzyzowy(self, pozycja, obiektBierki):
         mozliwy_ruch = []
         return mozliwy_ruch
 
-    def ruch_dla_krola(self, kolor, pozycja):
+    def ruchDlaKrola(self, pozycja, obiektBierki):
         mozliwy_ruch = []
         return mozliwy_ruch

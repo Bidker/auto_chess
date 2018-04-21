@@ -47,7 +47,7 @@ class RuchFigur(object):
                 pola_poruszonej_figury = self.pola_figur_w_trakcie_gry.get(figura_pole.get('figura'))
                 figury_ktorych_ruch[figura_pole.get('figura')] = self.zmien_pola(stop, pola_poruszonej_figury, figura_pole)
 
-    def czy_w_planszy(self, pozycja):
+    def czyWPlanszy(self, pozycja):
         i = 0
         for i in pozycja:
             if i in self.plansza.lista_szerokosci or i in self.plansza.lista_dlugosci:
@@ -57,20 +57,20 @@ class RuchFigur(object):
         else:
             return False
 
-    def sprawdz_bicie(self, kolor, stop):
+    def sprawdzBicie(self, kolor, stop):
         pozycje_przeciwnikow = self.pola_figur_w_trakcie_gry.get(kolor)
-        pozycja_w_biciu = self.daj_figure_i_pole(stop, pozycje_przeciwnikow)
+        pozycja_w_biciu = self.dajFigureIPole(stop, pozycje_przeciwnikow)
         if pozycja_w_biciu:
             bicie = pozycje_przeciwnikow.get(pozycja_w_biciu('figura'))
             bicie.pop[pozycja_w_biciu('pozycja_pola')]
 
-    def daj_figure_i_pole(self, start, figury_pola):
+    def dajFigurePole(self, start, figury_pola):
         for figura in self.figury_wagi.keys():
             pola_figury = figury_pola.get(figura)
             if start in pola_figury:
-                return self.sprawdz_pole(pola_figury, start)
+                return self.sprawdzPole(pola_figury, start)
 
-    def sprawdz_pole(self, pola_figury, start):
+    def sprawdzPole(self, pola_figury, start):
         for i, pole in enumerate(pola_figury):
             if pole == start:
                 return {
@@ -79,6 +79,6 @@ class RuchFigur(object):
                 }
         return None
 
-    def zmien_pola(self, stop, pola_poruszonej_figury, figura_pole):
+    def zmienPola(self, stop, pola_poruszonej_figury, figura_pole):
         pola_poruszonej_figury[figura_pole.get('pozycja_pola')] = stop
         return pola_poruszonej_figury
