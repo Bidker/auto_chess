@@ -1,33 +1,26 @@
 import time
 from livewires import games
 
+from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
+from .mozliwy_ruch import PodswietlMozliwyRuch
 from obsluga_gry.listy_planszy import Plansza
-from .mozliwy_ruch import MozliwyRuch
+from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
 class Figury(games.Sprite):
     def __init__(self, figura, pozycja):
-        self.wyznaczWspolrzednePoPozycji(pozycja)
+        wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
+        self.ustaw_x(wspolrzedne.get('x'))
+        self.ustaw_y(wspolrzedne.get('y'))
         self.nazwa = self.dajNazwe(figura)
         self.ikona = self.nadajIkone()
         self.czy_poruszona = False
-        self.czy_zbita = False
         self.stworzDuszka()
 
-    def wyznaczWspolrzednePoPozycji(self, pozycja):
-        plansza = Plansza()
-        szerokosc = plansza.lista_szerokosci
-        wysokosc = plansza.lista_dlugosci
-        for i in pozycja:
-            if i in szerokosc:
-                index = szerokosc.index(i)
-                self.pozycja_x = self.dajWspolrzedne(index)
-            elif i in wysokosc:
-                index = wysokosc.index(i)
-                self.pozycja_y = self.dajWspolrzedne(index)
+    def ustaw_x(self, x):
+        self.pozycja_x = x
 
-    def dajWspolrzedne(self, i):
-        return (49+(i*99))
-
+    def ustaw_y(self, y):
+        self.pozycja_y = y
 
     def dajNazwe(self, figura):
         nazwa = figura
@@ -41,7 +34,6 @@ class Figury(games.Sprite):
         else:
             kolor = 'czarny'
         return kolor
-
 
     def nadajIkone(self):
         nazwa_ikony = 'wyswietlenie_grafik/Grafiki/'
@@ -60,32 +52,18 @@ class Figury(games.Sprite):
         self.czy_poruszona = True
 
     def zbita(self):
-        self.czy_zbita = True
-
-    def dajPunktyGranicznePola(self):
-        return {
-            'prawa': self.pozycja_x + 49,
-            'lewa': self.pozycja_x - 49,
-            'gorna': self.pozycja_y + 49,
-            'dolna': self.pozycja_y - 49
-        }
+        self.destroy()
 
     def update(self):
         if games.mouse.is_pressed(0)==1:
-            if self.czyMyszNadBialymObiektem():
+            if myszNadObiektem(self) and 'bialy' in self.nazwa:
+                print('%s: x: %r, y: %r', self.nazwa, self.pozycja_x, self.pozycja_y)
                 self.podswietlMozliweRuchy()
 
-    def czyMyszNadBialymObiektem(self):
-        krawedzie_pola = self.dajPunktyGranicznePola()
-        if (games.mouse.x >= krawedzie_pola['lewa'] and
-                games.mouse.x <= krawedzie_pola['prawa'] and
-                games.mouse.y <= krawedzie_pola['gorna'] and
-                games.mouse.y >= krawedzie_pola['dolna'] and
-                'bialy' in self.nazwa):
-            return True
-        else:
-            return False
-
     def podswietlMozliweRuchy(self):
-        ruch = MozliwyRuch(self.pozycja_x, self.pozycja_y)
-        games.screen.add(ruch)
+        mozliwoscRuchu = MozliwoscRuchuBierki()
+        ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
+        podswietlony_ruch = []
+        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia):
+            podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
+            games.screen.add(podswietlony_ruch[i])
