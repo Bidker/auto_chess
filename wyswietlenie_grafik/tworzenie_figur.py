@@ -7,6 +7,7 @@ def pokaz_figury(games):
     for kolory in figury:
         obiekty_figur.extend(stworz_obiekty_figur(kolory))
     wyswietl_figury_na_ekranie(obiekty_figur, games)
+    return obiekty_figur
 
 def stworz_liste_figur():
     ruch_figur = RuchFigur()
@@ -19,26 +20,12 @@ def stworz_liste_figur():
 def stworz_obiekty_figur(kolor):
     stworzone_bierki = []
     for bierka in kolor.keys():
-        for pozycja in kolor[bierka]:
+        for i, pozycja in enumerate(kolor[bierka]):
             bierka_stworzona = Figury(bierka, pozycja)
             stworzone_bierki.append(bierka_stworzona)
 
     return stworzone_bierki
 
 def wyswietl_figury_na_ekranie(obiekty_figur, games):
-    obrazy = []
-    wspolrzedne = []
-    for figura in obiekty_figur:
-        obrazy.append(figura.ikona)
-        wspolrzedne.append(figura.wspolrzedne)
-    pokaz_obrazy(obrazy, wspolrzedne, games)
-
-def pokaz_obrazy(obrazy, wspolrzedne, games):
-    for i in range(len(obrazy)):
-        w = wspolrzedne[i]
-        obraz = games.load_image(obrazy[i])
-        wyswietlony = games.Sprite(
-                image = obraz,
-                x = int(w['szerokosc']),
-                y = int(w['wysokosc']))
-        games.screen.add(wyswietlony)
+    for bierka in obiekty_figur:
+        games.screen.add(bierka)

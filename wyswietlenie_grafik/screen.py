@@ -6,6 +6,6 @@ def rozpocznijGre():
     wall_image = games.load_image("wyswietlenie_grafik/Grafiki/chess.jpg", False)
 
     games.screen.background = wall_image
-    pokaz_figury(games)
+    obiekty_bierek = pokaz_figury(games)
 
     games.screen.mainloop()
