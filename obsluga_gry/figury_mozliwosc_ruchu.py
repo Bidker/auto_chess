@@ -66,7 +66,7 @@ class MozliwoscRuchuBierki(object):
             elif i in plansza.lista_wysokosci:
                 index = plansza.lista_wysokosci.index(i)
                 for j, pole in enumerate(pola_bicia):
-                    pola_bicia[j] = pole + plansza.lista_wysokosci[index + 1]
+                    pola_bicia[j] = pole + plansza.lista_wysokosci[index - 1]
         print(pola_bicia)
         lista_wspolrzednych = []
         for pole in pola_bicia:
