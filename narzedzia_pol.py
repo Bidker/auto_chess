@@ -19,6 +19,12 @@ def wyznaczWspolrzednePoPozycji(pole):
 def dajWspolrzedna(i):
     return (50+(i*100))
 
+def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
+    ret = []
+    for wspolrzedne in lista_wspolrzednych:
+        ret.append(zmienWspolrzedneNaPole(wspolrzedne['x'], wspolrzedne['y']))
+    return ret
+
 def zmienWspolrzedneNaPole(x, y):
     plansza = Plansza()
     pole = plansza.lista_szerokosci[dajIndexPola(x)]
@@ -45,3 +51,12 @@ def dajPunktyGranicznePola(obiekt):
             'gorna': obiekt.pozycja_y + 49,
             'dolna': obiekt.pozycja_y - 49
         }
+
+def czyWszpolrzedneWPolu(x, y):
+    if (x >= 0 and
+            x <= games.screen.width and
+            y >= 0 and
+            y <= games.screen.height):
+        return True
+    else:
+        return False

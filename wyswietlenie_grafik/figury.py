@@ -57,13 +57,13 @@ class Figury(games.Sprite):
     def update(self):
         if games.mouse.is_pressed(0)==1:
             if myszNadObiektem(self) and 'bialy' in self.nazwa:
-                print('%s: x: %r, y: %r', self.nazwa, self.pozycja_x, self.pozycja_y)
                 self.podswietlMozliweRuchy()
 
     def podswietlMozliweRuchy(self):
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
+        #print(ruchy_do_podswietlenia)
         for i, wspolrzedne in enumerate(ruchy_do_podswietlenia):
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
             games.screen.add(podswietlony_ruch[i])
