@@ -2,6 +2,12 @@ from livewires import games
 
 from obsluga_gry.listy_planszy import Plansza
 
+def zmienListePolNaWspolrzedne(lista_pol):
+    ret = []
+    for pole in lista_pol:
+        ret.append(wyznaczWspolrzednePoPozycji(pole))
+    return ret
+
 def wyznaczWspolrzednePoPozycji(pole):
     plansza = Plansza()
     szerokosc = plansza.lista_szerokosci
