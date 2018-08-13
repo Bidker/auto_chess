@@ -1,4 +1,4 @@
 def konfiguracjaOkna(self, tytulOkna):
-      self.resize(793, 798)
+      self.resize(200, 300)
       self.setWindowTitle(tytulOkna)
       self.show()

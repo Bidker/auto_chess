@@ -3,10 +3,11 @@
 
 from PyQt5.QtWidgets import QMessageBox, QApplication, QWidget
 from PyQt5.QtWidgets import QGridLayout, QPushButton
+from PyQt5.QtCore import Qt
+
 from wyswietlenie_grafik.screen import rozpocznijGre
 from otwarcia.pokaz_otwarcia import PokazOtwarcia
 from funkcje_wyswietlania import konfiguracjaOkna
-from PyQt5.QtCore import Qt
 
 class OknoStartoweSzachy(QWidget):
     def __init__(self, parent=None):

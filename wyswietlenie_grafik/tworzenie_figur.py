@@ -1,37 +1,33 @@
+from livewires import games
+
+from obsluga_gry.figury_ruchy import RuchFigur
 from .figury import Figury
 
-def pokaz_figury():
-    figury = stworz_liste_figur()
-    for figura in figury:
-        obiekty_figur = stworz_obiekty_figur(figura)
-    wyswietl_figury_na_ekranie(obiekty_figur)
+def pokazFigury():
+    obiekty_figur = []
+    figury = stworzListeFigur()
+    for kolory in figury:
+        obiekty_figur.extend(stworzObiektyFigur(kolory))
+    wyswietlFiguryNaEkranie(obiekty_figur)
+    return obiekty_figur
 
-def stworz_liste_figur():
-    slowniki_figur = Figury()
-    figury = []
-    figury.append(slowniki_figur.poczatkowe_pozycje.get('biale'))
-    figury.append(slowniki_figur.poczatkowe_pozycje.get('czarne'))
-    return figury
+def stworzListeFigur():
+    ruch_figur = RuchFigur()
+    lista_bierek = []
+    lista_bierek.append(ruch_figur.figury_pola_startowe.get('biale'))
+    lista_bierek.append(ruch_figur.figury_pola_startowe.get('czarne'))
 
-def stworz_obiekty_figur(figura_i_pozycja):
-    figura = Figury()
-    lista_obiektow = []
-    for figura in figura_i_pozycja.keys():
-        for pozycja in figura_i_pozycja.get(figura):
-            lista_obiektow.append(figura.__init__(figura, pozycja))
-    return lista_obiektow
+    return lista_bierek
 
-def wyswietl_figury_na_ekranie(obiekty_figur):
-    obrazy = []
-    wspolrzedne = []
-    for figura in obiekty_figur:
-        obrazy.append(figura.ikona)
-        wspolrzedne.append(figura.wspolrzedne)
-    pokaz_obrazy(obrazy, wspolrzedne)
+def stworzObiektyFigur(kolor):
+    stworzone_bierki = []
+    for bierka in kolor.keys():
+        for i, pozycja in enumerate(kolor[bierka]):
+            bierka_stworzona = Figury(bierka, pozycja)
+            stworzone_bierki.append(bierka_stworzona)
 
-def pokaz_obrazy(obrazy, wspolrzedne):
-    pokazane = []
-    for i in range(len(obrazy)):
-        w = wspolrzedne[i]
-        wyswietlony = games.Sprite(image = obrazy[i], x = w['szerokosc'], y = w['wysokosc'])
-        pokazane.append(wyswietlony)
+    return stworzone_bierki
+
+def wyswietlFiguryNaEkranie(obiekty_figur):
+    for bierka in obiekty_figur:
+        games.screen.add(bierka)
