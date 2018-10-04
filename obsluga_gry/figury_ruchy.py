@@ -1,5 +1,7 @@
 from .listy_planszy import Plansza
 
+from copy import deepcopy
+
 
 class RuchFigur(object):
     def __init__(self):
@@ -30,10 +32,10 @@ class RuchFigur(object):
                 'wieza': ['a8', 'h8'],
                 'hetman': ['d8'],
                 'krol': ['e8'],
-            }
+            },
         }
 
-        self.pola_figur_w_trakcie_gry = self.figury_pola_startowe.copy()
+        self.pola_figur_w_trakcie_gry = deepcopy(self.figury_pola_startowe)
 
     def ruch(self, start, stop, czyj_ruch):
         if self.czy_w_planszy(stop):

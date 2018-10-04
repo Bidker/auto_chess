@@ -18,20 +18,30 @@ class MozliwoscRuchuBierki(object):
         return pola
 
     def sprawdzMozliweRuchy(self, obiektBierki):
+        if 'biale' in obiektBierki.nazwa:
+            self.pola_przecinikow = self.pola_zajete_czarnymi
+        else:
+            self.pola_przecinikow = self.pola_zajete_bialymi
+
         if 'pion' in obiektBierki.nazwa:
-            return self.ruchDlaPiona(obiektBierki)
+            pola = self.ruchDlaPiona(obiektBierki)
+            return self.ograniczPionaOBicie(obiektBierki, pola)
         elif 'skoczek' in obiektBierki.nazwa:
-            return self.ruchDlaSkoczka(obiektBierki)
+            pola = self.ruchDlaSkoczka(obiektBierki)
+            return self.ograniczSkoczkaOBicie(obiektBierki, pola)
         elif 'goniec' in obiektBierki.nazwa:
-            return self.ruchPoprzeczny(obiektBierki)
+            pola = self.ruchPoprzeczny(obiektBierki)
+            return self.ograniczGoncaOBicie(obiektBierki, pola)
         elif 'wieza' in obiektBierki.nazwa:
-            # return self.ruchKrzyzowy(obiektBierki)
+            pola = self.ruchKrzyzowy(obiektBierki)
+            return self.ograniczWiezeOBicie(obiektBierki, pola)
         elif 'hetman' in obiektBierki.nazwa:
-            ret = self.ruchKrzyzowy(obiektBierki)
-            ret.extend(self.ruchPoprzeczny(obiektBierki))
-            return ret
+            pola = self.ruchKrzyzowy(obiektBierki)
+            pola.extend(self.ruchPoprzeczny(obiektBierki))
+            return self.ograniczHetmanaOBicie(obiektBierki, pola)
         elif 'krol' in obiektBierki.nazwa:
-            return self.ruchDlaKrola(obiektBierki)
+            pola = self.ruchDlaKrola(obiektBierki)
+            return self.ograniczKrolaOBicie(obiektBierki, pola)
 
     def ruchDlaPiona(self, obiektBierki):
         mozliwe_ruchy = []
@@ -58,14 +68,14 @@ class MozliwoscRuchuBierki(object):
 
     def dodajPionomBicie(self, obiektPiona, ruchy):
         pole_piona = zmienWspolrzedneNaPole(obiektPiona.pozycja_x, obiektPiona.pozycja_y)
-        pola_atakowane = self.dajBiciePionow(pole_piona, )
+        pola_atakowane = self.dajBiciePionow(pole_piona, obiektPiona.nazwa)
         pola_atakowane = self.sprawdzCzyBicieNaPolach(pola_atakowane, obiektPiona)
         lista_wspolrzednych = []
         for pole in pola_atakowane:
             lista_wspolrzednych.append(wyznaczWspolrzednePoPozycji(pole))
         return lista_wspolrzednych
 
-    def dajBiciePionow(pole_piona, nazwaPiona):
+    def dajBiciePionow(self, pole_piona, nazwaPiona):
         plansza = self.plansza
         pola_atakowane = []
         for i in pole_piona:
@@ -190,10 +200,10 @@ class MozliwoscRuchuBierki(object):
                 poprzeczne_lewy_dol.extend(
                     self.dajJedenMozliwyPoprzecznyWLewyDol(ruch, obiektBierki))
 
-        #poprzeczne_prawy_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_prawy_dol))
-        #poprzeczne_lewa_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_lewa_gora))
-        #poprzeczne_prawa_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_prawa_gora))
-        #poprzeczne_lewy_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_lewy_dol))
+        # poprzeczne_prawy_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_prawy_dol))
+        # poprzeczne_lewa_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_lewa_gora))
+        # poprzeczne_prawa_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_prawa_gora))
+        # poprzeczne_lewy_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(poprzeczne_lewy_dol))
 
         ret = poprzeczne_prawy_dol
         ret.extend(poprzeczne_lewa_gora)
@@ -242,10 +252,10 @@ class MozliwoscRuchuBierki(object):
             prosto_lewo.extend(self.dajJedenMozliwyWLewo(ruch, obiektBierki))
             prosto_dol.extend(self.dajJedenMozliwyWDol(ruch, obiektBierki))
 
-        #prosto_prawo = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_prawo))
-        #prosto_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_gora))
-        #prosto_lewo = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_lewo))
-        #prosto_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_lewo))
+        # prosto_prawo = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_prawo))
+        # prosto_gora = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_gora))
+        # prosto_lewo = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_lewo))
+        # prosto_dol = self.sprawdzCzyZawadzaPoKolorze(obiektBierki, zmienListeWspolrzednychNaPola(prosto_lewo))
 
         ret = prosto_prawo
         ret.extend(prosto_gora)
@@ -300,9 +310,6 @@ class MozliwoscRuchuBierki(object):
                 mozliwe_ruchy = mozliwe_ruchy[:index]
         return mozliwe_ruchy
 
-    def wykreslPolaBitePrzezPrzeciwnikow(self, obiektKrola, mozliwy_ruch):
-        return mozliwy_ruch
-
     def ustawSzerokoscBiciaOJeden(self, liera_planszy):
         ret = []
         lista_szerokosci = self.plansza.lista_szerokosci
@@ -313,11 +320,7 @@ class MozliwoscRuchuBierki(object):
             ret.append(lista_szerokosci[index + 1])
         return ret
 
-    def ustawWysokoscBiciaOJeden(
-            self,
-            cyfra_planszy,
-            pola_atakowane,
-            nazwa_bierki):
+    def ustawWysokoscBiciaOJeden(self, cyfra_planszy, pola_atakowane, nazwa_bierki):
         lista_wysokosci = self.plansza.lista_wysokosci
         index = lista_wysokosci.index(cyfra_planszy)
         for j, pole in enumerate(pola_atakowane):
@@ -353,50 +356,63 @@ class MozliwoscRuchuBierki(object):
             return self.wykreslPolaBitePrzez('biale', mozliwe_ruchy)
 
     def wykreslPolaBitePrzez(self, kolor_przecinikow, mozliwe_ruchy):
-        bierki_pola = self.ruchFigury.pola_figur_w_trakcie_gry.get(kolor_przecinikow)
+        figury_pola = self.ruchFigury.pola_figur_w_trakcie_gry.get(kolor_przecinikow)
 
         mozliwe_ruchy = zmienListeWspolrzednychNaPola(mozliwe_ruchy)
-
         for bierka in figury_pola.keys():
-            pola_bierki = figury_pola.get(bierka)
+            pola_bierki = figury_pola[bierka]
             if bierka == 'pion':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezPiona(
                     mozliwe_ruchy, pola_bierki, kolor_przecinikow)
             elif bierka == 'skoczek':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezSkoczka(mozliwe_ruchy, pola_bierki)
-            elif bierka == 'goniec':
+            '''elif bierka == 'goniec':
                 mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki, bierka)
             elif bierka == 'wieza':
                 mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki, bierka)
             elif bierka == ('hetman' or 'krol'):
                 mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki, bierka)
-                mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki, bierka)
+                mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki, bierka)'''
 
         mozliwe_ruchy = zmienListePolNaWspolrzedne(mozliwe_ruchy)
 
         return mozliwe_ruchy
 
-    def wykreslPolaBitePrzezPiona(mozliwe_ruchy, pola_bierki, kolor_przecinikow):
+    def wykreslPolaBitePrzezPiona(self, mozliwe_ruchy, pola_bierki, kolor_przecinikow):
         pola_atakowane = []
         for pole in pola_bierki:
             if kolor_przecinikow == 'biale':
-                pola_atakowane.extend(dajBiciePionow(pole, 'bialy pion'))
+                pola_atakowane.extend(self.dajBiciePionow(pole, 'bialy pion'))
             else:
-                pola_atakowane.extend(dajBiciePionow(pole, 'czarny pion'))
+                pola_atakowane.extend(self.dajBiciePionow(pole, 'czarny pion'))
 
         return self.wykreslAtakowanePola(mozliwe_ruchy, pola_atakowane)
 
     def wykreslPolaBitePrzezSkoczka(self, mozliwe_ruchy, pola_skoczka):
-        atakowane_pola = []
+        pola_atakowane = []
         for pole in pola_skoczka:
-            atakowane_pola.extend(self.przygotujRuchySKoczka(pole))
+            pola_atakowane.extend(self.przygotujRuchySKoczka(pole))
         return self.wykreslAtakowanePola(mozliwe_ruchy, pola_atakowane)
 
-    # TODO: wykreslanie pol dla innych bierek, ograniczenie przez bicie, refaktoryzacja kodu, poukładanie logiczne funkcji
+    # TODO: wykreslanie pol dla innych bierek, ograniczenie przez bicie, roszada
 
     def wykreslAtakowanePola(self, mozliwe_ruchy, pola_atakowane):
-        ret = []
-        for pole_ruchu in mozliwy_ruch:
-            if pole_ruchu not in pola_atakowane:
-                ret.append(index)
-        return ret
+        return [pole_ruchu for pole_ruchu in mozliwe_ruchy if pole_ruchu not in pola_atakowane]
+
+    def ograniczPionaOBicie(self, obiektPiona, pola):
+        return pola
+
+    def ograniczSkoczkaOBicie(self, obiektSkoczka, pola):
+        return pola
+
+    def ograniczGoncaOBicie(self, obiektGonca, pola):
+        return pola
+
+    def ograniczWiezeOBicie(self, obiektWiezy, pola):
+        return pola
+
+    def ograniczHetmanaOBicie(self, obiektHetmana, pola):
+        return pola
+
+    def ograniczKrolaOBicie(self, obiektKrola, pola):
+        return pola
