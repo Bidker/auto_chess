@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-import sqlalchemy #przerobić na alchemy
+import sqlalchemy  # przerobić na alchemy
 
 connection = sqlite3.connect('chess.db')
 

@@ -3,6 +3,7 @@ from livewires import games
 from obsluga_gry.figury_ruchy import RuchFigur
 from .figury import Figury
 
+
 def pokazFigury():
     obiekty_figur = []
     figury = stworzListeFigur()
@@ -10,6 +11,7 @@ def pokazFigury():
         obiekty_figur.extend(stworzObiektyFigur(kolory))
     wyswietlFiguryNaEkranie(obiekty_figur)
     return obiekty_figur
+
 
 def stworzListeFigur():
     ruch_figur = RuchFigur()
@@ -19,6 +21,7 @@ def stworzListeFigur():
 
     return lista_bierek
 
+
 def stworzObiektyFigur(kolor):
     stworzone_bierki = []
     for bierka in kolor.keys():
@@ -27,6 +30,7 @@ def stworzObiektyFigur(kolor):
             stworzone_bierki.append(bierka_stworzona)
 
     return stworzone_bierki
+
 
 def wyswietlFiguryNaEkranie(obiekty_figur):
     for bierka in obiekty_figur:
