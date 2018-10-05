@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from .listy_planszy import Plansza
 
 from copy import deepcopy

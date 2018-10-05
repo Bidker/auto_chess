@@ -1,3 +1,7 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
 class Plansza(object):
     def __init__(self):
         self.lista_szerokosci = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')

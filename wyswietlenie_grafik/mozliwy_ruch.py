@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from livewires import games
 
 from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
