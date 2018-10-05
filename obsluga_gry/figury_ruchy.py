@@ -1,39 +1,44 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from .listy_planszy import Plansza
+
+from copy import deepcopy
+
 
 class RuchFigur(object):
     def __init__(self):
         plansza = Plansza()
 
         self.figury_wagi = {
-            'pion' : 1,
-            'skoczek' : 3,
-            'goniec' : 3,
-            'wieza' : 4.5,
-            'hetman' : 8,
-            'krol' : None,
+            'pion': 1,
+            'skoczek': 3,
+            'goniec': 3,
+            'wieza': 4.5,
+            'hetman': 8,
+            'krol': None,
         }
 
         self.figury_pola_startowe = {
-            'biale' : {
-                'pion' : [znak + '2' for znak in plansza.lista_szerokosci],
-                'skoczek' : ['b1', 'g1'],
-                'goniec' : ['c1', 'f1'],
-                'wieza' : ['a1', 'h1'],
-                'hetman' : ['d1'],
-                'krol' : ['e1'],
+            'biale': {
+                'pion': [znak + '2' for znak in plansza.lista_szerokosci],
+                'skoczek': ['b1', 'g1'],
+                'goniec': ['c1', 'f1'],
+                'wieza': ['a1', 'h1'],
+                'hetman': ['d1'],
+                'krol': ['e1'],
             },
-            'czarne' : {
-                'pion' : [znak + '7' for znak in plansza.lista_szerokosci],
-                'skoczek' : ['b8', 'g8'],
-                'goniec' : ['c8', 'f8'],
-                'wieza' : ['a8', 'h8'],
-                'hetman' : ['d8'],
-                'krol' : ['e8'],
-            }
+            'czarne': {
+                'pion': [znak + '7' for znak in plansza.lista_szerokosci],
+                'skoczek': ['b8', 'g8'],
+                'goniec': ['c8', 'f8'],
+                'wieza': ['a8', 'h8'],
+                'hetman': ['d8'],
+                'krol': ['e8'],
+            },
         }
 
-        self.pola_figur_w_trakcie_gry = self.figury_pola_startowe.copy()
-
+        self.pola_figur_w_trakcie_gry = deepcopy(self.figury_pola_startowe)
 
     def ruch(self, start, stop, czyj_ruch):
         if self.czy_w_planszy(stop):
@@ -45,7 +50,8 @@ class RuchFigur(object):
             figura_pole = self.daj_figure_i_pole(start, figury_ktorych_ruch)
             if not figura_pole.get('blad'):
                 pola_poruszonej_figury = self.pola_figur_w_trakcie_gry.get(figura_pole.get('figura'))
-                figury_ktorych_ruch[figura_pole.get('figura')] = self.zmien_pola(stop, pola_poruszonej_figury, figura_pole)
+                figury_ktorych_ruch[figura_pole.get('figura')] = self.zmien_pola(
+                    stop, pola_poruszonej_figury, figura_pole)
 
     def czyWPlanszy(self, pozycja):
         i = 0

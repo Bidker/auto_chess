@@ -9,6 +9,7 @@ from wyswietlenie_grafik.screen import rozpocznijGre
 from otwarcia.pokaz_otwarcia import PokazOtwarcia
 from funkcje_wyswietlania import konfiguracjaOkna
 
+
 class OknoStartoweSzachy(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -93,6 +94,7 @@ class OknoStartoweSzachy(QWidget):
             event.accept()
         else:
             event.ignore()
+
 
 if __name__ == '__main__':
     import sys

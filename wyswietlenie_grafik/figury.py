@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import time
 from livewires import games
 
@@ -5,6 +8,7 @@ from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from .mozliwy_ruch import PodswietlMozliwyRuch
 from obsluga_gry.listy_planszy import Plansza
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+
 
 class Figury(games.Sprite):
     def __init__(self, figura, pozycja):
@@ -27,7 +31,6 @@ class Figury(games.Sprite):
         kolor = self.sprawdzKolorPoPozycji()
         return kolor + '_' + nazwa
 
-
     def sprawdzKolorPoPozycji(self):
         if self.pozycja_y > 200:
             kolor = 'bialy'
@@ -43,9 +46,9 @@ class Figury(games.Sprite):
     def stworzDuszka(self):
         obraz = games.load_image(self.ikona)
         super(Figury, self).__init__(
-            image = obraz,
-            x = self.pozycja_x,
-            y = self.pozycja_y
+            image=obraz,
+            x=self.pozycja_x,
+            y=self.pozycja_y
         )
 
     def poruszona(self):
@@ -55,7 +58,7 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0)==1:
+        if games.mouse.is_pressed(0) == 1:
             if myszNadObiektem(self) and 'bialy' in self.nazwa:
                 self.podswietlMozliweRuchy()
 
@@ -63,7 +66,7 @@ class Figury(games.Sprite):
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
-        #print(ruchy_do_podswietlenia)
+        # print(ruchy_do_podswietlenia)
         for i, wspolrzedne in enumerate(ruchy_do_podswietlenia):
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
             games.screen.add(podswietlony_ruch[i])
