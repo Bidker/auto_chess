@@ -392,23 +392,14 @@ class MozliwoscRuchuBierki(object):
         return self.wykreslAtakowanePola(mozliwe_ruchy, pola_atakowane)
 
     def wykreslPolaBitePoprzecznie(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
-        if kolor_przecinikow == 'biale':
-            bierka = 'bialy_' + bierka
-        else:
-            bierka = 'czarny_' + bierka
-        obiekt = self.narz_szukania_bierek.dajBierkePoNazwie(bierka)
-        pola_atakowane = zmienListeWspolrzednychNaPola(self.ruchPoprzeczny(obiekt))
-        return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
+        with self.narz_szukania_bierek.szukanieBierki(bierka, kolor_przecinikow) as obiekt:
+            pola_atakowane = zmienListeWspolrzednychNaPola(self.ruchPoprzeczny(obiekt))
+            return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
 
     def wykreslPolaBiteKrzyzowo(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
-        if kolor_przecinikow == 'biale':
-            bierka = 'bialy_' + bierka
-        else:
-            bierka = 'czarny_' + bierka
-        obiekt = self.narz_szukania_bierek.dajBierkePoNazwie(bierka)
-        pola_atakowane = zmienListeWspolrzednychNaPola(self.ruchKrzyzowy(obiekt))
-        print('pola_atakowane: %r', pola_atakowane)
-        return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
+        with self.narz_szukania_bierek.szukanieBierki(bierka, kolor_przecinikow) as obiekt:
+            pola_atakowane = zmienListeWspolrzednychNaPola(self.ruchKrzyzowy(obiekt))
+            return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
 
     def wykreslAtakowanePola(self, mozliwe_ruchy, pola_atakowane):
         return [pole_ruchu for pole_ruchu in mozliwe_ruchy if pole_ruchu not in pola_atakowane]
