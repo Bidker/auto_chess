@@ -4,7 +4,6 @@
 from livewires import games
 
 from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from obsluga_gry.listy_planszy import Plansza
 
 
 class PodswietlMozliwyRuch(games.Sprite):

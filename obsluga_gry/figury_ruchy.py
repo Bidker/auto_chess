@@ -1,15 +1,13 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .listy_planszy import Plansza
+from .listy_planszy import lista_szerokosci, lista_wysokosci
 
 from copy import deepcopy
 
 
 class RuchFigur(object):
     def __init__(self):
-        plansza = Plansza()
-
         self.figury_wagi = {
             'pion': 1,
             'skoczek': 3,
@@ -21,7 +19,7 @@ class RuchFigur(object):
 
         self.figury_pola_startowe = {
             'biale': {
-                'pion': [znak + '2' for znak in plansza.lista_szerokosci],
+                'pion': [znak + '2' for znak in lista_szerokosci],
                 'skoczek': ['b1', 'g1'],
                 'goniec': ['c1', 'f1'],
                 'wieza': ['a1', 'h1'],
@@ -29,7 +27,7 @@ class RuchFigur(object):
                 'krol': ['e1'],
             },
             'czarne': {
-                'pion': [znak + '3' for znak in plansza.lista_szerokosci],
+                'pion': [znak + '3' for znak in lista_szerokosci],
                 'skoczek': ['b8', 'g8'],
                 'goniec': ['c8', 'f8'],
                 'wieza': ['a8', 'h8'],
@@ -54,14 +52,9 @@ class RuchFigur(object):
                     stop, pola_poruszonej_figury, figura_pole)
 
     def czyWPlanszy(self, pozycja):
-        i = 0
-        for i in pozycja:
-            if i in self.plansza.lista_szerokosci or i in self.plansza.lista_dlugosci:
-                i += 1
-        if i == 2:
+        if pozycja[0] in lista_szerokosci and pozycja[1] in lista_wysokosci:
             return True
-        else:
-            return False
+        return False
 
     def sprawdzBicie(self, kolor, stop):
         pozycje_przeciwnikow = self.pola_figur_w_trakcie_gry.get(kolor)

@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from livewires import games
+from obsluga_gry.listy_planszy import lista_szerokosci, lista_wysokosci
 
-from obsluga_gry.listy_planszy import Plansza
+
+def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
+    for i, pole in enumerate(lista_pol):
+        if pole[0] in lista_szerokosci and pole[1] in lista_wysokosci:
+            lista_pol[i] = wyznaczWspolrzednePoPozycji(pole)
+    return lista_pol
 
 
 def zmienListePolNaWspolrzedne(lista_pol):
@@ -14,17 +20,9 @@ def zmienListePolNaWspolrzedne(lista_pol):
 
 
 def wyznaczWspolrzednePoPozycji(pole):
-    plansza = Plansza()
-    szerokosc = plansza.lista_szerokosci
-    wysokosc = plansza.lista_wysokosci
-    for i in pole:
-        if i in szerokosc:
-            x = dajWspolrzedna(szerokosc.index(i))
-        elif i in wysokosc:
-            y = dajWspolrzedna(wysokosc.index(i))
     return {
-        'x': x,
-        'y': y
+        'x': dajWspolrzedna(lista_szerokosci.index(pole[0])),
+        'y': dajWspolrzedna(lista_wysokosci.index(pole[1])),
     }
 
 
@@ -40,9 +38,8 @@ def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
 
 
 def zmienWspolrzedneNaPole(x, y):
-    plansza = Plansza()
-    pole = plansza.lista_szerokosci[dajIndexPola(x)]
-    pole += plansza.lista_wysokosci[dajIndexPola(y)]
+    pole = lista_szerokosci[dajIndexPola(x)]
+    pole += lista_wysokosci[dajIndexPola(y)]
     return pole
 
 

@@ -6,7 +6,6 @@ from livewires import games
 
 from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from obsluga_gry.listy_planszy import Plansza
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
 
