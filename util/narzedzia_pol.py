@@ -7,6 +7,7 @@ from obsluga_gry.listy_planszy import lista_szerokosci, lista_wysokosci
 
 def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
     for i, pole in enumerate(lista_pol):
+        pole = naprawPole(pole)
         if pole[0] in lista_szerokosci and pole[1] in lista_wysokosci:
             lista_pol[i] = wyznaczWspolrzednePoPozycji(pole)
     return lista_pol
@@ -20,6 +21,7 @@ def zmienListePolNaWspolrzedne(lista_pol):
 
 
 def wyznaczWspolrzednePoPozycji(pole):
+    pole = naprawPole(pole)
     return {
         'x': dajWspolrzedna(lista_szerokosci.index(pole[0])),
         'y': dajWspolrzedna(lista_wysokosci.index(pole[1])),
@@ -28,6 +30,13 @@ def wyznaczWspolrzednePoPozycji(pole):
 
 def dajWspolrzedna(i):
     return (50+(i*100))
+
+
+def zmienListeWspolrzednychNaPolaZeSprawdzeniem(lista_wspolrzednych):
+    for i, wspolrzedna in enumerate(lista_wspolrzednych):
+        if isinstance(wspolrzedna, dict):
+            lista_wspolrzednych[i] = zmienWspolrzedneNaPole(wspolrzedna['x'], wspolrzedna['y'])
+    return lista_wspolrzednych
 
 
 def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
@@ -40,7 +49,7 @@ def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
 def zmienWspolrzedneNaPole(x, y):
     pole = lista_szerokosci[dajIndexPola(x)]
     pole += lista_wysokosci[dajIndexPola(y)]
-    return pole
+    return naprawPole(pole)
 
 
 def dajIndexPola(wspolrzedna):
@@ -75,3 +84,9 @@ def czyWszpolrzedneWPolu(x, y):
         return True
     else:
         return False
+
+
+def naprawPole(pole):
+    if pole[0] in lista_szerokosci:
+        return pole
+    return pole[1] + pole[0]

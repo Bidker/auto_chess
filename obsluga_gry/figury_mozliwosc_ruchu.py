@@ -5,7 +5,7 @@ from .figury_ruchy import RuchFigur
 from .listy_planszy import lista_szerokosci, lista_wysokosci
 from util.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
 from util.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
-from util.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem
+from util.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
 from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
@@ -24,7 +24,7 @@ class MozliwoscRuchuBierki(object):
         return pola
 
     def sprawdzMozliweRuchy(self, obiektBierki):
-        if 'biale' in obiektBierki.nazwa:
+        if 'bialy' in obiektBierki.nazwa:
             self.pola_przecinikow = self.pola_zajete_czarnymi
             self.pola_sojusznikow = self.pola_zajete_bialymi
         else:
@@ -34,11 +34,7 @@ class MozliwoscRuchuBierki(object):
         if 'pion' in obiektBierki.nazwa:
             return self.ruchDlaPiona(obiektBierki)  # funkcja daje też bicie pionów
         elif 'skoczek' in obiektBierki.nazwa:
-            pola = self.ruchDlaSkoczka(obiektBierki)
-            return {
-                'ruch': pola,
-                'bicie': self.ograniczSkoczkaOBicie(obiektBierki, pola),
-            }
+            return self.ruchDlaSkoczka(obiektBierki)  # funkcja daje też bicie skoczków
         elif 'goniec' in obiektBierki.nazwa:
             pola = self.ruchPoprzeczny(obiektBierki)
             return {
@@ -115,7 +111,7 @@ class MozliwoscRuchuBierki(object):
         for ruch in mozliwe_ruchy:
             ret.append(wyznaczWspolrzednePoPozycji(ruch))
 
-        return ret
+        return self.ograniczSkoczkaOBicie(ret)
 
     def przygotujRuchySKoczka(self, pole_skoczka):
         mozliwe_ruchy = []
@@ -384,8 +380,17 @@ class MozliwoscRuchuBierki(object):
             pola_atakowane = self.ruchKrzyzowy(obiekt)
             return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
 
-    def ograniczSkoczkaOBicie(self, obiektSkoczka, pola):
-        return pola
+    def ograniczSkoczkaOBicie(self, pola_ruchu):
+        pola_bicia = []
+        print(self.pola_przecinikow)
+        for pole in zmienListeWspolrzednychNaPolaZeSprawdzeniem(pola_ruchu):
+            if pole in self.pola_przecinikow:
+                pola_bicia.append(pole)
+                pola_ruchu.remove(pole)
+        return {
+            'ruch': zmienListePolNaWspolrzedne(pola_ruchu),
+            'bicie': zmienListePolNaWspolrzedne(pola_bicia),
+        }
 
     def ograniczGoncaOBicie(self, obiektGonca, pola):
         return pola
