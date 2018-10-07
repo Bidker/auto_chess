@@ -29,7 +29,7 @@ class RuchFigur(object):
                 'krol': ['e1'],
             },
             'czarne': {
-                'pion': [znak + '7' for znak in plansza.lista_szerokosci],
+                'pion': [znak + '3' for znak in plansza.lista_szerokosci],
                 'skoczek': ['b8', 'g8'],
                 'goniec': ['c8', 'f8'],
                 'wieza': ['a8', 'h8'],
@@ -70,7 +70,7 @@ class RuchFigur(object):
             bicie = pozycje_przeciwnikow.get(pozycja_w_biciu('figura'))
             bicie.pop[pozycja_w_biciu('pozycja_pola')]
 
-    def dajFigurePole(self, start, figury_pola):
+    def dajFigureIPole(self, start, figury_pola):
         for figura in self.figury_wagi.keys():
             pola_figury = figury_pola.get(figura)
             if start in pola_figury:

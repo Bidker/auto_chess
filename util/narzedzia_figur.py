@@ -18,7 +18,7 @@ class NarzedziaSzukaniaBierek(object):
 
     @contextmanager
     def szukanieBierki(self, bierka, kolor_przecinikow):
-        if kolor_przecinikow == 'biale':
+        if kolor_przecinikow in ('biale'):  # w razie potrzeby można dodać inne odmiany
             bierka = 'bialy_' + bierka
         else:
             bierka = 'czarny_' + bierka

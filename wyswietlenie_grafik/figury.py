@@ -4,8 +4,8 @@
 import time
 from livewires import games
 
-from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from .mozliwy_ruch import PodswietlMozliwyRuch
+from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
+from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from obsluga_gry.listy_planszy import Plansza
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
@@ -32,7 +32,7 @@ class Figury(games.Sprite):
         return kolor + '_' + nazwa
 
     def sprawdzKolorPoPozycji(self):
-        if self.pozycja_y > 200:
+        if self.pozycja_y > 600:
             kolor = 'bialy'
         else:
             kolor = 'czarny'
@@ -66,7 +66,10 @@ class Figury(games.Sprite):
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
-        # print(ruchy_do_podswietlenia)
-        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia):
+        print('ruchy: %r', ruchy_do_podswietlenia)
+        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia['ruch']):
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
+            games.screen.add(podswietlony_ruch[i])
+        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia['bicie']):
+            podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
             games.screen.add(podswietlony_ruch[i])
