@@ -29,20 +29,22 @@ class NarzedziaSzukaniaBierek(object):
 
     def dajSlownikZajetychPol(self):
         slownik = {
-            'czarne': self.dajSlownikCzarnych,
-            'biale': self.dajSlownikBialych,
+            'czarne': self.dajSlownikCzarnych(),
+            'biale': self.dajSlownikBialych(),
         }
         return slownik
 
     def dajSlownikBialych(self):
-        return self._dajSlownikPozycji(6, 'biale')
+        return self._dajSlownikPozycji('bialy')
 
     def dajSlownikCzarnych(self):
-        return self._dajSlownikPozycji(7, 'czarne')
+        return self._dajSlownikPozycji('czarny')
 
-    def _dajSlownikPozycji(self, index_wyciecia, kolor):
+    def _dajSlownikPozycji(self, kolor):
         slownik = slownik_bierek.copy()
+        index = len(kolor) + 1
+
         for bierka in self.lista_obiektow:
             if kolor in bierka.nazwa:
-                slownik[bierka.nazwa[index_wyciecia:]].append(bierka.pozycja)
+                slownik[bierka.nazwa[index:]].append(bierka.pozycja)
         return slownik

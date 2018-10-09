@@ -1,6 +1,6 @@
 from livewires import games
 
-from obsluga_gry.figury_ruchy import RuchFigur
+from obsluga_gry.listy_planszy import figury_pola_startowe
 from .figury import Figury
 
 
@@ -11,10 +11,9 @@ def pokazFigury():
 
 
 def stworzListeFigur():
-    ruch_figur = RuchFigur()
     lista_bierek = []
-    lista_bierek.append(ruch_figur.figury_pola_startowe['biale'])
-    lista_bierek.append(ruch_figur.figury_pola_startowe['czarne'])
+    lista_bierek.append(figury_pola_startowe['biale'])
+    lista_bierek.append(figury_pola_startowe['czarne'])
 
     return lista_bierek
 

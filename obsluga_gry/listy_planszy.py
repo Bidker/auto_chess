@@ -13,3 +13,31 @@ slownik_bierek = {
     'hetman': [],
     'krol': [],
 }
+
+figury_pola_startowe = {
+    'biale': {
+        'pion': [znak + '2' for znak in lista_szerokosci],
+        'skoczek': ['b1', 'g1'],
+        'goniec': ['c1', 'f1'],
+        'wieza': ['a1', 'h1'],
+        'hetman': ['d1'],
+        'krol': ['e1'],
+    },
+    'czarne': {
+        'pion': [znak + '3' for znak in lista_szerokosci],
+        'skoczek': ['b8', 'g8'],
+        'goniec': ['c8', 'f8'],
+        'wieza': ['a8', 'h8'],
+        'hetman': ['d8'],
+        'krol': ['e8'],
+    },
+}
+
+figury_wagi = {
+    'pion': 1,
+    'skoczek': 3,
+    'goniec': 3,
+    'wieza': 4.5,
+    'hetman': 8,
+    'krol': None,
+}

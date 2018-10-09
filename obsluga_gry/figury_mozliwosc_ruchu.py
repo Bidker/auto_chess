@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .figury_ruchy import RuchFigur
 from .listy_planszy import lista_szerokosci, lista_wysokosci
 from util.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
 from util.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
@@ -11,9 +10,9 @@ from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
 class MozliwoscRuchuBierki(object):
     def __init__(self):
+        self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
         self.pola_zajete_bialymi = self.stworzZajetePola('biale')
         self.pola_zajete_czarnymi = self.stworzZajetePola('czarne')
-        self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
 
     def stworzZajetePola(self, kolor):
         pola = []
@@ -381,11 +380,12 @@ class MozliwoscRuchuBierki(object):
 
     def ograniczSkoczkaOBicie(self, pola_ruchu):
         pola_bicia = []
-        print(self.pola_przecinikow)
         for pole in zmienListeWspolrzednychNaPolaZeSprawdzeniem(pola_ruchu):
             if pole in self.pola_przecinikow:
                 pola_bicia.append(pole)
-                pola_ruchu.remove(pole)
+                # metoda remove robi jakiegos break'a więc usunięcie trzeba zrobic tak
+                index = pola_ruchu.index(pole)
+                pola_ruchu = pola_ruchu[:index-1] + pola_ruchu[index:]
         return {
             'ruch': zmienListePolNaWspolrzedne(pola_ruchu),
             'bicie': zmienListePolNaWspolrzedne(pola_bicia),

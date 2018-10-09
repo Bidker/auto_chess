@@ -70,10 +70,9 @@ class Figury(games.Sprite):
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
-        print('ruchy: %r', ruchy_do_podswietlenia)
-        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia['ruch']):
+        for wspolrzedne in ruchy_do_podswietlenia['ruch']:
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
-            games.screen.add(podswietlony_ruch[i])
-        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia['bicie']):
+        for wspolrzedne in ruchy_do_podswietlenia['bicie']:
             podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
-            games.screen.add(podswietlony_ruch[i])
+        for ruch in podswietlony_ruch:
+            games.screen.add(ruch)
