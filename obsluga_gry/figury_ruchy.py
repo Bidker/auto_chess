@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from .listy_planszy import lista_szerokosci, lista_wysokosci
-
-from copy import deepcopy
+from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
 class RuchFigur(object):
     def __init__(self):
+        self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
         self.figury_wagi = {
             'pion': 1,
             'skoczek': 3,
@@ -36,18 +36,16 @@ class RuchFigur(object):
             },
         }
 
-        self.pola_figur_w_trakcie_gry = deepcopy(self.figury_pola_startowe)
-
     def ruch(self, start, stop, czyj_ruch):
         if self.czy_w_planszy(stop):
-            figury_ktorych_ruch = self.pola_figur_w_trakcie_gry.get(czyj_ruch)
+            figury_ktorych_ruch = self.narz_szukania_bierek.dajSlownikZajetychPol()[czyj_ruch]
             if czyj_ruch == 'biale':
                 self.sprawdz_bicie('czarne')
             else:
                 self.sprawdz_bicie('biale')
             figura_pole = self.daj_figure_i_pole(start, figury_ktorych_ruch)
             if not figura_pole.get('blad'):
-                pola_poruszonej_figury = self.pola_figur_w_trakcie_gry.get(figura_pole.get('figura'))
+                pola_poruszonej_figury = self.narz_szukania_bierek.dajSlownikZajetychPol()[figura_pole['figura']]
                 figury_ktorych_ruch[figura_pole.get('figura')] = self.zmien_pola(
                     stop, pola_poruszonej_figury, figura_pole)
 
@@ -57,7 +55,7 @@ class RuchFigur(object):
         return False
 
     def sprawdzBicie(self, kolor, stop):
-        pozycje_przeciwnikow = self.pola_figur_w_trakcie_gry.get(kolor)
+        pozycje_przeciwnikow = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
         pozycja_w_biciu = self.dajFigureIPole(stop, pozycje_przeciwnikow)
         if pozycja_w_biciu:
             bicie = pozycje_przeciwnikow.get(pozycja_w_biciu('figura'))

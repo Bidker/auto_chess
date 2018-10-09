@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from obsluga_gry.listy_planszy import slownik_bierek
+
 from contextlib import contextmanager
 
 
@@ -24,3 +26,23 @@ class NarzedziaSzukaniaBierek(object):
             bierka = 'czarny_' + bierka
         obiekt = self.dajBierkePoNazwie(bierka)
         yield obiekt
+
+    def dajSlownikZajetychPol(self):
+        slownik = {
+            'czarne': self.dajSlownikCzarnych,
+            'biale': self.dajSlownikBialych,
+        }
+        return slownik
+
+    def dajSlownikBialych(self):
+        return self._dajSlownikPozycji(6, 'biale')
+
+    def dajSlownikCzarnych(self):
+        return self._dajSlownikPozycji(7, 'czarne')
+
+    def _dajSlownikPozycji(self, index_wyciecia, kolor):
+        slownik = slownik_bierek.copy()
+        for bierka in self.lista_obiektow:
+            if kolor in bierka.nazwa:
+                slownik[bierka.nazwa[index_wyciecia:]].append(bierka.pozycja)
+        return slownik

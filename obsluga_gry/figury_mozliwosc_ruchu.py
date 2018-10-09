@@ -11,14 +11,13 @@ from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
 class MozliwoscRuchuBierki(object):
     def __init__(self):
-        self.ruchFigury = RuchFigur()
         self.pola_zajete_bialymi = self.stworzZajetePola('biale')
         self.pola_zajete_czarnymi = self.stworzZajetePola('czarne')
         self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
 
     def stworzZajetePola(self, kolor):
         pola = []
-        figury = self.ruchFigury.pola_figur_w_trakcie_gry.get(kolor)
+        figury = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
         for figura in figury.keys():
             pola.extend(figury.get(figura))
         return pola
@@ -340,7 +339,7 @@ class MozliwoscRuchuBierki(object):
             return self.wykreslPolaBitePrzez('biale', mozliwe_ruchy)
 
     def wykreslPolaBitePrzez(self, kolor_przecinikow, mozliwe_ruchy):
-        figury_pola = self.ruchFigury.pola_figur_w_trakcie_gry.get(kolor_przecinikow)
+        figury_pola = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor_przecinikow]
         for bierka, pola_bierki in figury_pola.items():
             if bierka == 'pion':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezPiona(mozliwe_ruchy, pola_bierki, kolor_przecinikow)

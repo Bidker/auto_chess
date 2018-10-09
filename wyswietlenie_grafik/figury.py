@@ -12,12 +12,18 @@ from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 class Figury(games.Sprite):
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
+        self.pozycja = pozycja
         self.ustaw_x(wspolrzedne.get('x'))
         self.ustaw_y(wspolrzedne.get('y'))
         self.nazwa = self.dajNazwe(figura)
         self.ikona = self.nadajIkone()
         self.czy_poruszona = False
         self.stworzDuszka()
+
+    def zmienUstawienieBierki(self, wspolrzedne, pozycja):
+        self.pozycja = pozycja
+        self.ustaw_x = wspolrzedne['x']
+        self.ustaw_y = wspolrzedne['y']
 
     def ustaw_x(self, x):
         self.pozycja_x = x
@@ -26,9 +32,8 @@ class Figury(games.Sprite):
         self.pozycja_y = y
 
     def dajNazwe(self, figura):
-        nazwa = figura
         kolor = self.sprawdzKolorPoPozycji()
-        return kolor + '_' + nazwa
+        return kolor + '_' + figura
 
     def sprawdzKolorPoPozycji(self):
         if self.pozycja_y > 600:
