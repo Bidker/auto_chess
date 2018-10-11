@@ -3,18 +3,16 @@
 
 from livewires import games
 
-from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from obsluga_gry.listy_planszy import Plansza
+from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 
 
-class PodswietlMozliwyRuch(games.Sprite):
-    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie.jpg'
+class PodswietlMozliwePola(games.Sprite):
 
-    def __init__(self, wspolrzedne):
-        self.ustaw_x(wspolrzedne.get('x'))
-        self.ustaw_y(wspolrzedne.get('y'))
+    def __init__(self, cls, wspolrzedne):
+        self.ustaw_x(wspolrzedne['x'])
+        self.ustaw_y(wspolrzedne['y'])
         self.wybrane = False
-        self.podswietlPole()
+        cls.podswietlPole(self)
 
     def ustaw_x(self, x):
         self.pozycja_x = x
@@ -23,13 +21,28 @@ class PodswietlMozliwyRuch(games.Sprite):
         self.pozycja_y = y
 
     def ustawWspolrzedne(self, wspolrzedne):
-        self.pozycja_x = wspolrzedne.get('x')
-        self.pozycja_y = wspolrzedne.get('y')
+        self.pozycja_x = wspolrzedne['x']
+        self.pozycja_y = wspolrzedne['y']
 
-    def podswietlPole(self):
-        obraz = games.load_image(PodswietlMozliwyRuch.ikona, False)
-        super(PodswietlMozliwyRuch, self).__init__(
+    @classmethod
+    def podswietlPole(cls, self):
+        obraz = games.load_image(cls.ikona, False)
+        super(PodswietlMozliwePola, self).__init__(
             image=obraz,
             x=self.pozycja_x,
             y=self.pozycja_y
         )
+
+
+class PodswietlMozliwyRuch(PodswietlMozliwePola):
+    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie.jpg'
+
+    def __init__(self, wspolrzedne):
+        super(PodswietlMozliwyRuch, self).__init__(PodswietlMozliwyRuch, wspolrzedne)
+
+
+class PodswietlMozliweBicie(PodswietlMozliwePola):
+    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie_bicia.jpg'
+
+    def __init__(self, wspolrzedne):
+        super(PodswietlMozliweBicie, self).__init__(PodswietlMozliweBicie, wspolrzedne)

@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from livewires import games
+from obsluga_gry.config import lista_szerokosci, lista_wysokosci
 
-from obsluga_gry.listy_planszy import Plansza
+
+def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
+    for i, pole in enumerate(lista_pol):
+        if not isinstance(pole, dict):
+            lista_pol[i] = wyznaczWspolrzednePoPozycji(pole)
+    return lista_pol
 
 
 def zmienListePolNaWspolrzedne(lista_pol):
@@ -14,22 +20,22 @@ def zmienListePolNaWspolrzedne(lista_pol):
 
 
 def wyznaczWspolrzednePoPozycji(pole):
-    plansza = Plansza()
-    szerokosc = plansza.lista_szerokosci
-    wysokosc = plansza.lista_wysokosci
-    for i in pole:
-        if i in szerokosc:
-            x = dajWspolrzedna(szerokosc.index(i))
-        elif i in wysokosc:
-            y = dajWspolrzedna(wysokosc.index(i))
+    pole = naprawPole(pole)
     return {
-        'x': x,
-        'y': y
+        'x': dajWspolrzedna(lista_szerokosci.index(pole[0])),
+        'y': dajWspolrzedna(lista_wysokosci.index(pole[1])),
     }
 
 
 def dajWspolrzedna(i):
     return (50+(i*100))
+
+
+def zmienListeWspolrzednychNaPolaZeSprawdzeniem(lista_wspolrzednych):
+    for i, wspolrzedna in enumerate(lista_wspolrzednych):
+        if isinstance(wspolrzedna, dict):
+            lista_wspolrzednych[i] = zmienWspolrzedneNaPole(wspolrzedna['x'], wspolrzedna['y'])
+    return lista_wspolrzednych
 
 
 def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
@@ -40,10 +46,9 @@ def zmienListeWspolrzednychNaPola(lista_wspolrzednych):
 
 
 def zmienWspolrzedneNaPole(x, y):
-    plansza = Plansza()
-    pole = plansza.lista_szerokosci[dajIndexPola(x)]
-    pole += plansza.lista_wysokosci[dajIndexPola(y)]
-    return pole
+    pole = lista_szerokosci[dajIndexPola(x)]
+    pole += lista_wysokosci[dajIndexPola(y)]
+    return naprawPole(pole)
 
 
 def dajIndexPola(wspolrzedna):
@@ -78,3 +83,9 @@ def czyWszpolrzedneWPolu(x, y):
         return True
     else:
         return False
+
+
+def naprawPole(pole):
+    if pole[0] in lista_szerokosci:
+        return pole
+    return pole[1] + pole[0]

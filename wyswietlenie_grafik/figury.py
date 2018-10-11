@@ -4,21 +4,26 @@
 import time
 from livewires import games
 
-from narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from .mozliwy_ruch import PodswietlMozliwyRuch
-from obsluga_gry.listy_planszy import Plansza
+from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
+from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
 
 class Figury(games.Sprite):
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
+        self.pozycja = pozycja
         self.ustaw_x(wspolrzedne.get('x'))
         self.ustaw_y(wspolrzedne.get('y'))
         self.nazwa = self.dajNazwe(figura)
         self.ikona = self.nadajIkone()
         self.czy_poruszona = False
         self.stworzDuszka()
+
+    def zmienUstawienieBierki(self, wspolrzedne, pozycja):
+        self.pozycja = pozycja
+        self.ustaw_x = wspolrzedne['x']
+        self.ustaw_y = wspolrzedne['y']
 
     def ustaw_x(self, x):
         self.pozycja_x = x
@@ -27,12 +32,11 @@ class Figury(games.Sprite):
         self.pozycja_y = y
 
     def dajNazwe(self, figura):
-        nazwa = figura
         kolor = self.sprawdzKolorPoPozycji()
-        return kolor + '_' + nazwa
+        return kolor + '_' + figura
 
     def sprawdzKolorPoPozycji(self):
-        if self.pozycja_y > 200:
+        if self.pozycja_y > 600:
             kolor = 'bialy'
         else:
             kolor = 'czarny'
@@ -66,7 +70,9 @@ class Figury(games.Sprite):
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
-        # print(ruchy_do_podswietlenia)
-        for i, wspolrzedne in enumerate(ruchy_do_podswietlenia):
+        for wspolrzedne in ruchy_do_podswietlenia['ruch']:
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
-            games.screen.add(podswietlony_ruch[i])
+        for wspolrzedne in ruchy_do_podswietlenia['bicie']:
+            podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
+        for ruch in podswietlony_ruch:
+            games.screen.add(ruch)

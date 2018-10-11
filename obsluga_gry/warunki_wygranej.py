@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .figury_ruchy import RuchFigur
+from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
-ruchFigury = RuchFigur()
+narz_szukania_bierek = NarzedziaSzukaniaBierek()
 
 
 def sprawdzWarunkiWygranej(kolor):
-    wszystkie_figury_koloru = ruchFigury.pola_figur_w_trakcie_gry.get(kolor)
-    krol_koloru = wszystkie_figury_koloru.get('krol')
+    wszystkie_figury_koloru = narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
+    krol_koloru = wszystkie_figury_koloru['krol']
