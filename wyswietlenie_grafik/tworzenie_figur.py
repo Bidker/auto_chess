@@ -1,6 +1,6 @@
 from livewires import games
 
-from obsluga_gry.listy_planszy import figury_pola_startowe
+from obsluga_gry.config import figury_pola_startowe
 from .figury import Figury
 
 

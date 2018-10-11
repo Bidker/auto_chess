@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from obsluga_gry.listy_planszy import slownik_bierek
+from obsluga_gry.config import slownik_bierek
 
 from contextlib import contextmanager
+from copy import deepcopy
 
 
 class NarzedziaSzukaniaBierek(object):
@@ -41,7 +42,7 @@ class NarzedziaSzukaniaBierek(object):
         return self._dajSlownikPozycji('czarny')
 
     def _dajSlownikPozycji(self, kolor):
-        slownik = slownik_bierek.copy()
+        slownik = deepcopy(slownik_bierek)
         index = len(kolor) + 1
 
         for bierka in self.lista_obiektow:

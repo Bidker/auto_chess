@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from livewires import games
-from obsluga_gry.listy_planszy import lista_szerokosci, lista_wysokosci
+from obsluga_gry.config import lista_szerokosci, lista_wysokosci
 
 
 def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
     for i, pole in enumerate(lista_pol):
-        pole = naprawPole(pole)
-        if pole[0] in lista_szerokosci and pole[1] in lista_wysokosci:
+        if not isinstance(pole, dict):
             lista_pol[i] = wyznaczWspolrzednePoPozycji(pole)
     return lista_pol
 

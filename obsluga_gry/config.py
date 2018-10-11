@@ -24,7 +24,7 @@ figury_pola_startowe = {
         'krol': ['e1'],
     },
     'czarne': {
-        'pion': [znak + '3' for znak in lista_szerokosci],
+        'pion': [znak + '7' for znak in lista_szerokosci],
         'skoczek': ['b8', 'g8'],
         'goniec': ['c8', 'f8'],
         'wieza': ['a8', 'h8'],
