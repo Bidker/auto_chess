@@ -35,6 +35,8 @@ def zmienListeWspolrzednychNaPolaZeSprawdzeniem(lista_wspolrzednych):
     for i, wspolrzedna in enumerate(lista_wspolrzednych):
         if isinstance(wspolrzedna, dict):
             lista_wspolrzednych[i] = zmienWspolrzedneNaPole(wspolrzedna['x'], wspolrzedna['y'])
+        else:
+            lista_wspolrzednych[i] = naprawPole(wspolrzedna)
     return lista_wspolrzednych
 
 
