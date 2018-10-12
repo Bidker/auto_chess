@@ -7,6 +7,7 @@ from livewires import games
 from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+from obsluga_gry.config import warunki_biale
 
 
 class Figury(games.Sprite):
@@ -64,7 +65,7 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0) and 'bialy' in self.nazwa:
+        if games.mouse.is_pressed(0) and warunki_biale in self.nazwa:
             if myszNadObiektem(self) and not self.zaznaczony:
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
