@@ -23,16 +23,23 @@ class Figury(games.Sprite):
         self.zaznaczony = False
         self.stworzDuszka()
 
-    def zmienUstawienieBierki(self, wspolrzedne, pozycja):
-        self.pozycja = pozycja
-        self.ustaw_x = wspolrzedne['x']
-        self.ustaw_y = wspolrzedne['y']
-
     def ustaw_x(self, x):
         self.pozycja_x = x
 
     def ustaw_y(self, y):
         self.pozycja_y = y
+
+    def zmienUstawienieBierki(self, wspolrzedne, pozycja):
+        self.pozycja = pozycja
+        self.czy_poruszona = True
+        self.zaznaczony = False
+        self.ustawWspolrzedne(wspolrzedne)
+        self.usunPodswietloneRuchy()
+
+    def ustawWspolrzedne(self, wspolrzedne):
+        self.ustaw_x(wspolrzedne['x'])
+        self.ustaw_y(wspolrzedne['y'])
+        self.set_position((self.pozycja_x, self.pozycja_y))
 
     def dajNazwe(self, figura):
         kolor = self.sprawdzKolorPoPozycji()
@@ -96,5 +103,6 @@ class Figury(games.Sprite):
         narz_szukania_bierki = NarzedziaSzukaniaBierek()
 
         bierka = narz_szukania_bierki.dajZaznaczonaBierke()
+        self.zaznaczony = True
         if bierka:
             bierka.zaznaczony = False

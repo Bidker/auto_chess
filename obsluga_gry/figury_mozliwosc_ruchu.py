@@ -85,7 +85,7 @@ class MozliwoscRuchuBierki(object):
     def ruchDlaSkoczka(self, obiektSkoczka):
         pole_skoczka = zmienWspolrzedneNaPole(obiektSkoczka.pozycja_x, obiektSkoczka.pozycja_y)
         mozliwe_ruchy = self.przygotujRuchySKoczka(pole_skoczka)
-        mozliwe_ruchy = self.sprawdzCzyKucowiZawadza(self.pola_sojusznikow, mozliwe_ruchy)
+        mozliwe_ruchy = self.sprawdzCzyKucowiZawadza(mozliwe_ruchy)
 
         ret = []
         for ruch in mozliwe_ruchy:
@@ -136,10 +136,10 @@ class MozliwoscRuchuBierki(object):
                     ret.append(znak + lista_szerokosci[index+1])
         return ret
 
-    def sprawdzCzyKucowiZawadza(self, sojusznicy, mozliwe_ruchy):
+    def sprawdzCzyKucowiZawadza(self, mozliwe_ruchy):
         ret = []
-        for pole in mozliwe_ruchy:
-            if pole not in sojusznicy:
+        for pole in zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy):
+            if pole not in self.pola_sojusznikow:
                 ret.append(pole)
         return ret
 
@@ -289,13 +289,13 @@ class MozliwoscRuchuBierki(object):
             return []
 
     def sprawdzCzyZawadza(self, mozliwe_ruchy):
-        for index, pole in enumerate(mozliwe_ruchy):
+        for index, pole in enumerate(zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)):
             if pole in self.pola_sojusznikow:
                 mozliwe_ruchy = mozliwe_ruchy[:index]
         return mozliwe_ruchy
 
     def sprawdzCzyZawadzaPrzeciwnik(self, mozliwe_ruchy, dodaj_do_indexu=0):
-        for index, pole in enumerate(mozliwe_ruchy):
+        for index, pole in enumerate(zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)):
             if pole in self.pola_przecinikow:
                 mozliwe_ruchy = mozliwe_ruchy[:(index+dodaj_do_indexu)]
         return mozliwe_ruchy

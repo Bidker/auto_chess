@@ -3,7 +3,8 @@
 
 from livewires import games
 
-from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
+from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji, zmienWspolrzedneNaPole
+from util.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
 class PodswietlMozliwePola(games.Sprite):
@@ -12,6 +13,7 @@ class PodswietlMozliwePola(games.Sprite):
     def __init__(self, cls, wspolrzedne):
         self.ustaw_x(wspolrzedne['x'])
         self.ustaw_y(wspolrzedne['y'])
+        self.pozycja = zmienWspolrzedneNaPole(self.pozycja_x, self.pozycja_y)
         self.wybrane = False
         cls.podswietlPole(self)
         PodswietlMozliwePola.lista_podswietlen.append(self)
@@ -22,9 +24,10 @@ class PodswietlMozliwePola(games.Sprite):
     def ustaw_y(self, y):
         self.pozycja_y = y
 
-    def ustawWspolrzedne(self, wspolrzedne):
+    def ustawWspolrzedne(self, wspolrzedne, pozycja):
         self.pozycja_x = wspolrzedne['x']
         self.pozycja_y = wspolrzedne['y']
+        self.pozycja = pozycja
 
     @classmethod
     def podswietlPole(cls, self):
@@ -34,6 +37,18 @@ class PodswietlMozliwePola(games.Sprite):
             x=self.pozycja_x,
             y=self.pozycja_y
         )
+
+    def update(self):
+        if games.mouse.is_pressed(0) and myszNadObiektem(self):
+            self.wybrane = True
+            szukanie_bierek = NarzedziaSzukaniaBierek()
+            wspolrzedne = {
+                'x': self.pozycja_x,
+                'y': self.pozycja_y,
+            }
+            bierka = szukanie_bierek.dajZaznaczonaBierke()
+            if bierka:
+                bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):
