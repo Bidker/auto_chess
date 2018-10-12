@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from obsluga_gry.config import slownik_bierek
+from obsluga_gry.config import slownik_bierek, warunki_biale
 
 from contextlib import contextmanager
 from copy import deepcopy
@@ -19,9 +19,14 @@ class NarzedziaSzukaniaBierek(object):
             if bierka.nazwa == nazwa_bierki:
                 return bierka
 
+    def dajZaznaczonaBierke(self):
+        for bierka in self.lista_obiektow:
+            if bierka.zaznaczony:
+                return bierka
+
     @contextmanager
     def szukanieBierki(self, bierka, kolor_przecinikow):
-        if kolor_przecinikow in ('biale'):  # w razie potrzeby można dodać inne odmiany
+        if kolor_przecinikow == warunki_biale:
             bierka = 'bialy_' + bierka
         else:
             bierka = 'czarny_' + bierka

@@ -7,12 +7,14 @@ from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 
 
 class PodswietlMozliwePola(games.Sprite):
+    lista_podswietlen = []
 
     def __init__(self, cls, wspolrzedne):
         self.ustaw_x(wspolrzedne['x'])
         self.ustaw_y(wspolrzedne['y'])
         self.wybrane = False
         cls.podswietlPole(self)
+        PodswietlMozliwePola.lista_podswietlen.append(self)
 
     def ustaw_x(self, x):
         self.pozycja_x = x
