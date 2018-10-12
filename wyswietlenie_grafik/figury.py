@@ -64,9 +64,19 @@ class Figury(games.Sprite):
     def update(self):
         if games.mouse.is_pressed(0) == 1:
             if myszNadObiektem(self) and 'bialy' in self.nazwa:
+                self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
 
+    def usunPodswietloneRuchy(self):
+        from .mozliwy_ruch import PodswietlMozliwePola
+        ilosc_obiektow = len(PodswietlMozliwePola.lista_podswietlen)
+        for _ in range(ilosc_obiektow):
+            pole = PodswietlMozliwePola.lista_podswietlen.pop()
+            pole.destroy()
+
     def podswietlMozliweRuchy(self):
+        from .tworzenie_figur import wyswietlObiektyNaEkranie
+
         mozliwoscRuchu = MozliwoscRuchuBierki()
         ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
         podswietlony_ruch = []
@@ -74,5 +84,4 @@ class Figury(games.Sprite):
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
         for wspolrzedne in ruchy_do_podswietlenia['bicie']:
             podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
-        for ruch in podswietlony_ruch:
-            games.screen.add(ruch)
+        wyswietlObiektyNaEkranie(podswietlony_ruch)

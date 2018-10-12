@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from livewires import games
 
 from obsluga_gry.config import figury_pola_startowe
@@ -6,7 +9,7 @@ from .figury import Figury
 
 def pokazFigury():
     obiekty_figur = ObiektyFigur.dajObiektyFigur()
-    wyswietlFiguryNaEkranie(obiekty_figur)
+    wyswietlObiektyNaEkranie(obiekty_figur)
     return obiekty_figur
 
 
@@ -16,6 +19,11 @@ def stworzListeFigur():
     lista_bierek.append(figury_pola_startowe['czarne'])
 
     return lista_bierek
+
+
+def wyswietlObiektyNaEkranie(obiekty_do_wyswietlenia):
+    for obiekt in obiekty_do_wyswietlenia:
+        games.screen.add(obiekt)
 
 
 class ObiektyFigur(object):
@@ -36,8 +44,3 @@ class ObiektyFigur(object):
                         cls.stworzone_bierki.append(bierka_stworzona)
 
         return cls.stworzone_bierki
-
-
-def wyswietlFiguryNaEkranie(obiekty_figur):
-    for bierka in obiekty_figur:
-        games.screen.add(bierka)
