@@ -41,3 +41,7 @@ figury_wagi = {
     'hetman': 8,
     'krol': None,
 }
+
+warunki_biale = ('bialy' or 'biale' or 'biały' or 'białe')
+
+warunki_czarne = ('czarny' or 'czarne')

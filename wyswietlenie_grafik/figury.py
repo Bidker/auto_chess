@@ -10,6 +10,7 @@ from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
 
 class Figury(games.Sprite):
+
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
         self.pozycja = pozycja
@@ -18,6 +19,7 @@ class Figury(games.Sprite):
         self.nazwa = self.dajNazwe(figura)
         self.ikona = self.nadajIkone()
         self.czy_poruszona = False
+        self.zaznaczony = False
         self.stworzDuszka()
 
     def zmienUstawienieBierki(self, wspolrzedne, pozycja):
@@ -62,13 +64,15 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0) == 1:
-            if myszNadObiektem(self) and 'bialy' in self.nazwa:
+        if games.mouse.is_pressed(0) and 'bialy' in self.nazwa:
+            if myszNadObiektem(self) and not self.zaznaczony:
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
+                self.zmienZaznaczenia()
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola
+
         ilosc_obiektow = len(PodswietlMozliwePola.lista_podswietlen)
         for _ in range(ilosc_obiektow):
             pole = PodswietlMozliwePola.lista_podswietlen.pop()
@@ -85,3 +89,11 @@ class Figury(games.Sprite):
         for wspolrzedne in ruchy_do_podswietlenia['bicie']:
             podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
         wyswietlObiektyNaEkranie(podswietlony_ruch)
+
+    def zmienZaznaczenia(self):
+        from util.narzedzia_figur import NarzedziaSzukaniaBierek
+        narz_szukania_bierki = NarzedziaSzukaniaBierek()
+
+        bierka = narz_szukania_bierki.dajZaznaczonaBierke()
+        if bierka:
+            bierka.zaznaczony = False
