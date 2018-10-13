@@ -69,8 +69,6 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        nsb = NarzedziaSzukaniaBierek()
-        bierka = nsb.dajZaznaczonaBierke()
         if games.mouse.is_pressed(0) and warunki_biale in self.nazwa:  # TODO warunek czyj ruch dla gry 2 osób
             if myszNadObiektem(self) and not self.zaznaczony:
                 self.usunPodswietloneRuchy()
