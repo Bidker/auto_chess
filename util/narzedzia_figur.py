@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from obsluga_gry.config import slownik_bierek, warunki_biale
+from .narzedzia_pol import naprawPole
 
 from contextlib import contextmanager
 from copy import deepcopy
@@ -16,12 +17,17 @@ class NarzedziaSzukaniaBierek(object):
 
     def dajBierkePoNazwie(self, nazwa_bierki):
         for bierka in self.lista_obiektow:
-            if bierka.nazwa == nazwa_bierki:
+            if bierka.nazwa == nazwa_bierki and not bierka.czy_zbita:
                 return bierka
 
     def dajZaznaczonaBierke(self):
         for bierka in self.lista_obiektow:
-            if bierka.zaznaczony:
+            if bierka.zaznaczony and not bierka.czy_zbita:
+                return bierka
+
+    def dajBierkePoPolu(self, pole):
+        for bierka in self.lista_obiektow:
+            if naprawPole(bierka.pozycja) == naprawPole(pole) and not bierka.czy_zbita:
                 return bierka
 
     @contextmanager

@@ -43,4 +43,4 @@ class ObiektyFigur(object):
                         bierka_stworzona = Figury(bierka, pozycja)
                         cls.stworzone_bierki.append(bierka_stworzona)
 
-        return cls.stworzone_bierki
+        return [bierka for bierka in cls.stworzone_bierki if not bierka.czy_zbita]

@@ -18,7 +18,7 @@ class MozliwoscRuchuBierki(object):
         pola = []
         figury = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
         for figura in figury.keys():
-            pola.extend(figury.get(figura))
+            pola.extend(figury[figura])
         return pola
 
     def sprawdzMozliweRuchy(self, obiektBierki):
