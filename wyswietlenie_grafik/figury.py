@@ -6,6 +6,7 @@ from livewires import games
 
 from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
+from util.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.config import warunki_biale
 
@@ -15,30 +16,25 @@ class Figury(games.Sprite):
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
         self.pozycja = pozycja
-        self.ustaw_x(wspolrzedne.get('x'))
-        self.ustaw_y(wspolrzedne.get('y'))
+        self.pozycja_x = wspolrzedne['x']
+        self.pozycja_y = wspolrzedne['y']
         self.nazwa = self.dajNazwe(figura)
         self.ikona = self.nadajIkone()
         self.czy_poruszona = False
+        self.czy_zbita = False
         self.zaznaczony = False
         self.stworzDuszka()
-
-    def ustaw_x(self, x):
-        self.pozycja_x = x
-
-    def ustaw_y(self, y):
-        self.pozycja_y = y
 
     def zmienUstawienieBierki(self, wspolrzedne, pozycja):
         self.pozycja = pozycja
         self.czy_poruszona = True
         self.zaznaczony = False
-        self.ustawWspolrzedne(wspolrzedne)
+        self.poruszBierka(wspolrzedne)
         self.usunPodswietloneRuchy()
 
-    def ustawWspolrzedne(self, wspolrzedne):
-        self.ustaw_x(wspolrzedne['x'])
-        self.ustaw_y(wspolrzedne['y'])
+    def poruszBierka(self, wspolrzedne):
+        self.pozycja_x = wspolrzedne['x']
+        self.pozycja_y = wspolrzedne['y']
         self.set_position((self.pozycja_x, self.pozycja_y))
 
     def dajNazwe(self, figura):
@@ -69,10 +65,11 @@ class Figury(games.Sprite):
         self.czy_poruszona = True
 
     def zbita(self):
+        self.czy_zbita = True
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0) and warunki_biale in self.nazwa:
+        if games.mouse.is_pressed(0) and warunki_biale in self.nazwa:  # TODO warunek czyj ruch dla gry 2 osób
             if myszNadObiektem(self) and not self.zaznaczony:
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()

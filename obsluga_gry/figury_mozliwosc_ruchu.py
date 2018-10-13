@@ -18,7 +18,7 @@ class MozliwoscRuchuBierki(object):
         pola = []
         figury = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
         for figura in figury.keys():
-            pola.extend(figury.get(figura))
+            pola.extend(figury[figura])
         return pola
 
     def sprawdzMozliweRuchy(self, obiektBierki):
@@ -130,10 +130,10 @@ class MozliwoscRuchuBierki(object):
                     ret.append(znak + lista_wysokosci[index-1])
             elif znak in lista_wysokosci:
                 index = lista_szerokosci.index(pole_skoczka[0])
-                if znak != 7:
-                    ret.append(znak + lista_szerokosci[index-1])
-                if znak != 0:
-                    ret.append(znak + lista_szerokosci[index+1])
+                if index != 7:
+                    ret.append(lista_szerokosci[index+1] + znak)
+                if index != 0:
+                    ret.append(lista_szerokosci[index-1] + znak)
         return ret
 
     def sprawdzCzyKucowiZawadza(self, mozliwe_ruchy):

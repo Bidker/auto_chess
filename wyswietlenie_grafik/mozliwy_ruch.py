@@ -11,23 +11,12 @@ class PodswietlMozliwePola(games.Sprite):
     lista_podswietlen = []
 
     def __init__(self, cls, wspolrzedne):
-        self.ustaw_x(wspolrzedne['x'])
-        self.ustaw_y(wspolrzedne['y'])
+        self.pozycja_x = wspolrzedne['x']
+        self.pozycja_y = wspolrzedne['y']
         self.pozycja = zmienWspolrzedneNaPole(self.pozycja_x, self.pozycja_y)
         self.wybrane = False
         cls.podswietlPole(self)
         PodswietlMozliwePola.lista_podswietlen.append(self)
-
-    def ustaw_x(self, x):
-        self.pozycja_x = x
-
-    def ustaw_y(self, y):
-        self.pozycja_y = y
-
-    def ustawWspolrzedne(self, wspolrzedne, pozycja):
-        self.pozycja_x = wspolrzedne['x']
-        self.pozycja_y = wspolrzedne['y']
-        self.pozycja = pozycja
 
     @classmethod
     def podswietlPole(cls, self):
@@ -46,6 +35,11 @@ class PodswietlMozliwePola(games.Sprite):
                 'x': self.pozycja_x,
                 'y': self.pozycja_y,
             }
+
+            bita_bierka = szukanie_bierek.dajBierkePoPolu(self.pozycja)
+            if bita_bierka:
+                bita_bierka.zbita()
+
             bierka = szukanie_bierek.dajZaznaczonaBierke()
             if bierka:
                 bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
