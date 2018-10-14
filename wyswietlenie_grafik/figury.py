@@ -8,6 +8,7 @@ from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from util.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale
 
 
@@ -31,6 +32,7 @@ class Figury(games.Sprite):
         self.zaznaczony = False
         self.poruszBierka(wspolrzedne)
         self.usunPodswietloneRuchy()
+        KolejnoscRuchu.zmien_ture()
 
     def poruszBierka(self, wspolrzedne):
         self.pozycja_x = wspolrzedne['x']
@@ -42,7 +44,7 @@ class Figury(games.Sprite):
         return kolor + '_' + figura
 
     def sprawdzKolorPoPozycji(self):
-        if self.pozycja_y > 600:
+        if self.pozycja_y > 400:
             kolor = 'bialy'
         else:
             kolor = 'czarny'
@@ -69,8 +71,8 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0) and warunki_biale in self.nazwa:  # TODO warunek czyj ruch dla gry 2 osób
-            if myszNadObiektem(self) and not self.zaznaczony:
+        if games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony:
+            if KolejnoscRuchu.kolej_na in self.nazwa:
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
                 self.zmienZaznaczenia()

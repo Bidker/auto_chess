@@ -152,6 +152,7 @@ class MozliwoscRuchuBierki(object):
         }
 
     def ruchDlaKrola(self, obiektKrola):
+        # TODO roszada
         ruch_krzyzowy = self.ruchKrzyzowy(obiektKrola)
         ruch_poprzeczny = self.ruchPoprzeczny(obiektKrola)
         mozliwy_ruch = self.wykreslPolaBitePrzezPrzeciwnikow(obiektKrola, ruch_poprzeczny['ruch']+ruch_krzyzowy['ruch'])
