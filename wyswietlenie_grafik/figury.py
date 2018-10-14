@@ -42,7 +42,7 @@ class Figury(games.Sprite):
         return kolor + '_' + figura
 
     def sprawdzKolorPoPozycji(self):
-        if self.pozycja_y > 600:
+        if self.pozycja_y > 400:
             kolor = 'bialy'
         else:
             kolor = 'czarny'
