@@ -3,8 +3,8 @@
 
 from livewires import games
 
-from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji, zmienWspolrzedneNaPole
-from util.narzedzia_figur import NarzedziaSzukaniaBierek
+from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji, zmienWspolrzedneNaPole
+from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
 class PodswietlMozliwePola(games.Sprite):

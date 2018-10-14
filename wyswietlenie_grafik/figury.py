@@ -5,14 +5,16 @@ import time
 from livewires import games
 
 from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
-from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from util.narzedzia_figur import NarzedziaSzukaniaBierek
+from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
+from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+from obsluga_gry.warunki_wygranej import sprawdz_warunki_wygranej
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale
 
 
 class Figury(games.Sprite):
+    zagrozony_krol = None
 
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
@@ -24,6 +26,7 @@ class Figury(games.Sprite):
         self.czy_poruszona = False
         self.czy_zbita = False
         self.zaznaczony = False
+        self.zagrozony = False
         self.stworzDuszka()
 
     def zmienUstawienieBierki(self, wspolrzedne, pozycja):
@@ -76,6 +79,7 @@ class Figury(games.Sprite):
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
                 self.zmienZaznaczenia()
+                sprawdz_warunki_wygranej(self)
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola
@@ -98,7 +102,7 @@ class Figury(games.Sprite):
         wyswietlObiektyNaEkranie(podswietlony_ruch)
 
     def zmienZaznaczenia(self):
-        from util.narzedzia_figur import NarzedziaSzukaniaBierek
+        from tools.narzedzia_figur import NarzedziaSzukaniaBierek
         narz_szukania_bierki = NarzedziaSzukaniaBierek()
 
         bierka = narz_szukania_bierki.dajZaznaczonaBierke()

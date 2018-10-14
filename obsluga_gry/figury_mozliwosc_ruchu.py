@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from .config import lista_szerokosci, lista_wysokosci
-from util.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
-from util.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
-from util.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
-from util.narzedzia_figur import NarzedziaSzukaniaBierek
+from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
+from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
+from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
+from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
 class MozliwoscRuchuBierki(object):
