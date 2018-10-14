@@ -41,6 +41,7 @@ class MozliwoscRuchuBierki(object):
             return self.ruchHetmana(obiektBierki)
         elif 'krol' in obiektBierki.nazwa:
             return self.ruchDlaKrola(obiektBierki)
+        # TODO dla słowników ruchu ogarnąć ograniczenie ruchu jesli jest bicie na króla tego koloru
 
     def ruchDlaPiona(self, obiektBierki):
         mozliwe_ruchy = []

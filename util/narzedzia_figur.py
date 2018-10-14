@@ -16,22 +16,26 @@ class NarzedziaSzukaniaBierek(object):
         self.lista_obiektow = of.dajObiektyFigur()
 
     def dajBierkePoNazwie(self, nazwa_bierki):
+        '''Funkcja zwraca bierwszy obiekt w którym napotka zadaną frazę'''
         for bierka in self.lista_obiektow:
-            if bierka.nazwa == nazwa_bierki and not bierka.czy_zbita:
+            if nazwa_bierki in bierka.nazwa and not bierka.czy_zbita:
                 return bierka
 
     def dajZaznaczonaBierke(self):
+        '''Funkcja zwraca bierkę nad którą został ostatnio wcisnięty klawisz myszy'''
         for bierka in self.lista_obiektow:
             if bierka.zaznaczony and not bierka.czy_zbita:
                 return bierka
 
     def dajBierkePoPolu(self, pole):
+        '''Zwraca bierkę która stoi na polu podanym w parametrze'''
         for bierka in self.lista_obiektow:
             if naprawPole(bierka.pozycja) == naprawPole(pole) and not bierka.czy_zbita:
                 return bierka
 
     @contextmanager
     def szukanieBierki(self, bierka, kolor_przecinikow):
+        '''Kontekst dla konkretnych użyć żeby nie duplikować kodu. Zwraca bierkę przeciwników po kolorze i nazwie'''
         if kolor_przecinikow == warunki_biale:
             bierka = 'bialy_' + bierka
         else:
@@ -40,6 +44,7 @@ class NarzedziaSzukaniaBierek(object):
         yield obiekt
 
     def dajSlownikZajetychPol(self):
+        '''Zwraca słownik z kluczami 'czarne' i 'biale' gdzie wartosciami są słowniki list '''
         slownik = {
             'czarne': self.dajSlownikCzarnych(),
             'biale': self.dajSlownikBialych(),
@@ -47,9 +52,11 @@ class NarzedziaSzukaniaBierek(object):
         return slownik
 
     def dajSlownikBialych(self):
+        '''Zwraca słownik białych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
         return self._dajSlownikPozycji('bialy')
 
     def dajSlownikCzarnych(self):
+        '''Zwraca słownik czarnych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
         return self._dajSlownikPozycji('czarny')
 
     def _dajSlownikPozycji(self, kolor):
