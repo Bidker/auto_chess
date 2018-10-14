@@ -10,10 +10,10 @@ class WarunkiWygranej(object):
 
     def __init__(self, bierka):
         from wyswietlenie_grafik.figury import Figury
+        ruch_bierek = MozliwoscRuchuBierki()
 
         self.zagrozony_krol = Figury.zagrozony_krol
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
-        self.ruch_bierek = MozliwoscRuchuBierki(bierka)
         self.pola_bierki = ruch_bierek.sprawdzMozliweRuchy(bierka)
         self.bierka = bierka
 
@@ -31,3 +31,6 @@ class WarunkiWygranej(object):
             if 'krol' in zagrozona_bierka.nazwa:
                 self.zagrozony_krol = zagrozona_bierka
                 return zagrozona_bierka
+
+    def sprawdz_mozliwosc_ucieczki(self, zagrozony_krol):
+        pass

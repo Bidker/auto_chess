@@ -8,7 +8,7 @@ from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
-from obsluga_gry.warunki_wygranej import sprawdz_warunki_wygranej
+from obsluga_gry.warunki_wygranej import WarunkiWygranej
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale
 
@@ -79,7 +79,8 @@ class Figury(games.Sprite):
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
                 self.zmienZaznaczenia()
-                sprawdz_warunki_wygranej(self)
+                ww = WarunkiWygranej(self)
+                ww.sprawdz_warunki_wygranej()
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola
