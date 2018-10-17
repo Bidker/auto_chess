@@ -353,9 +353,9 @@ class MozliwoscRuchuBierki(object):
             elif bierka == 'skoczek':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezSkoczka(mozliwe_ruchy, pola_bierki)
             if bierka in ('goniec', 'hetman', 'krol'):
-                mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow)
+                mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki)
             if bierka in ('wieza', 'hetman', 'krol'):
-                mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow)
+                mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki)
 
         mozliwe_ruchy = zmienListePolNaWspolrzedneZeSprawdzeniem(mozliwe_ruchy)
         return mozliwe_ruchy
@@ -376,7 +376,7 @@ class MozliwoscRuchuBierki(object):
             pola_atakowane.extend(self.przygotujRuchySKoczka(pole))
         return [pole_ruchu for pole_ruchu in mozliwe_ruchy if pole_ruchu not in pola_atakowane]
 
-    def wykreslPolaBitePoprzecznie(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
+    def wykreslPolaBitePoprzecznie(self, mozliwe_ruchy, pola_bierki):
         ret = []
         for pole in pola_bierki:
             obiekt = self.narz_szukania_bierek.dajBierkePoPolu(pole)
@@ -385,7 +385,7 @@ class MozliwoscRuchuBierki(object):
         ret = zmienListeWspolrzednychNaPola(ret)
         return [pole for pole in mozliwe_ruchy if pole not in ret]
 
-    def wykreslPolaBiteKrzyzowo(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
+    def wykreslPolaBiteKrzyzowo(self, mozliwe_ruchy, pola_bierki):
         ret = []
         for pole in pola_bierki:
             obiekt = self.narz_szukania_bierek.dajBierkePoPolu(pole)
