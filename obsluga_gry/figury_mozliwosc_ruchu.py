@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .config import lista_szerokosci, lista_wysokosci
+from .config import lista_szerokosci, lista_wysokosci, warunki_biale, warunki_czarne
 from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
 from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
 from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
@@ -340,7 +340,7 @@ class MozliwoscRuchuBierki(object):
         return wspolrzedna + x*100
 
     def wykreslPolaBitePrzezPrzeciwnikow(self, obiektKrola, mozliwe_ruchy):
-        if 'bialy' in obiektKrola.nazwa:
+        if warunki_biale in obiektKrola.nazwa:
             return self.wykreslPolaBitePrzez('czarne', mozliwe_ruchy)
         else:
             return self.wykreslPolaBitePrzez('biale', mozliwe_ruchy)
@@ -352,9 +352,9 @@ class MozliwoscRuchuBierki(object):
                 mozliwe_ruchy = self.wykreslPolaBitePrzezPiona(mozliwe_ruchy, pola_bierki, kolor_przecinikow)
             elif bierka == 'skoczek':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezSkoczka(mozliwe_ruchy, pola_bierki)
-            elif bierka in ('goniec', 'hetman', 'krol'):
+            if bierka in ('goniec', 'hetman', 'krol'):
                 mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow)
-            elif bierka in ('wieza', 'hetman', 'krol'):
+            if bierka in ('wieza', 'hetman', 'krol'):
                 mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow)
 
         mozliwe_ruchy = zmienListePolNaWspolrzedneZeSprawdzeniem(mozliwe_ruchy)
@@ -364,7 +364,7 @@ class MozliwoscRuchuBierki(object):
         mozliwe_ruchy = zmienListeWspolrzednychNaPola(mozliwe_ruchy)
         pola_atakowane = []
         for pole in pola_bierki:
-            if kolor_przecinikow == 'biale':
+            if kolor_przecinikow == warunki_biale:
                 pola_atakowane.extend(self.dajBiciePionow(pole, 'bialy pion'))
             else:
                 pola_atakowane.extend(self.dajBiciePionow(pole, 'czarny pion'))
@@ -377,14 +377,22 @@ class MozliwoscRuchuBierki(object):
         return [pole_ruchu for pole_ruchu in mozliwe_ruchy if pole_ruchu not in pola_atakowane]
 
     def wykreslPolaBitePoprzecznie(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
-        with self.narz_szukania_bierek.szukanieBierki(bierka, kolor_przecinikow) as obiekt:
+        ret = []
+        for pole in pola_bierki:
+            obiekt = self.narz_szukania_bierek.dajBierkePoPolu(pole)
             pola_atakowane = self.ruchPoprzeczny(obiekt)
-            return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
+            ret.extend(pola_atakowane['ruch'])
+        ret = zmienListeWspolrzednychNaPola(ret)
+        return [pole for pole in mozliwe_ruchy if pole not in ret]
 
     def wykreslPolaBiteKrzyzowo(self, mozliwe_ruchy, pola_bierki, bierka, kolor_przecinikow):
-        with self.narz_szukania_bierek.szukanieBierki(bierka, kolor_przecinikow) as obiekt:
+        ret = []
+        for pole in pola_bierki:
+            obiekt = self.narz_szukania_bierek.dajBierkePoPolu(pole)
             pola_atakowane = self.ruchKrzyzowy(obiekt)
-            return [pole for pole in mozliwe_ruchy if pole not in pola_atakowane]
+            ret.extend(pola_atakowane['ruch'])
+        ret = zmienListeWspolrzednychNaPola(ret)
+        return [pole for pole in mozliwe_ruchy if pole not in ret]
 
     def ograniczSkoczkaOBicie(self, pola_ruchu):
         pola_bicia = []
