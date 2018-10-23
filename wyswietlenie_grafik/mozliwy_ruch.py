@@ -5,6 +5,7 @@ from livewires import games
 
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji, zmienWspolrzedneNaPole
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
+from obsluga_gry.warunki_wygranej import WarunkiWygranej
 
 
 class PodswietlMozliwePola(games.Sprite):
@@ -43,6 +44,8 @@ class PodswietlMozliwePola(games.Sprite):
             bierka = szukanie_bierek.dajZaznaczonaBierke()
             if bierka:
                 bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
+                ww = WarunkiWygranej(bierka)
+                ww.sprawdzWarunkiWygranej()
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):

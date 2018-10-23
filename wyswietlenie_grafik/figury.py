@@ -8,7 +8,6 @@ from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
-from obsluga_gry.warunki_wygranej import WarunkiWygranej
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale
 
@@ -79,8 +78,6 @@ class Figury(games.Sprite):
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
                 self.zmienZaznaczenia()
-                ww = WarunkiWygranej(self)
-                ww.sprawdz_warunki_wygranej()
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola
@@ -93,8 +90,8 @@ class Figury(games.Sprite):
     def podswietlMozliweRuchy(self):
         from .tworzenie_figur import wyswietlObiektyNaEkranie
 
-        mozliwoscRuchu = MozliwoscRuchuBierki()
-        ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
+        mozliwoscRuchu = MozliwoscRuchuBierki(self)
+        ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy()
         podswietlony_ruch = []
         for wspolrzedne in ruchy_do_podswietlenia['ruch']:
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))

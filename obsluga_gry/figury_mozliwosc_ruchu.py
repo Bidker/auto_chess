@@ -9,10 +9,13 @@ from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 
 
 class MozliwoscRuchuBierki(object):
-    def __init__(self):
+
+    def __init__(self, obiekt_bierki):
+        self.obiekt_bierki = obiekt_bierki
         self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
-        self.pola_zajete_bialymi = self.stworzZajetePola('biale')
-        self.pola_zajete_czarnymi = self.stworzZajetePola('czarne')
+        self.pola_zajete_bialymi = self.stworzZajetePola(warunki_biale)
+        self.pola_zajete_czarnymi = self.stworzZajetePola(warunki_czarne)
+        self.dajPolaSojusznikowIWrogow()
 
     def stworzZajetePola(self, kolor):
         pola = []
@@ -21,27 +24,31 @@ class MozliwoscRuchuBierki(object):
             pola.extend(figury[figura])
         return pola
 
-    def sprawdzMozliweRuchy(self, obiektBierki):
-        if 'bialy' in obiektBierki.nazwa:
+    def dajPolaSojusznikowIWrogow(self):
+        if warunki_biale in self.obiekt_bierki.nazwa:
             self.pola_przecinikow = self.pola_zajete_czarnymi
             self.pola_sojusznikow = self.pola_zajete_bialymi
         else:
             self.pola_przecinikow = self.pola_zajete_bialymi
             self.pola_sojusznikow = self.pola_zajete_czarnymi
 
-        if 'pion' in obiektBierki.nazwa:
-            return self.ruchDlaPiona(obiektBierki)
-        elif 'skoczek' in obiektBierki.nazwa:
-            return self.ruchDlaSkoczka(obiektBierki)
-        elif 'goniec' in obiektBierki.nazwa:
-            return self.ruchPoprzeczny(obiektBierki)
-        elif 'wieza' in obiektBierki.nazwa:
-            return self.ruchKrzyzowy(obiektBierki)
-        elif 'hetman' in obiektBierki.nazwa:
-            return self.ruchHetmana(obiektBierki)
-        elif 'krol' in obiektBierki.nazwa:
-            return self.ruchDlaKrola(obiektBierki)
-        # TODO dla słowników ruchu ogarnąć ograniczenie ruchu jesli jest bicie na króla tego koloru
+    def sprawdzMozliweRuchy(self, ograniczyc_szach=True):
+        if 'pion' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchDlaPiona(self.obiekt_bierki)
+        elif 'skoczek' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchDlaSkoczka(self.obiekt_bierki)
+        elif 'goniec' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchPoprzeczny(self.obiekt_bierki)
+        elif 'wieza' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchKrzyzowy(self.obiekt_bierki)
+        elif 'hetman' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchHetmana(self.obiekt_bierki)
+        elif 'krol' in self.obiekt_bierki.nazwa:
+            ruch = self.ruchDlaKrola(self.obiekt_bierki)
+
+        if ograniczyc_szach:
+            return self.sprawdzIOgraniczJesliSzach(ruch)
+        return ruch
 
     def ruchDlaPiona(self, obiektBierki):
         mozliwe_ruchy = []
@@ -314,14 +321,14 @@ class MozliwoscRuchuBierki(object):
     def ustawWysokoscBiciaOJeden(self, cyfra_planszy, pola_atakowane, nazwa_bierki):
         index = lista_wysokosci.index(cyfra_planszy)
         for j, pole in enumerate(pola_atakowane):
-            if 'bialy' in nazwa_bierki and index != 0:
+            if warunki_biale in nazwa_bierki and index != 0:
                 pola_atakowane[j] = pole + lista_wysokosci[index - 1]
-            elif 'czarny' in nazwa_bierki and index != len(lista_wysokosci):
+            elif warunki_czarne in nazwa_bierki and index != len(lista_wysokosci):
                 pola_atakowane[j] = pole + lista_wysokosci[index + 1]
         return pola_atakowane
 
     def sprawdzCzyBicieNaPolach(self, pola_atakowane, obiektBierki):
-        if 'bialy' in obiektBierki.nazwa:
+        if warunki_biale in obiektBierki.nazwa:
             return self.sprawdzBicieNa(self.pola_zajete_czarnymi, pola_atakowane)
         else:
             return self.sprawdzBicieNa(self.pola_zajete_bialymi, pola_atakowane)
@@ -341,9 +348,8 @@ class MozliwoscRuchuBierki(object):
 
     def wykreslPolaBitePrzezPrzeciwnikow(self, obiektKrola, mozliwe_ruchy):
         if warunki_biale in obiektKrola.nazwa:
-            return self.wykreslPolaBitePrzez('czarne', mozliwe_ruchy)
-        else:
-            return self.wykreslPolaBitePrzez('biale', mozliwe_ruchy)
+            return self.wykreslPolaBitePrzez(warunki_czarne, mozliwe_ruchy)
+        return self.wykreslPolaBitePrzez(warunki_biale, mozliwe_ruchy)
 
     def wykreslPolaBitePrzez(self, kolor_przecinikow, mozliwe_ruchy):
         figury_pola = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor_przecinikow]
@@ -361,10 +367,10 @@ class MozliwoscRuchuBierki(object):
         return mozliwe_ruchy
 
     def wykreslPolaBitePrzezPiona(self, mozliwe_ruchy, pola_bierki, kolor_przecinikow):
-        mozliwe_ruchy = zmienListeWspolrzednychNaPola(mozliwe_ruchy)
+        mozliwe_ruchy = zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)
         pola_atakowane = []
         for pole in pola_bierki:
-            if kolor_przecinikow == warunki_biale:
+            if warunki_biale in kolor_przecinikow:
                 pola_atakowane.extend(self.dajBiciePionow(pole, 'bialy pion'))
             else:
                 pola_atakowane.extend(self.dajBiciePionow(pole, 'czarny pion'))
@@ -405,3 +411,39 @@ class MozliwoscRuchuBierki(object):
             'ruch': zmienListePolNaWspolrzedne(pola_ruchu),
             'bicie': zmienListePolNaWspolrzedne(pola_bicia),
         }
+
+    def sprawdzIOgraniczJesliSzach(self, pola):
+        from .warunki_wygranej import WarunkiWygranej
+
+        # print('sprawdzam')
+        if WarunkiWygranej.zagrozony_krol:
+            # print('ograniczam')
+            return self.ograniczMozliwePola(pola)
+        return pola
+
+    def ograniczMozliwePola(self, pola):
+        return {
+            'ruch': self.dajMozliwyRuchWSzachu(pola['ruch']),
+            'bicie': self.dajMozliwoscBiciaWSzachu(pola['bicie']),
+        }
+
+    def dajMozliwyRuchWSzachu(self, ruch):
+        from .warunki_wygranej import WarunkiWygranej
+
+        if 'skoczek' in WarunkiWygranej.bierka_bijaca.nazwa:
+            return []
+        pola_biacej = self.dajPolaBijacejDoKrola()
+        #print('ruch: %r, pola bijacej: %r', ruch, pola_biacej)
+        return [i for i in ruch if zmienWspolrzedneNaPole(i['x'], i['y']) not in pola_biacej]
+
+    def dajMozliwoscBiciaWSzachu(self, bicie):
+        from .warunki_wygranej import WarunkiWygranej
+        if 'skoczek' in WarunkiWygranej.bierka_bijaca.nazwa:
+            return [pole for pole in bicie if pole in WarunkiWygranej.bierka_bijaca.pozycja]
+
+        return bicie
+
+    def dajPolaBijacejDoKrola(self):
+        from .warunki_wygranej import WarunkiWygranej
+
+        return []

@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from obsluga_gry.config import slownik_bierek, warunki_biale
+from obsluga_gry.config import slownik_bierek, warunki_biale, warunki_czarne
 from .narzedzia_pol import naprawPole
 
 from copy import deepcopy
@@ -27,20 +27,20 @@ class NarzedziaSzukaniaBierek(object):
                 return bierka
 
     def dajSlownikZajetychPol(self):
-        '''Zwraca słownik z kluczami 'czarne' i 'biale' gdzie wartosciami są słowniki list '''
+        '''Zwraca słownik z kluczami 'czarny' i 'bialy' gdzie wartosciami są słowniki list '''
         slownik = {
-            'czarne': self.dajSlownikCzarnych(),
-            'biale': self.dajSlownikBialych(),
+            warunki_czarne: self.dajSlownikCzarnych(),
+            warunki_biale: self.dajSlownikBialych(),
         }
         return slownik
 
     def dajSlownikBialych(self):
         '''Zwraca słownik białych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
-        return self._dajSlownikPozycji('bialy')
+        return self._dajSlownikPozycji(warunki_biale)
 
     def dajSlownikCzarnych(self):
         '''Zwraca słownik czarnych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
-        return self._dajSlownikPozycji('czarny')
+        return self._dajSlownikPozycji(warunki_czarne)
 
     def _dajSlownikPozycji(self, kolor):
         slownik = deepcopy(slownik_bierek)
