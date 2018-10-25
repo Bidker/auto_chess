@@ -3,7 +3,7 @@
 
 from livewires import games
 
-from obsluga_gry.config import lista_szerokosci, lista_wysokosci, warunki_biale
+from obsluga_gry.config import lista_szerokosci, lista_wysokosci, warunki_biale, warunki_czarne
 
 
 def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
@@ -81,8 +81,7 @@ def dajPunktyGranicznePola(obiekt):
 def czyWszpolrzedneWPolu(x, y):
     if (x >= 0 and x <= games.screen.width and y >= 0 and y <= games.screen.height):
         return True
-    else:
-        return False
+    return False
 
 
 def naprawPole(pole):
@@ -95,7 +94,7 @@ def czyPoleNaBiciu(bierka):
     from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
     mrb = MozliwoscRuchuBierki(bierka)
     if warunki_biale in bierka.nazwa:
-        ruch = mrb.wykreslPolaBitePrzez('czarny', [bierka.pozycja])
+        ruch = mrb.wykreslPolaBitePrzez(warunki_czarne, [bierka.pozycja])
     else:
-        ruch = mrb.wykreslPolaBitePrzez('bialy', [bierka.pozycja])
+        ruch = mrb.wykreslPolaBitePrzez(warunki_biale, [bierka.pozycja])
     return not bool(ruch)

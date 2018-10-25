@@ -46,30 +46,32 @@ class MozliwoscRuchuBierki(object):
         elif 'krol' in self.obiekt_bierki.nazwa:
             ruch = self.ruchDlaKrola(self.obiekt_bierki)
 
-        if ograniczyc_szach:
+        if ograniczyc_szach and 'krol' not in self.obiekt_bierki.nazwa:
             return self.sprawdzIOgraniczJesliSzach(ruch)
+        self.obiekt_bierki = ruch
         return ruch
 
-    def ruchDlaPiona(self, obiektBierki):
+    def ruchDlaPiona(self, obiekt_bierki):
         mozliwe_ruchy = []
-        ilosc_ruchow = range(1, 2) if obiektBierki.czy_poruszona else range(1, 3)
+        ilosc_ruchow = range(1, 2) if obiekt_bierki.czy_poruszona else range(1, 3)
 
         for ruch in ilosc_ruchow:
-            if 'bialy' in obiektBierki.nazwa:
+            if warunki_biale in obiekt_bierki.nazwa:
                 mozliwe_ruchy.append({
-                    'x': obiektBierki.pozycja_x,
-                    'y': obiektBierki.pozycja_y - 100*ruch
+                    'x': obiekt_bierki.pozycja_x,
+                    'y': obiekt_bierki.pozycja_y - 100*ruch
                 })
             else:
                 mozliwe_ruchy.append({
-                    'x': obiektBierki.pozycja_x,
-                    'y': obiektBierki.pozycja_y + 100*ruch
+                    'x': obiekt_bierki.pozycja_x,
+                    'y': obiekt_bierki.pozycja_y + 100*ruch
                 })
         mozliwe_ruchy = zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)
         mozliwe_ruchy = self.sprawdzCzyZawadzaPrzeciwnik(mozliwe_ruchy)
+        # TODO Promocja
         return {
             'ruch': zmienListePolNaWspolrzedne(self.sprawdzCzyZawadza(mozliwe_ruchy)),
-            'bicie': self.dodajPionomBicie(obiektBierki, mozliwe_ruchy),
+            'bicie': self.dodajPionomBicie(obiekt_bierki, mozliwe_ruchy),
         }
 
     def dodajPionomBicie(self, obiektPiona, ruchy):
@@ -95,10 +97,7 @@ class MozliwoscRuchuBierki(object):
         mozliwe_ruchy = self.przygotujRuchySKoczka(pole_skoczka)
         mozliwe_ruchy = self.sprawdzCzyKucowiZawadza(mozliwe_ruchy)
 
-        ret = []
-        for ruch in mozliwe_ruchy:
-            ret.append(wyznaczWspolrzednePoPozycji(ruch))
-
+        ret = [wyznaczWspolrzednePoPozycji(ruch) for ruch in mozliwe_ruchy]
         return self.ograniczSkoczkaOBicie(ret)
 
     def przygotujRuchySKoczka(self, pole_skoczka):
@@ -164,45 +163,39 @@ class MozliwoscRuchuBierki(object):
         ruch_krzyzowy = self.ruchKrzyzowy(obiektKrola)
         ruch_poprzeczny = self.ruchPoprzeczny(obiektKrola)
         mozliwy_ruch = self.wykreslPolaBitePrzezPrzeciwnikow(obiektKrola, ruch_poprzeczny['ruch']+ruch_krzyzowy['ruch'])
-        mozliwe_bicie = self.wykreslPolaBitePrzezPrzeciwnikow(
+        mozliwe_bicie = self.wykreslOslonieteBierki(
             obiektKrola, ruch_poprzeczny['bicie']+ruch_krzyzowy['bicie'])
         return {
             'ruch': mozliwy_ruch,
             'bicie': mozliwe_bicie,
         }
 
-    def ruchPoprzeczny(self, obiektBierki):
+    def wykreslOslonieteBierki(self, obiektKrola, mozliwe_ruchy):
+        for wspolrzedne in mozliwe_ruchy[:]:
+            pole = zmienWspolrzedneNaPole(wspolrzedne['x'], wspolrzedne['y'])
+            bierka = self.narz_szukania_bierek.dajBierkePoPolu(pole)
+            if bierka and bierka.kryta:
+                mozliwe_ruchy.remove(wspolrzedne)
+        return mozliwe_ruchy
+
+    def ruchPoprzeczny(self, obiekt_bierki):
+        lista_ruchow = self.dajListyRuchowPoprzecznych(obiekt_bierki)
+        return self.koncoweMozliwosciProstegoRuchu(lista_ruchow)
+
+    def dajListyRuchowPoprzecznych(self, obiekt_bierki):
         poprzeczne_prawy_dol = []
         poprzeczne_lewa_gora = []
         poprzeczne_prawa_gora = []
         poprzeczne_lewy_dol = []
 
-        if 'krol' in obiektBierki.nazwa:
-            ilosc_ruchow = range(1, 2)
-        else:
-            ilosc_ruchow = range(1, 8)
-
-        ilosc_poprzednich_w_prawy_dol = None
-        ilosc_poprzednich_w_lewa_gore = None
-        ilosc_poprzednich_w_prawa_gore = None
-        ilosc_poprzednich_w_lewy_dol = None
-
+        ilosc_ruchow = range(1, 2) if 'krol' in obiekt_bierki.nazwa else range(1, 8)
         for ruch in ilosc_ruchow:
-            if ilosc_poprzednich_w_prawy_dol != len(poprzeczne_prawy_dol):
-                ilosc_poprzednich_w_prawy_dol == len(poprzeczne_prawy_dol)
-                poprzeczne_prawy_dol.extend(self.dajJedenMozliwyPoprzecznyWPrawyDol(ruch, obiektBierki))
-            if ilosc_poprzednich_w_lewa_gore != len(poprzeczne_lewa_gora):
-                ilosc_poprzednich_w_lewa_gore == len(poprzeczne_lewa_gora)
-                poprzeczne_lewa_gora.extend(self.dajJedenMozliwyPoprzecznyWLewaGore(ruch, obiektBierki))
-            if ilosc_poprzednich_w_prawa_gore != len(poprzeczne_prawa_gora):
-                ilosc_poprzednich_w_prawa_gore == len(poprzeczne_prawa_gora)
-                poprzeczne_prawa_gora.extend(self.dajJedenMozliwyPoprzecznyWPrawaGore(ruch, obiektBierki))
-            if ilosc_poprzednich_w_lewy_dol != len(poprzeczne_lewy_dol):
-                ilosc_poprzednich_w_lewy_dol == len(poprzeczne_lewy_dol)
-                poprzeczne_lewy_dol.extend(self.dajJedenMozliwyPoprzecznyWLewyDol(ruch, obiektBierki))
+            poprzeczne_prawy_dol.extend(self.dajJedenMozliwyPoprzecznyWPrawyDol(ruch, obiekt_bierki))
+            poprzeczne_lewa_gora.extend(self.dajJedenMozliwyPoprzecznyWLewaGore(ruch, obiekt_bierki))
+            poprzeczne_prawa_gora.extend(self.dajJedenMozliwyPoprzecznyWPrawaGore(ruch, obiekt_bierki))
+            poprzeczne_lewy_dol.extend(self.dajJedenMozliwyPoprzecznyWLewyDol(ruch, obiekt_bierki))
 
-        lista_ruchow = [poprzeczne_prawy_dol, poprzeczne_lewa_gora, poprzeczne_prawa_gora, poprzeczne_lewy_dol]
-        return self.koncoweMozliwosciProstegoRuchu(lista_ruchow)
+        return [poprzeczne_prawy_dol, poprzeczne_lewa_gora, poprzeczne_prawa_gora, poprzeczne_lewy_dol]
 
     def koncoweMozliwosciProstegoRuchu(self, lista_ruchow):
         mozliwe_bicie = []
@@ -224,68 +217,63 @@ class MozliwoscRuchuBierki(object):
             'bicie': zmienListePolNaWspolrzedne(mozliwe_bicie),
         }
 
-    def dajJedenMozliwyPoprzecznyWLewaGore(self, index, obiektBierki):
-        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, index)
-        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, index)
+    def dajJedenMozliwyPoprzecznyWLewaGore(self, index, obiekt_bierki):
+        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, index)
+        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, index)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyPoprzecznyWPrawyDol(self, index, obiektBierki):
-        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, index)
-        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, index)
+    def dajJedenMozliwyPoprzecznyWPrawyDol(self, index, obiekt_bierki):
+        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, index)
+        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, index)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyPoprzecznyWPrawaGore(self, index, obiektBierki):
-        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, index)
-        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, index)
+    def dajJedenMozliwyPoprzecznyWPrawaGore(self, index, obiekt_bierki):
+        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, index)
+        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, index)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyPoprzecznyWLewyDol(self, index, obiektBierki):
-        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, index)
-        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, index)
+    def dajJedenMozliwyPoprzecznyWLewyDol(self, index, obiekt_bierki):
+        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, index)
+        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, index)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def ruchKrzyzowy(self, obiektBierki):
+    def ruchKrzyzowy(self, obiekt_bierki):
+        lista_ruchow = self.dajListyRuchowKrzyzowych(obiekt_bierki)
+        return self.koncoweMozliwosciProstegoRuchu(lista_ruchow)
+
+    def dajListyRuchowKrzyzowych(self, obiekt_bierki):
         prosto_prawo = []
         prosto_gora = []
         prosto_lewo = []
         prosto_dol = []
 
-        if 'krol' not in obiektBierki.nazwa:
-            ilosc_ruchow = range(1, 8)
-        else:
-            ilosc_ruchow = range(1, 2)
-        ilosc_poprzednich_prawo = None
-        ilosc_poprzednich_gora = None
-        ilosc_poprzednich_lewo = None
-        ilosc_poprzednich_dol = None
-
+        ilosc_ruchow = range(1, 2) if 'krol' in obiekt_bierki.nazwa else range(1, 8)
         for ruch in ilosc_ruchow:
-            prosto_prawo.extend(self.dajJedenMozliwyWPrawo(ruch, obiektBierki))
-            prosto_gora.extend(self.dajJedenMozliwyWGore(ruch, obiektBierki))
-            prosto_lewo.extend(self.dajJedenMozliwyWLewo(ruch, obiektBierki))
-            prosto_dol.extend(self.dajJedenMozliwyWDol(ruch, obiektBierki))
+            prosto_prawo.extend(self.dajJedenMozliwyWPrawo(ruch, obiekt_bierki))
+            prosto_gora.extend(self.dajJedenMozliwyWGore(ruch, obiekt_bierki))
+            prosto_lewo.extend(self.dajJedenMozliwyWLewo(ruch, obiekt_bierki))
+            prosto_dol.extend(self.dajJedenMozliwyWDol(ruch, obiekt_bierki))
 
-        lista_ruchow = [prosto_prawo, prosto_gora, prosto_lewo, prosto_dol]
-        return self.koncoweMozliwosciProstegoRuchu(lista_ruchow)
+        return [prosto_prawo, prosto_gora, prosto_lewo, prosto_dol]
 
-    def dajJedenMozliwyWPrawo(self, ruch, obiektBierki):
-        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, ruch)
-        y_podswietlenia = obiektBierki.pozycja_y
+    def dajJedenMozliwyWPrawo(self, ruch, obiekt_bierki):
+        x_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, ruch)
+        y_podswietlenia = obiekt_bierki.pozycja_y
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyWGore(self, ruch, obiektBierki):
-        x_podswietlenia = obiektBierki.pozycja_x
-        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, ruch)
+    def dajJedenMozliwyWGore(self, ruch, obiekt_bierki):
+        x_podswietlenia = obiekt_bierki.pozycja_x
+        y_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, ruch)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyWLewo(self, ruch, obiektBierki):
-        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiektBierki.pozycja_x, ruch)
-        y_podswietlenia = obiektBierki.pozycja_y
+    def dajJedenMozliwyWLewo(self, ruch, obiekt_bierki):
+        x_podswietlenia = self.zmniejszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_x, ruch)
+        y_podswietlenia = obiekt_bierki.pozycja_y
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
-    def dajJedenMozliwyWDol(self, ruch, obiektBierki):
-        x_podswietlenia = obiektBierki.pozycja_x
-        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiektBierki.pozycja_y, ruch)
+    def dajJedenMozliwyWDol(self, ruch, obiekt_bierki):
+        x_podswietlenia = obiekt_bierki.pozycja_x
+        y_podswietlenia = self.zwiekszWspolrzednaOXSetekPx(obiekt_bierki.pozycja_y, ruch)
         return self.przypiszPozycjePodswietleniaJesliWPolu(x_podswietlenia, y_podswietlenia)
 
     def przypiszPozycjePodswietleniaJesliWPolu(self, x, y):
@@ -294,13 +282,12 @@ class MozliwoscRuchuBierki(object):
                 'x': x,
                 'y': y
             }]
-        else:
-            return []
+        return []
 
-    def sprawdzCzyZawadza(self, mozliwe_ruchy):
+    def sprawdzCzyZawadza(self, mozliwe_ruchy, dodaj_do_indexu=0):
         for index, pole in enumerate(zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)):
-            if pole in self.pola_sojusznikow:
-                mozliwe_ruchy = mozliwe_ruchy[:index]
+            if pole in self.pola_sojusznikow and index <= len(mozliwe_ruchy):
+                mozliwe_ruchy = mozliwe_ruchy[:index+dodaj_do_indexu]
         return mozliwe_ruchy
 
     def sprawdzCzyZawadzaPrzeciwnik(self, mozliwe_ruchy, dodaj_do_indexu=0):
@@ -327,8 +314,8 @@ class MozliwoscRuchuBierki(object):
                 pola_atakowane[j] = pole + lista_wysokosci[index + 1]
         return pola_atakowane
 
-    def sprawdzCzyBicieNaPolach(self, pola_atakowane, obiektBierki):
-        if warunki_biale in obiektBierki.nazwa:
+    def sprawdzCzyBicieNaPolach(self, pola_atakowane, obiekt_bierki):
+        if warunki_biale in obiekt_bierki.nazwa:
             return self.sprawdzBicieNa(self.pola_zajete_czarnymi, pola_atakowane)
         else:
             return self.sprawdzBicieNa(self.pola_zajete_bialymi, pola_atakowane)
