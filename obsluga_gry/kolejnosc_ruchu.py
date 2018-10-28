@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from livewires import games
-
 from .config import warunki_biale, warunki_czarne
 from .figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from tools.narzedzia_matow import NarzedziaMatow
@@ -32,14 +30,3 @@ class KolejnoscRuchu(object):
             for kryta in ObiektyFigur.dajObiektyFigur():
                 if kryta.kolor == bierka.kolor and kryta.pozycja != bierka.pozycja:
                     nm.ustawKrycieBierki(kryta)
-
-
-def koniecGry():
-    from wyswietlenie_grafik.tworzenie_figur import ObiektyFigur
-    from wyswietlenie_grafik.mozliwy_ruch import PodswietlMozliwePola
-
-    for obiekt in ObiektyFigur.dajObiektyFigur():
-        obiekt.zbita()
-    for obiekt in PodswietlMozliwePola.lista_podswietlen:
-        obiekt.destroy()
-    games.screen.quit()

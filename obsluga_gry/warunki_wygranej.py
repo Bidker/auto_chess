@@ -6,7 +6,8 @@ from livewires import games, color
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, czyPoleNaBiciu
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
-from obsluga_gry.kolejnosc_ruchu import koniecGry
+from obsluga_gry.config import warunki_biale, warunki_czarne
+from obsluga_gry.etapy_gry import koniecGry
 
 
 class WarunkiWygranej(object):
@@ -26,20 +27,25 @@ class WarunkiWygranej(object):
     def sprawdzWarunkiWygranej(self):
         self.dajZagrozonegoKrola()
         if WarunkiWygranej.zagrozony_krol:
-            mozliwa_ucieczka = self.sprawdzMozliwoscUcieczki()
-            mozliwa_ucieczka = mozliwa_ucieczka['bicie'] + mozliwa_ucieczka['ruch']
-            mozliwosc_zbicia_bijacego = czyPoleNaBiciu(WarunkiWygranej.bierka_bijaca)
-            print('ucieczka i bicie: ', mozliwa_ucieczka, mozliwosc_zbicia_bijacego)
-            if mozliwa_ucieczka or mozliwosc_zbicia_bijacego:  # mozliwe zasłoniecie
-                print('warn: %r', bool(mozliwa_ucieczka or mozliwosc_zbicia_bijacego))
-                msg = games.Message('Szach!', 70, color.red, x=games.screen.width/2, y=games.screen.height/2,
-                                    lifetime=(7*games.screen.fps))
+            if self.sprawdzCzyMat():
+                self.wyswietlKomunikat('Szach mat!', koniecGry)
             else:
-                msg = games.Message('Szach Mat!', 70, color.red, x=games.screen.width/2, y=games.screen.height/2,
-                                    lifetime=(7*games.screen.fps))
-            games.screen.add(msg)
+                self.wyswietlKomunikat('Szach!')
         else:
             WarunkiWygranej.pola_bierki = []
+
+    def sprawdzCzyMat(self):
+        kolor = warunki_biale if warunki_biale in WarunkiWygranej.zagrozony_krol.nazwa else warunki_czarne
+        bierki_ruszajace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(kolor)
+        mozliwe_pola = {'ruch': [], 'bicie': []}
+        for bierka in bierki_ruszajace:
+            mrb = MozliwoscRuchuBierki(bierka)
+            pola = mrb.sprawdzMozliweRuchy()
+            mozliwe_pola['ruch'].extend(pola['ruch'])
+            mozliwe_pola['bicie'].extend(pola['bicie'])
+        if mozliwe_pola['ruch'] or mozliwe_pola['bicie']:
+            return False
+        return True
 
     def dajZagrozonegoKrola(self):
         pola_bite = WarunkiWygranej.pola_bierki['bicie']
@@ -49,6 +55,8 @@ class WarunkiWygranej(object):
                 WarunkiWygranej.zagrozony_krol = zagrozona_bierka
                 return zagrozona_bierka
 
-    def sprawdzMozliwoscUcieczki(self):
-        mrb = MozliwoscRuchuBierki(WarunkiWygranej.zagrozony_krol)
-        return mrb.sprawdzMozliweRuchy(False)
+    def wyswietlKomunikat(self, tresc, func=None):
+        msg = games.Message(tresc, 70, color.red, x=games.screen.width/2, y=games.screen.height/2,
+                            lifetime=(7*games.screen.fps), after_death=func)
+
+        games.screen.add(msg)

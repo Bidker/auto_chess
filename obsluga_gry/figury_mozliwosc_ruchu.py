@@ -6,6 +6,7 @@ from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozy
 from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
 from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
+from tools.narzedzia_matow import NarzedziaMatow
 
 
 class MozliwoscRuchuBierki(object):
@@ -402,9 +403,7 @@ class MozliwoscRuchuBierki(object):
     def sprawdzIOgraniczJesliSzach(self, pola):
         from .warunki_wygranej import WarunkiWygranej
 
-        # print('sprawdzam')
         if WarunkiWygranej.zagrozony_krol:
-            # print('ograniczam')
             return self.ograniczMozliwePola(pola)
         return pola
 
@@ -417,20 +416,12 @@ class MozliwoscRuchuBierki(object):
     def dajMozliwyRuchWSzachu(self, ruch):
         from .warunki_wygranej import WarunkiWygranej
 
-        if 'skoczek' in WarunkiWygranej.bierka_bijaca.nazwa:
-            return []
-        pola_biacej = self.dajPolaBijacejDoKrola()
-        #print('ruch: %r, pola bijacej: %r', ruch, pola_biacej)
-        return [i for i in ruch if zmienWspolrzedneNaPole(i['x'], i['y']) not in pola_biacej]
+        nm = NarzedziaMatow(WarunkiWygranej.bierka_bijaca)
+        pola_biacej = nm.dajPolaBijacejDoKrola()
+        return [i for i in ruch if i in pola_biacej]
 
     def dajMozliwoscBiciaWSzachu(self, bicie):
         from .warunki_wygranej import WarunkiWygranej
-        if 'skoczek' in WarunkiWygranej.bierka_bijaca.nazwa:
-            return [pole for pole in bicie if pole in WarunkiWygranej.bierka_bijaca.pozycja]
 
-        return bicie
-
-    def dajPolaBijacejDoKrola(self):
-        from .warunki_wygranej import WarunkiWygranej
-
-        return []
+        nm = NarzedziaMatow(WarunkiWygranej.bierka_bijaca)
+        return nm.dajPolaBijaceSzachujacego(bicie)

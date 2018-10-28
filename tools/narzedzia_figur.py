@@ -50,3 +50,6 @@ class NarzedziaSzukaniaBierek(object):
             if kolor in bierka.nazwa:
                 slownik[bierka.nazwa[index:]].append(bierka.pozycja)
         return slownik
+
+    def dajBierkiPoSlowieKluczowym(self, slowo):
+        return [bierka for bierka in self.lista_obiektow if slowo in bierka.nazwa]
