@@ -5,25 +5,30 @@ import time
 from livewires import games
 
 from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
-from util.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from util.narzedzia_figur import NarzedziaSzukaniaBierek
+from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
+from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
-from obsluga_gry.config import warunki_biale
+from obsluga_gry.config import warunki_biale, warunki_czarne
 
 
 class Figury(games.Sprite):
+    zagrozony_krol = None
 
     def __init__(self, figura, pozycja):
         wspolrzedne = wyznaczWspolrzednePoPozycji(pozycja)
         self.pozycja = pozycja
         self.pozycja_x = wspolrzedne['x']
         self.pozycja_y = wspolrzedne['y']
-        self.nazwa = self.dajNazwe(figura)
+        self.kolor = warunki_biale if self.pozycja_y > 400 else warunki_czarne
+        self.nazwa = self.kolor + '_' + figura
         self.ikona = self.nadajIkone()
+        self.mozliwe_ruchy = {'ruch': [], 'bicie': []}
         self.czy_poruszona = False
         self.czy_zbita = False
         self.zaznaczony = False
+        self.zagrozony = False
+        self.kryta = False
         self.stworzDuszka()
 
     def zmienUstawienieBierki(self, wspolrzedne, pozycja):
@@ -38,17 +43,6 @@ class Figury(games.Sprite):
         self.pozycja_x = wspolrzedne['x']
         self.pozycja_y = wspolrzedne['y']
         self.set_position((self.pozycja_x, self.pozycja_y))
-
-    def dajNazwe(self, figura):
-        kolor = self.sprawdzKolorPoPozycji()
-        return kolor + '_' + figura
-
-    def sprawdzKolorPoPozycji(self):
-        if self.pozycja_y > 400:
-            kolor = 'bialy'
-        else:
-            kolor = 'czarny'
-        return kolor
 
     def nadajIkone(self):
         nazwa_ikony = 'wyswietlenie_grafik/Grafiki/'
@@ -88,8 +82,8 @@ class Figury(games.Sprite):
     def podswietlMozliweRuchy(self):
         from .tworzenie_figur import wyswietlObiektyNaEkranie
 
-        mozliwoscRuchu = MozliwoscRuchuBierki()
-        ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy(self)
+        mozliwoscRuchu = MozliwoscRuchuBierki(self)
+        ruchy_do_podswietlenia = mozliwoscRuchu.sprawdzMozliweRuchy()
         podswietlony_ruch = []
         for wspolrzedne in ruchy_do_podswietlenia['ruch']:
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
@@ -98,7 +92,7 @@ class Figury(games.Sprite):
         wyswietlObiektyNaEkranie(podswietlony_ruch)
 
     def zmienZaznaczenia(self):
-        from util.narzedzia_figur import NarzedziaSzukaniaBierek
+        from tools.narzedzia_figur import NarzedziaSzukaniaBierek
         narz_szukania_bierki = NarzedziaSzukaniaBierek()
 
         bierka = narz_szukania_bierki.dajZaznaczonaBierke()

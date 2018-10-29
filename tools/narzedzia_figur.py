@@ -1,10 +1,9 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from obsluga_gry.config import slownik_bierek, warunki_biale
+from obsluga_gry.config import slownik_bierek, warunki_biale, warunki_czarne
 from .narzedzia_pol import naprawPole
 
-from contextlib import contextmanager
 from copy import deepcopy
 
 
@@ -15,42 +14,33 @@ class NarzedziaSzukaniaBierek(object):
         of = ObiektyFigur()
         self.lista_obiektow = of.dajObiektyFigur()
 
-    def dajBierkePoNazwie(self, nazwa_bierki):
-        for bierka in self.lista_obiektow:
-            if bierka.nazwa == nazwa_bierki and not bierka.czy_zbita:
-                return bierka
-
     def dajZaznaczonaBierke(self):
+        '''Funkcja zwraca bierkę nad którą został ostatnio wcisnięty klawisz myszy'''
         for bierka in self.lista_obiektow:
             if bierka.zaznaczony and not bierka.czy_zbita:
                 return bierka
 
     def dajBierkePoPolu(self, pole):
+        '''Zwraca bierkę która stoi na polu podanym w parametrze'''
         for bierka in self.lista_obiektow:
             if naprawPole(bierka.pozycja) == naprawPole(pole) and not bierka.czy_zbita:
                 return bierka
 
-    @contextmanager
-    def szukanieBierki(self, bierka, kolor_przecinikow):
-        if kolor_przecinikow == warunki_biale:
-            bierka = 'bialy_' + bierka
-        else:
-            bierka = 'czarny_' + bierka
-        obiekt = self.dajBierkePoNazwie(bierka)
-        yield obiekt
-
     def dajSlownikZajetychPol(self):
+        '''Zwraca słownik z kluczami 'czarny' i 'bialy' gdzie wartosciami są słowniki list '''
         slownik = {
-            'czarne': self.dajSlownikCzarnych(),
-            'biale': self.dajSlownikBialych(),
+            warunki_czarne: self.dajSlownikCzarnych(),
+            warunki_biale: self.dajSlownikBialych(),
         }
         return slownik
 
     def dajSlownikBialych(self):
-        return self._dajSlownikPozycji('bialy')
+        '''Zwraca słownik białych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
+        return self._dajSlownikPozycji(warunki_biale)
 
     def dajSlownikCzarnych(self):
-        return self._dajSlownikPozycji('czarny')
+        '''Zwraca słownik czarnych bierek gdzie kluczami są figury, a wartosciami listy pól na których są'''
+        return self._dajSlownikPozycji(warunki_czarne)
 
     def _dajSlownikPozycji(self, kolor):
         slownik = deepcopy(slownik_bierek)
@@ -60,3 +50,6 @@ class NarzedziaSzukaniaBierek(object):
             if kolor in bierka.nazwa:
                 slownik[bierka.nazwa[index:]].append(bierka.pozycja)
         return slownik
+
+    def dajBierkiPoSlowieKluczowym(self, slowo):
+        return [bierka for bierka in self.lista_obiektow if slowo in bierka.nazwa]

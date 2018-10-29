@@ -3,7 +3,7 @@
 
 from livewires import games
 
-from obsluga_gry.config import figury_pola_startowe
+from obsluga_gry.config import figury_pola_startowe, warunki_biale, warunki_czarne
 from .figury import Figury
 
 
@@ -15,8 +15,8 @@ def pokazFigury():
 
 def stworzListeFigur():
     lista_bierek = []
-    lista_bierek.append(figury_pola_startowe['biale'])
-    lista_bierek.append(figury_pola_startowe['czarne'])
+    lista_bierek.append(figury_pola_startowe[warunki_biale])
+    lista_bierek.append(figury_pola_startowe[warunki_czarne])
 
     return lista_bierek
 

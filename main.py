@@ -36,7 +36,7 @@ class OknoStartoweSzachy(QWidget):
         j = 0
         for i, przycisk in enumerate(listaPrzyciskow):
             if (i % 3) == 0:
-                j = j + 1
+                j += 1
             ukladT.addWidget(przycisk, 0, i)
         return ukladT
 
@@ -97,8 +97,9 @@ class OknoStartoweSzachy(QWidget):
 
 
 if __name__ == '__main__':
-    import sys
+    '''import sys
 
     aplikacja = QApplication(sys.argv)
     okno = OknoStartoweSzachy()
-    sys.exit(aplikacja.exec_())
+    sys.exit(aplikacja.exec_())'''
+    rozpocznijGre()

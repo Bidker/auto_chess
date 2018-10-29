@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
+warunki_biale = 'bialy'
+warunki_czarne = 'czarny'
+
 lista_szerokosci = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 lista_wysokosci = ['8', '7', '6', '5', '4', '3', '2', '1']
 
@@ -15,7 +18,7 @@ slownik_bierek = {
 }
 
 figury_pola_startowe = {
-    'biale': {
+    warunki_biale: {
         'pion': [znak + '2' for znak in lista_szerokosci],
         'skoczek': ['b1', 'g1'],
         'goniec': ['c1', 'f1'],
@@ -23,7 +26,7 @@ figury_pola_startowe = {
         'hetman': ['d1'],
         'krol': ['e1'],
     },
-    'czarne': {
+    warunki_czarne: {
         'pion': [znak + '7' for znak in lista_szerokosci],
         'skoczek': ['b8', 'g8'],
         'goniec': ['c8', 'f8'],
@@ -41,7 +44,3 @@ figury_wagi = {
     'hetman': 8,
     'krol': None,
 }
-
-warunki_biale = ('bialy' or 'biale' or 'biały' or 'białe')
-
-warunki_czarne = ('czarny' or 'czarne')

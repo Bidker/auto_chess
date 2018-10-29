@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .config import warunki_biale, warunki_czarne
+from .figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+from tools.narzedzia_matow import NarzedziaMatow
 
 
 class KolejnoscRuchu(object):
@@ -15,3 +17,16 @@ class KolejnoscRuchu(object):
         cls.licznik_polruchow += 1
         if cls.licznik_polruchow % 2 != 0:
             cls.licznik_ruchow += 1
+        kr = cls()
+        kr.sprawdzKrycieBierek()
+
+    def sprawdzKrycieBierek(self):
+        from wyswietlenie_grafik.tworzenie_figur import ObiektyFigur
+
+        for bierka in ObiektyFigur.dajObiektyFigur():
+            bierka.kryta = False
+        for bierka in ObiektyFigur.dajObiektyFigur():
+            nm = NarzedziaMatow(bierka)
+            for kryta in ObiektyFigur.dajObiektyFigur():
+                if kryta.kolor == bierka.kolor and kryta.pozycja != bierka.pozycja:
+                    nm.ustawKrycieBierki(kryta)
