@@ -35,15 +35,11 @@ class NarzedziaMatow(object):
 
     def _dajDlaPiona(self, bierka_kryta):
         pola_kryte = self.mrb.dajBiciePionow(self.kryjaca.pozycja, self.kryjaca.nazwa)
-        if bierka_kryta.pozycja in pola_kryte:
-            return True
-        return False
+        return bierka_kryta.pozycja in pola_kryte
 
     def _dajDlaSkoczka(self, bierka_kryta):
         pola_kryte = self.mrb.przygotujRuchySKoczka(self.kryjaca.pozycja)
-        if bierka_kryta.pozycja in pola_kryte:
-            return True
-        return False
+        return bierka_kryta.pozycja in pola_kryte
 
     def _dajKrzyzowy(self, bierka_kryta):
         listy_ruchow = self.mrb.dajListyRuchowKrzyzowych(self.kryjaca)
@@ -62,9 +58,7 @@ class NarzedziaMatow(object):
     def _sprawdzDlaProstych(self, lista, bierka_kryta):
         mozliwe_pola = zmienListeWspolrzednychNaPola(lista)
         mozliwe_pola = self.mrb.sprawdzCzyZawadza(mozliwe_pola, 1)
-        if bierka_kryta.pozycja in mozliwe_pola:
-            return True
-        return False
+        return bierka_kryta.pozycja in mozliwe_pola
 
     def dajPolaBijacejDoKrola(self):
         if 'pion' in self.kryjaca.nazwa or 'skoczek' in self.kryjaca.nazwa:
