@@ -92,9 +92,7 @@ def naprawPole(pole):
 
 def czyPoleNaBiciu(bierka):
     from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
+
     mrb = MozliwoscRuchuBierki(bierka)
-    if warunki_biale in bierka.nazwa:
-        ruch = mrb.wykreslPolaBitePrzez(warunki_czarne, [bierka.pozycja])
-    else:
-        ruch = mrb.wykreslPolaBitePrzez(warunki_biale, [bierka.pozycja])
-    return not bool(ruch)
+    kolor = warunki_czarne if warunki_biale in bierka.nazwa else warunki_biale
+    return not bool(mrb.wykreslPolaBitePrzez(kolor, [bierka.pozycja]))
