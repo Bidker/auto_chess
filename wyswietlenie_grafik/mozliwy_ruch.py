@@ -42,10 +42,9 @@ class PodswietlMozliwePola(games.Sprite):
                 bita_bierka.zbita()
 
             bierka = szukanie_bierek.dajZaznaczonaBierke()
-            if bierka:
-                bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
-                ww = WarunkiWygranej(bierka)
-                ww.sprawdzWarunkiWygranej()
+            bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
+            ww = WarunkiWygranej(bierka)
+            ww.sprawdzWarunkiWygranej()
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):

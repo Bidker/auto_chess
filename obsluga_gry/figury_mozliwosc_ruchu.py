@@ -49,7 +49,6 @@ class MozliwoscRuchuBierki(object):
 
         if ograniczyc_szach and 'krol' not in self.obiekt_bierki.nazwa:
             return self.sprawdzIOgraniczJesliSzach(ruch)
-        self.obiekt_bierki = ruch
         return ruch
 
     def ruchDlaPiona(self, obiekt_bierki):
@@ -403,7 +402,7 @@ class MozliwoscRuchuBierki(object):
     def sprawdzIOgraniczJesliSzach(self, pola):
         from .warunki_wygranej import WarunkiWygranej
 
-        if WarunkiWygranej.zagrozony_krol:
+        if WarunkiWygranej.zagrozony_krol and self.obiekt_bierki.kolor in WarunkiWygranej.zagrozony_krol.nazwa:
             return self.ograniczMozliwePola(pola)
         return pola
 
