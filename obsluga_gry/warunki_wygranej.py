@@ -20,22 +20,26 @@ class WarunkiWygranej(object):
         ruch_bierek = MozliwoscRuchuBierki(bierka)
 
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
-        self.kolor = warunki_biale if warunki_czarne in KolejnoscRuchu.kolej_na else warunki_czarne
-        self.bierki_ruszajace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(self.kolor)
+        self.kolor_ruszajacych = warunki_biale if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_czarne
+        self.kolor_broniacych = warunki_czarne if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_biale
+        self.bierki_ruszajace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(self.kolor_ruszajacych)
+        self.bierki_broniace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(self.kolor_broniacych)
 
     def sprawdzWarunkiWygranej(self):
         self.dajZagrozonegoKrola()
         if WarunkiWygranej.zagrozony_krol:
             if self.sprawdzCzyMat():
-                self.wyswietlKomunikat('Szach mat!', koniecGry)
+                kolor = self.kolor_ruszajacych.capitalize()
+                komunikat = 'Szach mat! ' + kolor + ' wygrał!'
+                self.wyswietlKomunikat(komunikat, koniecGry)
             else:
                 self.wyswietlKomunikat('Szach!')
 
     def sprawdzCzyMat(self):
         mozliwe_pola = {'ruch': [], 'bicie': []}
-        for bierka in self.bierki_ruszajace:
+        for bierka in self.bierki_broniace:
             mrb = MozliwoscRuchuBierki(bierka)
-            pola = mrb.sprawdzMozliweRuchy(False)
+            pola = mrb.sprawdzMozliweRuchy()
             mozliwe_pola['ruch'].extend(pola['ruch'])
             mozliwe_pola['bicie'].extend(pola['bicie'])
         if mozliwe_pola['ruch'] or mozliwe_pola['bicie']:
@@ -44,14 +48,20 @@ class WarunkiWygranej(object):
 
     def dajZagrozonegoKrola(self):
         for bierka in self.bierki_ruszajace:
-            mrb = MozliwoscRuchuBierki(bierka)
-            pola = mrb.sprawdzMozliweRuchy(False)['bicie']
-            for pole in zmienListeWspolrzednychNaPola(pola):
-                zagrozona_bierka = self.szukanie_bierek.dajBierkePoPolu(pole)
-                if 'krol' in zagrozona_bierka.nazwa:
-                    self._zmienWartosciKlasy(zagrozona_bierka, bierka)
-                    return zagrozona_bierka
+            zagrozony_krol = self.sprawdzCzyKrolZagrozonyPrzezBierke(bierka)
+            if zagrozony_krol:
+                self._zmienWartosciKlasy(zagrozony_krol, bierka)
+                return zagrozony_krol
         self._zmienWartosciKlasy()
+
+    def sprawdzCzyKrolZagrozonyPrzezBierke(self, bierka):
+        mrb = MozliwoscRuchuBierki(bierka)
+        pola = mrb.sprawdzMozliweRuchy(False)['bicie']
+        for pole in zmienListeWspolrzednychNaPola(pola):
+            zagrozona_bierka = self.szukanie_bierek.dajBierkePoPolu(pole)
+            if 'krol' in zagrozona_bierka.nazwa:
+                return zagrozona_bierka
+        return False
 
     def wyswietlKomunikat(self, tresc, func=None):
         msg = games.Message(tresc, 70, color.red, x=games.screen.width/2, y=games.screen.height/2,
