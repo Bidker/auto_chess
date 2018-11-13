@@ -7,6 +7,7 @@ from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWs
 from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_matow import NarzedziaMatow
+from tools.narzedzia_szachow import czyKrolWSzachu
 
 
 class MozliwoscRuchuBierki(object):
@@ -18,11 +19,12 @@ class MozliwoscRuchuBierki(object):
         self.pola_zajete_czarnymi = self.stworzZajetePola(warunki_czarne)
         self.dajPolaSojusznikowIWrogow()
 
-    def stworzZajetePola(self, kolor):
+    def stworzZajetePola(self, kolor, wykluczenie=' '):
         pola = []
         figury = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor]
         for figura in figury.keys():
-            pola.extend(figury[figura])
+            if wykluczenie not in figura:
+                pola.extend(figury[figura])
         return pola
 
     def dajPolaSojusznikowIWrogow(self):
@@ -32,6 +34,14 @@ class MozliwoscRuchuBierki(object):
         else:
             self.pola_przecinikow = self.pola_zajete_bialymi
             self.pola_sojusznikow = self.pola_zajete_czarnymi
+
+    def dajPolaSojusznikowIWrogowBezKrola(self):
+        if warunki_biale in self.obiekt_bierki.nazwa:
+            self.pola_przecinikow = self.stworzZajetePola(warunki_czarne, 'krol')
+            self.pola_sojusznikow = self.stworzZajetePola(warunki_biale, 'krol')
+        else:
+            self.pola_przecinikow = self.stworzZajetePola(warunki_biale, 'krol')
+            self.pola_sojusznikow = self.stworzZajetePola(warunki_czarne, 'krol')
 
     def sprawdzMozliweRuchy(self, ograniczyc_szach=True):
         if 'pion' in self.obiekt_bierki.nazwa:
@@ -48,8 +58,9 @@ class MozliwoscRuchuBierki(object):
             ruch = self.ruchDlaKrola(self.obiekt_bierki)
 
         if ograniczyc_szach and 'krol' not in self.obiekt_bierki.nazwa:
-            return self.sprawdzIOgraniczJesliSzach(ruch)
-        self.obiekt_bierki = ruch
+            ruch = self.sprawdzIOgraniczJesliSzach(ruch)
+            ruch = self.dajRuchyBezSzachow(ruch, self.obiekt_bierki)
+
         return ruch
 
     def ruchDlaPiona(self, obiekt_bierki):
@@ -98,8 +109,7 @@ class MozliwoscRuchuBierki(object):
         mozliwe_ruchy = self.przygotujRuchySKoczka(pole_skoczka)
         mozliwe_ruchy = self.sprawdzCzyKucowiZawadza(mozliwe_ruchy)
 
-        ret = [wyznaczWspolrzednePoPozycji(ruch) for ruch in mozliwe_ruchy]
-        return self.ograniczSkoczkaOBicie(ret)
+        return self.ograniczSkoczkaOBicie([wyznaczWspolrzednePoPozycji(ruch) for ruch in mozliwe_ruchy])
 
     def przygotujRuchySKoczka(self, pole_skoczka):
         mozliwe_ruchy = []
@@ -164,8 +174,7 @@ class MozliwoscRuchuBierki(object):
         ruch_krzyzowy = self.ruchKrzyzowy(obiektKrola)
         ruch_poprzeczny = self.ruchPoprzeczny(obiektKrola)
         mozliwy_ruch = self.wykreslPolaBitePrzezPrzeciwnikow(obiektKrola, ruch_poprzeczny['ruch']+ruch_krzyzowy['ruch'])
-        mozliwe_bicie = self.wykreslOslonieteBierki(
-            obiektKrola, ruch_poprzeczny['bicie']+ruch_krzyzowy['bicie'])
+        mozliwe_bicie = self.wykreslOslonieteBierki(obiektKrola, ruch_poprzeczny['bicie']+ruch_krzyzowy['bicie'])
         return {
             'ruch': mozliwy_ruch,
             'bicie': mozliwe_bicie,
@@ -341,6 +350,7 @@ class MozliwoscRuchuBierki(object):
 
     def wykreslPolaBitePrzez(self, kolor_przecinikow, mozliwe_ruchy):
         figury_pola = self.narz_szukania_bierek.dajSlownikZajetychPol()[kolor_przecinikow]
+        self.dajPolaSojusznikowIWrogowBezKrola()
         for bierka, pola_bierki in figury_pola.items():
             if bierka == 'pion':
                 mozliwe_ruchy = self.wykreslPolaBitePrzezPiona(mozliwe_ruchy, pola_bierki, kolor_przecinikow)
@@ -350,6 +360,7 @@ class MozliwoscRuchuBierki(object):
                 mozliwe_ruchy = self.wykreslPolaBitePoprzecznie(mozliwe_ruchy, pola_bierki)
             if bierka in ('wieza', 'hetman', 'krol'):
                 mozliwe_ruchy = self.wykreslPolaBiteKrzyzowo(mozliwe_ruchy, pola_bierki)
+        self.dajPolaSojusznikowIWrogow()
 
         mozliwe_ruchy = zmienListePolNaWspolrzedneZeSprawdzeniem(mozliwe_ruchy)
         return mozliwe_ruchy
@@ -403,7 +414,7 @@ class MozliwoscRuchuBierki(object):
     def sprawdzIOgraniczJesliSzach(self, pola):
         from .warunki_wygranej import WarunkiWygranej
 
-        if WarunkiWygranej.zagrozony_krol:
+        if WarunkiWygranej.zagrozony_krol and self.obiekt_bierki.kolor in WarunkiWygranej.zagrozony_krol.nazwa:
             return self.ograniczMozliwePola(pola)
         return pola
 
@@ -425,3 +436,24 @@ class MozliwoscRuchuBierki(object):
 
         nm = NarzedziaMatow(WarunkiWygranej.bierka_bijaca)
         return nm.dajPolaBijaceSzachujacego(bicie)
+
+    def dajRuchyBezSzachow(self, mozliwe_ruchy, bierka):
+        from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
+
+        nazwa_krola = KolejnoscRuchu.kolej_na + '_krol'
+        krol = self.narz_szukania_bierek.dajBierkiPoSlowieKluczowym(nazwa_krola)[0]
+        bazowe_wspolrzedne = {'x': bierka.pozycja_x, 'y': bierka.pozycja_y, 'pozycja': bierka.pozycja}
+
+        for klucz in mozliwe_ruchy:
+            for wspolrzedna in mozliwe_ruchy[klucz][:]:
+                bierka.pozycja_x = wspolrzedna['x']
+                bierka.pozycja_y = wspolrzedna['y']
+                bierka.pozycja = zmienWspolrzedneNaPole(wspolrzedna['x'], wspolrzedna['y'])
+                if czyKrolWSzachu(krol):
+                    mozliwe_ruchy[klucz].remove(wspolrzedna)
+
+        bierka.pozycja = bazowe_wspolrzedne['pozycja']
+        bierka.pozycja_x = bazowe_wspolrzedne['x']
+        bierka.pozycja_y = bazowe_wspolrzedne['y']
+
+        return mozliwe_ruchy

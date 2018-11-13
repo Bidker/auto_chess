@@ -20,11 +20,15 @@ class NarzedziaSzukaniaBierek(object):
             if bierka.zaznaczony and not bierka.czy_zbita:
                 return bierka
 
-    def dajBierkePoPolu(self, pole):
+    def dajBierkePoPolu(self, pole, wiecej_niz_jeden=False):
         '''Zwraca bierkę która stoi na polu podanym w parametrze'''
+        lst_brk = []
         for bierka in self.lista_obiektow:
             if naprawPole(bierka.pozycja) == naprawPole(pole) and not bierka.czy_zbita:
-                return bierka
+                if not wiecej_niz_jeden:
+                    return bierka
+                lst_brk.append(bierka)
+        return lst_brk
 
     def dajSlownikZajetychPol(self):
         '''Zwraca słownik z kluczami 'czarny' i 'bialy' gdzie wartosciami są słowniki list '''
