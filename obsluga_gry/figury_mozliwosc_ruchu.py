@@ -7,6 +7,7 @@ from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWs
 from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_matow import NarzedziaMatow
+from tools.narzedzia_szachow import czyKrolWSzachu
 
 
 class MozliwoscRuchuBierki(object):
@@ -57,7 +58,9 @@ class MozliwoscRuchuBierki(object):
             ruch = self.ruchDlaKrola(self.obiekt_bierki)
 
         if ograniczyc_szach and 'krol' not in self.obiekt_bierki.nazwa:
-            return self.sprawdzIOgraniczJesliSzach(ruch)
+            ruch = self.sprawdzIOgraniczJesliSzach(ruch)
+            ruch = self.dajRuchyBezSzachow(ruch, self.obiekt_bierki)
+
         return ruch
 
     def ruchDlaPiona(self, obiekt_bierki):
@@ -433,3 +436,24 @@ class MozliwoscRuchuBierki(object):
 
         nm = NarzedziaMatow(WarunkiWygranej.bierka_bijaca)
         return nm.dajPolaBijaceSzachujacego(bicie)
+
+    def dajRuchyBezSzachow(self, mozliwe_ruchy, bierka):
+        from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
+
+        nazwa_krola = KolejnoscRuchu.kolej_na + '_krol'
+        krol = self.narz_szukania_bierek.dajBierkiPoSlowieKluczowym(nazwa_krola)[0]
+        bazowe_wspolrzedne = {'x': bierka.pozycja_x, 'y': bierka.pozycja_y, 'pozycja': bierka.pozycja}
+
+        for klucz in mozliwe_ruchy:
+            for wspolrzedna in mozliwe_ruchy[klucz][:]:
+                bierka.pozycja_x = wspolrzedna['x']
+                bierka.pozycja_y = wspolrzedna['y']
+                bierka.pozycja = zmienWspolrzedneNaPole(wspolrzedna['x'], wspolrzedna['y'])
+                if czyKrolWSzachu(krol):
+                    mozliwe_ruchy[klucz].remove(wspolrzedna)
+
+        bierka.pozycja = bazowe_wspolrzedne['pozycja']
+        bierka.pozycja_x = bazowe_wspolrzedne['x']
+        bierka.pozycja_y = bazowe_wspolrzedne['y']
+
+        return mozliwe_ruchy
