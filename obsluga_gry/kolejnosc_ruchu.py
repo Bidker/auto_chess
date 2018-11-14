@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from .config import warunki_biale, warunki_czarne
-from .figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from tools.narzedzia_matow import NarzedziaMatow
 
 

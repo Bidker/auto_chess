@@ -8,13 +8,16 @@ from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienL
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_matow import NarzedziaMatow
 from tools.narzedzia_szachow import czyKrolWSzachu
+from tools.narzedzia_wyznaczania_ruchow import NarzedziaWyznaczaniaRuchow
 
 
 class MozliwoscRuchuBierki(object):
 
     def __init__(self, obiekt_bierki):
-        self.obiekt_bierki = obiekt_bierki
         self.narz_szukania_bierek = NarzedziaSzukaniaBierek()
+        self.narz_wyznacz_ruchow = NarzedziaWyznaczaniaRuchow()
+
+        self.obiekt_bierki = obiekt_bierki
         self.pola_zajete_bialymi = self.stworzZajetePola(warunki_biale)
         self.pola_zajete_czarnymi = self.stworzZajetePola(warunki_czarne)
         self.dajPolaSojusznikowIWrogow()
@@ -57,11 +60,18 @@ class MozliwoscRuchuBierki(object):
         elif 'krol' in self.obiekt_bierki.nazwa:
             ruch = self.ruchDlaKrola(self.obiekt_bierki)
 
-        if ograniczyc_szach and 'krol' not in self.obiekt_bierki.nazwa:
-            ruch = self.sprawdzIOgraniczJesliSzach(ruch)
+        if ograniczyc_szach:
+            if 'krol' not in self.obiekt_bierki.nazwa:
+                ruch = self.sprawdzIOgraniczJesliSzach(ruch)
+            else:
+                ruch['roszada'] = self.dajRoszade(self.obiekt_bierki)
             ruch = self.dajRuchyBezSzachow(ruch, self.obiekt_bierki)
 
         return ruch
+
+    def dajRoszade(self, obiekt_krola):
+        mozliwa_roszada = self.dajPolaDoRoszady(obiekt_krola)
+        return self.wykreslPolaBitePrzezPrzeciwnikow(obiekt_krola, mozliwa_roszada)
 
     def ruchDlaPiona(self, obiekt_bierki):
         mozliwe_ruchy = []
@@ -170,9 +180,9 @@ class MozliwoscRuchuBierki(object):
         }
 
     def ruchDlaKrola(self, obiektKrola):
-        # TODO roszada
         ruch_krzyzowy = self.ruchKrzyzowy(obiektKrola)
         ruch_poprzeczny = self.ruchPoprzeczny(obiektKrola)
+
         mozliwy_ruch = self.wykreslPolaBitePrzezPrzeciwnikow(obiektKrola, ruch_poprzeczny['ruch']+ruch_krzyzowy['ruch'])
         mozliwe_bicie = self.wykreslOslonieteBierki(obiektKrola, ruch_poprzeczny['bicie']+ruch_krzyzowy['bicie'])
         return {
@@ -187,6 +197,15 @@ class MozliwoscRuchuBierki(object):
             if bierka and bierka.kryta:
                 mozliwe_ruchy.remove(wspolrzedne)
         return mozliwe_ruchy
+
+    def dajPolaDoRoszady(self, obiekt_krola):
+        roszada = []
+        szerokosc = '1' if warunki_biale in obiekt_krola.nazwa else '8'
+        if self.narz_wyznacz_ruchow.czyMozliwaRoszadaDluga(obiekt_krola):
+            roszada.append('c'+szerokosc)
+        if self.narz_wyznacz_ruchow.czyMozliwaRoszadaKrotka(obiekt_krola):
+            roszada.append('g'+szerokosc)
+        return roszada
 
     def ruchPoprzeczny(self, obiekt_bierki):
         lista_ruchow = self.dajListyRuchowPoprzecznych(obiekt_bierki)

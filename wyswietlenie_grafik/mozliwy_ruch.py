@@ -28,20 +28,26 @@ class PodswietlMozliwePola(games.Sprite):
             y=self.pozycja_y
         )
 
+    def wykonajStandardowyUpdate(self):
+        self.wybrane = True
+        szukanie_bierek = NarzedziaSzukaniaBierek()
+        wspolrzedne = {
+            'x': self.pozycja_x,
+            'y': self.pozycja_y,
+        }
+
+        bita_bierka = szukanie_bierek.dajBierkePoPolu(self.pozycja)
+        if bita_bierka:
+            bita_bierka.zbita()
+
+        bierka = szukanie_bierek.dajZaznaczonaBierke()
+        return {'bierka': bierka, 'wspolrzedne': wspolrzedne}
+
     def update(self):
         if games.mouse.is_pressed(0) and myszNadObiektem(self):
-            self.wybrane = True
-            szukanie_bierek = NarzedziaSzukaniaBierek()
-            wspolrzedne = {
-                'x': self.pozycja_x,
-                'y': self.pozycja_y,
-            }
-
-            bita_bierka = szukanie_bierek.dajBierkePoPolu(self.pozycja)
-            if bita_bierka:
-                bita_bierka.zbita()
-
-            bierka = szukanie_bierek.dajZaznaczonaBierke()
+            slownik = self.wykonajStandardowyUpdate()
+            bierka = slownik['bierka']
+            wspolrzedne = slownik['wspolrzedne']
             bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
             ww = WarunkiWygranej(bierka)
             ww.sprawdzWarunkiWygranej()
@@ -59,3 +65,18 @@ class PodswietlMozliweBicie(PodswietlMozliwePola):
 
     def __init__(self, wspolrzedne):
         super(PodswietlMozliweBicie, self).__init__(PodswietlMozliweBicie, wspolrzedne)
+
+
+class PodswietlMozliweRoszady(PodswietlMozliwyRuch):
+
+    def __init__(self, wspolrzedne):
+        super(PodswietlMozliweRoszady, self).__init__(wspolrzedne)
+
+    def update(self):
+        if games.mouse.is_pressed(0) and myszNadObiektem(self):
+            slownik = self.wykonajStandardowyUpdate()
+            bierka = slownik['bierka']
+            wspolrzedne = slownik['wspolrzedne']
+            bierka.wykonajRoszade(wspolrzedne, self.pozycja)
+            ww = WarunkiWygranej(bierka)
+            ww.sprawdzWarunkiWygranej()
