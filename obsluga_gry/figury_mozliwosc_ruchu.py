@@ -71,8 +71,7 @@ class MozliwoscRuchuBierki(object):
 
     def dajRoszade(self, obiekt_krola):
         mozliwa_roszada = self.dajPolaDoRoszady(obiekt_krola)
-        mozliwa_roszada = self.wykreslPolaBitePrzezPrzeciwnikow(obiekt_krola, mozliwa_roszada)
-        return zmienListePolNaWspolrzedne(mozliwa_roszada)
+        return self.wykreslPolaBitePrzezPrzeciwnikow(obiekt_krola, mozliwa_roszada)
 
     def ruchDlaPiona(self, obiekt_bierki):
         mozliwe_ruchy = []

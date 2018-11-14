@@ -4,9 +4,8 @@
 import time
 from livewires import games
 
-from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie
+from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie, PodswietlMozliweRoszady
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
-from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale, warunki_czarne
@@ -32,14 +31,26 @@ class Figury(games.Sprite):
         self.stworzDuszka()
 
     def zmienUstawienieBierki(self, wspolrzedne, pozycja):
-        self.pozycja = pozycja
-        self.czy_poruszona = True
         self.zaznaczony = False
-        self.poruszBierka(wspolrzedne)
+        self.poruszBierka(wspolrzedne, pozycja)
         self.usunPodswietloneRuchy()
         KolejnoscRuchu.zmien_ture()
 
-    def poruszBierka(self, wspolrzedne):
+    def wykonajRoszade(self, wspolrzedne, pozycja):
+        from tools.narzedzia_figur import NarzedziaSzukaniaBierek
+
+        nsb = NarzedziaSzukaniaBierek()
+        szerokosc = 'a' if pozycja[0] == 'c' else 'h'
+        nowe_pole = 'd'+pozycja[1] if szerokosc == 'a' else 'f'+pozycja[1]
+        nowe_wspolrzedne = wyznaczWspolrzednePoPozycji(nowe_pole)
+
+        wieza = nsb.dajBierkePoPolu(szerokosc+pozycja[1])
+        wieza.poruszBierka(nowe_wspolrzedne, nowe_pole)
+        self.zmienUstawienieBierki(wspolrzedne, pozycja)
+
+    def poruszBierka(self, wspolrzedne, pozycja):
+        self.pozycja = pozycja
+        self.czy_poruszona = True
         self.pozycja_x = wspolrzedne['x']
         self.pozycja_y = wspolrzedne['y']
         self.set_position((self.pozycja_x, self.pozycja_y))
@@ -89,13 +100,15 @@ class Figury(games.Sprite):
             podswietlony_ruch.append(PodswietlMozliwyRuch(wspolrzedne))
         for wspolrzedne in ruchy_do_podswietlenia['bicie']:
             podswietlony_ruch.append(PodswietlMozliweBicie(wspolrzedne))
+        for wspolrzedne in ruchy_do_podswietlenia.get('roszada', []):
+            podswietlony_ruch.append(PodswietlMozliweRoszady(wspolrzedne))
         wyswietlObiektyNaEkranie(podswietlony_ruch)
 
     def zmienZaznaczenia(self):
         from tools.narzedzia_figur import NarzedziaSzukaniaBierek
-        narz_szukania_bierki = NarzedziaSzukaniaBierek()
 
-        bierka = narz_szukania_bierki.dajZaznaczonaBierke()
+        nsb = NarzedziaSzukaniaBierek()
+        bierka = nsb.dajZaznaczonaBierke()
         self.zaznaczony = True
         if bierka:
             bierka.zaznaczony = False

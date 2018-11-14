@@ -23,10 +23,10 @@ class NarzedziaWyznaczaniaRuchow(object):
         nsb = NarzedziaSzukaniaBierek()
         wieza = nsb.dajBierkePoPolu(pole)
         if wieza:
-            czy_nie_poruszone = not (obiekt_krola.czy_poruszona and wieza.czy_poruszona)
+            czy_nie_poruszone = not (obiekt_krola.czy_poruszona or wieza.czy_poruszona)
             czy_krol_nie_szachowany = bool(
                 not WarunkiWygranej.zagrozony_krol or
-                WarunkiWygranej.zagrozony_krol.nazwa != obiektKrola.nazwa
+                WarunkiWygranej.zagrozony_krol.nazwa != obiekt_krola.nazwa
             )
             return (
                 czy_nie_poruszone and
@@ -42,17 +42,16 @@ class NarzedziaWyznaczaniaRuchow(object):
         pole_b = naprawPole(pole_b)
 
         if pole_a[1] != pole_b[1]:
-            print('a: ' + pole_a + ' b: ' + pole_b)
-            raise Exception('Pola muszą być na tej samej wysokosci!')
+            return False
 
         idx_a = lista_szerokosci.index(pole_a[0])
         idx_b = lista_szerokosci.index(pole_b[0])
 
         if idx_a < idx_b:
-            minor_idx = idx_a
+            minor_idx = idx_a + 1
             max_idx = idx_b
         else:
-            minor_idx = idx_b
+            minor_idx = idx_b + 1
             max_idx = idx_a
 
         nsb = NarzedziaSzukaniaBierek()
