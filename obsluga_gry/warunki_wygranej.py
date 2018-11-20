@@ -36,7 +36,6 @@ class WarunkiWygranej(object):
 
     def sprawdzCzyPat(self):
         for bierka in self.bierki_broniace:
-            print(bierka.nazwa)
             mrb = MozliwoscRuchuBierki(bierka)
             pola = mrb.sprawdzMozliweRuchy()
             if pola['ruch'] or pola['bicie'] or pola.get('roszada'):
