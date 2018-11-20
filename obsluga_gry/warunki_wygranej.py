@@ -16,9 +16,6 @@ class WarunkiWygranej(object):
     bierka_bijaca = None
 
     def __init__(self, bierka):
-        from wyswietlenie_grafik.figury import Figury
-        ruch_bierek = MozliwoscRuchuBierki(bierka)
-
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
         self.kolor_ruszajacych = warunki_biale if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_czarne
         self.kolor_broniacych = warunki_czarne if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_biale
@@ -34,6 +31,17 @@ class WarunkiWygranej(object):
                 self.wyswietlKomunikat(komunikat, koniecGry)
             else:
                 self.wyswietlKomunikat('Szach!')
+        elif self.sprawdzCzyPat():
+            self.wyswietlKomunikat('Pat!', koniecGry)
+
+    def sprawdzCzyPat(self):
+        for bierka in self.bierki_broniace:
+            print(bierka.nazwa)
+            mrb = MozliwoscRuchuBierki(bierka)
+            pola = mrb.sprawdzMozliweRuchy()
+            if pola['ruch'] or pola['bicie'] or pola.get('roszada'):
+                return False
+        return True
 
     def sprawdzCzyMat(self):
         mozliwe_pola = {'ruch': [], 'bicie': []}
