@@ -35,11 +35,18 @@ class WarunkiWygranej(object):
             self.wyswietlKomunikat('Pat!', koniecGry)
 
     def sprawdzCzyPat(self):
+        if (
+            len(self.bierki_broniace) == 1 and len(self.bierki_ruszajace) == 1 and
+            'krol' in self.bierki_broniace[0].nazwa and 'krol' in self.bierki_ruszajace[0].nazwa
+        ):
+            return True
+
         for bierka in self.bierki_broniace:
             mrb = MozliwoscRuchuBierki(bierka)
             pola = mrb.sprawdzMozliweRuchy()
             if pola['ruch'] or pola['bicie'] or pola.get('roszada'):
                 return False
+
         return True
 
     def sprawdzCzyMat(self):

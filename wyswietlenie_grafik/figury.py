@@ -8,7 +8,7 @@ from .mozliwy_ruch import PodswietlMozliwyRuch, PodswietlMozliweBicie, Podswietl
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
-from obsluga_gry.config import warunki_biale, warunki_czarne
+from obsluga_gry.config import warunki_biale, warunki_czarne, szerokosc_ekranu
 
 
 class Figury(games.Sprite):
@@ -19,7 +19,7 @@ class Figury(games.Sprite):
         self.pozycja = pozycja
         self.pozycja_x = wspolrzedne['x']
         self.pozycja_y = wspolrzedne['y']
-        self.kolor = warunki_biale if self.pozycja_y > 400 else warunki_czarne
+        self.kolor = warunki_biale if self.pozycja_y > szerokosc_ekranu/2 else warunki_czarne
         self.nazwa = self.kolor + '_' + figura
         self.ikona = self.nadajIkone()
         self.mozliwe_ruchy = {'ruch': [], 'bicie': []}

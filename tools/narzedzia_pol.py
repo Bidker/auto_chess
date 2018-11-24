@@ -2,8 +2,35 @@
 # -*- coding: utf-8 -*-
 
 from livewires import games
+from math import fabs  # funkcja służąca do obliczania wartoci bezwzględnej
 
-from obsluga_gry.config import lista_szerokosci, lista_wysokosci, warunki_biale, warunki_czarne
+from obsluga_gry.config import (
+    lista_szerokosci,
+    lista_wysokosci,
+    warunki_biale,
+    warunki_czarne,
+    szerokosc_pola,
+    srodek_pola,
+)
+
+
+def dajOdlegloscPolaDoCentrum(pole):
+    pole = naprawPole(pole)
+    idx_szerokosci = lista_szerokosci.index(pole[0])
+    idx_wysokosci = lista_wysokosci.index(pole[1])
+    return 7 - fabs(3.5-idx_szerokosci) + fabs(3.5-idx_wysokosci)
+
+
+def dajOdlegloscMiedzyPolami(pole_a, pole_b):
+    pole_a = naprawPole(pole_a)
+    pole_b = naprawPole(pole_b)
+
+    idx_szrksc_a = lista_szerokosci.index(pole_a[0])
+    idx_szrksc_b = lista_szerokosci.index(pole_b[0])
+    idx_wsksc_a = lista_wysokosci.index(pole_a[1])
+    idx_wsksc_b = lista_wysokosci.index(pole_b[1])
+
+    return 7 - fabs(idx_szrksc_a-idx_szrksc_b) + fabs(idx_wsksc_a-idx_wsksc_b)
 
 
 def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
@@ -29,7 +56,7 @@ def wyznaczWspolrzednePoPozycji(pole):
 
 
 def dajWspolrzedna(i):
-    return (50+(i*100))
+    return (srodek_pola+(i*szerokosc_pola))
 
 
 def zmienListeWspolrzednychNaPolaZeSprawdzeniem(lista_wspolrzednych):
@@ -55,7 +82,7 @@ def zmienWspolrzedneNaPole(x, y):
 
 
 def dajIndexPola(wspolrzedna):
-    return int(((wspolrzedna - 50)/100))
+    return int(((wspolrzedna - srodek_pola)/szerokosc_pola))
 
 
 def myszNadObiektem(obiekt):
@@ -71,10 +98,10 @@ def myszNadObiektem(obiekt):
 
 def dajPunktyGranicznePola(obiekt):
     return {
-        'prawa': obiekt.pozycja_x + 49,
-        'lewa': obiekt.pozycja_x - 49,
-        'gorna': obiekt.pozycja_y + 49,
-        'dolna': obiekt.pozycja_y - 49,
+        'prawa': obiekt.pozycja_x + srodek_pola,
+        'lewa': obiekt.pozycja_x - srodek_pola,
+        'gorna': obiekt.pozycja_y + srodek_pola,
+        'dolna': obiekt.pozycja_y - srodek_pola,
     }
 
 
