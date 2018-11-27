@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from tools.narzedzia_pol import zmienWspolrzedneNaPole
+from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 
 from contextlib import contextmanager
@@ -15,7 +15,7 @@ def wykonajPseudobicie(bierka, ruch):
     with wykonajPseudoruch(bierka, ruch):
         bierka_bita.czy_zbita = True
         yield
-    bierka_bita.czy_zbita = False
+        bierka_bita.czy_zbita = False
 
 
 @contextmanager

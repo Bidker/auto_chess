@@ -9,7 +9,7 @@ from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 
 def dajWartoscMaterialna():
     wm = WartoscMaterialna()
-    return wm.dajWartoscMaterialnaCzarnych() - wm.dajWartoscMaterialnaCzarnych()
+    return wm.dajWartoscMaterialnaCzarnych() - wm.dajWartoscMaterialnaBialych()
 
 
 class WartoscMaterialna(object):

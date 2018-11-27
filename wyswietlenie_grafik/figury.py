@@ -76,11 +76,13 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
-        if games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony:
-            if KolejnoscRuchu.kolej_na in self.nazwa:  # TODO zmienić na warunki_biale
-                self.usunPodswietloneRuchy()
-                self.podswietlMozliweRuchy()
-                self.zmienZaznaczenia()
+        if (
+            games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony and
+            KolejnoscRuchu.kolej_na == warunki_biale and warunki_biale in self.nazwa
+        ):
+            self.usunPodswietloneRuchy()
+            self.podswietlMozliweRuchy()
+            self.zmienZaznaczenia()
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola

@@ -20,7 +20,7 @@ def dajWartoscPozycyjna():
 class KontrolerWartosciPozycyjnych(object):
 
     def dajWartoscPozycyjnaCzarnych(self):
-        pass
+        return 0
 
     def dajWartoscPozycyjnaBialych(self):
-        pass
+        return 0

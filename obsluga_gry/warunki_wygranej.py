@@ -15,7 +15,7 @@ class WarunkiWygranej(object):
     zagrozony_krol = None
     bierka_bijaca = None
 
-    def __init__(self, bierka):
+    def __init__(self):
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
         self.kolor_ruszajacych = warunki_biale if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_czarne
         self.kolor_broniacych = warunki_czarne if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_biale
@@ -29,10 +29,13 @@ class WarunkiWygranej(object):
                 kolor = self.kolor_ruszajacych.capitalize()
                 komunikat = 'Szach mat! ' + kolor + ' wygrał!'
                 self.wyswietlKomunikat(komunikat, koniecGry)
+                return True
             else:
                 self.wyswietlKomunikat('Szach!')
         elif self.sprawdzCzyPat():
             self.wyswietlKomunikat('Pat!', koniecGry)
+            return True
+        return False
 
     def sprawdzCzyPat(self):
         if (

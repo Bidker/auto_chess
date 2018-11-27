@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from .config import warunki_biale, warunki_czarne
-from algorytm.kontroler_obliczania_wartosci import uruchomAlgorytm
 from tools.narzedzia_matow import NarzedziaMatow
 
 
@@ -19,9 +18,6 @@ class KolejnoscRuchu(object):
             cls.licznik_ruchow += 1
         kr = cls()
         kr.sprawdzKrycieBierek()
-
-        if cls.kolej_na == warunki_czarne:
-            uruchomAlgorytm()
 
     def sprawdzKrycieBierek(self):
         from wyswietlenie_grafik.tworzenie_figur import ObiektyFigur

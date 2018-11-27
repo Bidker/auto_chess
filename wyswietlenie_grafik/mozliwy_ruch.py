@@ -6,6 +6,8 @@ from livewires import games
 from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji, zmienWspolrzedneNaPole
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from obsluga_gry.warunki_wygranej import WarunkiWygranej
+from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
+from obsluga_gry.config import warunki_czarne
 
 
 class PodswietlMozliwePola(games.Sprite):
@@ -49,8 +51,16 @@ class PodswietlMozliwePola(games.Sprite):
             bierka = slownik['bierka']
             wspolrzedne = slownik['wspolrzedne']
             bierka.zmienUstawienieBierki(wspolrzedne, self.pozycja)
-            ww = WarunkiWygranej(bierka)
-            ww.sprawdzWarunkiWygranej()
+            self.poUpdate()
+
+    def poUpdate(self):
+        from algorytm.kontroler_obliczania_wartosci import uruchomAlgorytm
+
+        ww = WarunkiWygranej()
+        czy_koniec_gry = ww.sprawdzWarunkiWygranej()
+
+        if KolejnoscRuchu.kolej_na == warunki_czarne and not czy_koniec_gry:
+            uruchomAlgorytm()
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):
@@ -78,5 +88,4 @@ class PodswietlMozliweRoszady(PodswietlMozliwyRuch):
             bierka = slownik['bierka']
             wspolrzedne = slownik['wspolrzedne']
             bierka.wykonajRoszade(wspolrzedne, self.pozycja)
-            ww = WarunkiWygranej(bierka)
-            ww.sprawdzWarunkiWygranej()
+            self.poUpdate()
