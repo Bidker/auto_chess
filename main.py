@@ -6,14 +6,12 @@ from PyQt5.QtWidgets import QGridLayout, QPushButton
 from PyQt5.QtCore import Qt
 
 from wyswietlenie_grafik.screen import rozpocznijGre
-from otwarcia.pokaz_otwarcia import PokazOtwarcia
 from funkcje_wyswietlania import konfiguracjaOkna
 
 
 class OknoStartoweSzachy(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        pokazOtwarcia = PokazOtwarcia()
         self.interfejs()
 
     def interfejs(self):

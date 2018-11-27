@@ -15,7 +15,7 @@ class WarunkiWygranej(object):
     zagrozony_krol = None
     bierka_bijaca = None
 
-    def __init__(self, bierka):
+    def __init__(self):
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
         self.kolor_ruszajacych = warunki_biale if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_czarne
         self.kolor_broniacych = warunki_czarne if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_biale
@@ -29,18 +29,27 @@ class WarunkiWygranej(object):
                 kolor = self.kolor_ruszajacych.capitalize()
                 komunikat = 'Szach mat! ' + kolor + ' wygrał!'
                 self.wyswietlKomunikat(komunikat, koniecGry)
+                return True
             else:
                 self.wyswietlKomunikat('Szach!')
         elif self.sprawdzCzyPat():
             self.wyswietlKomunikat('Pat!', koniecGry)
+            return True
+        return False
 
     def sprawdzCzyPat(self):
+        if (
+            len(self.bierki_broniace) == 1 and len(self.bierki_ruszajace) == 1 and
+            'krol' in self.bierki_broniace[0].nazwa and 'krol' in self.bierki_ruszajace[0].nazwa
+        ):
+            return True
+
         for bierka in self.bierki_broniace:
-            print(bierka.nazwa)
             mrb = MozliwoscRuchuBierki(bierka)
             pola = mrb.sprawdzMozliweRuchy()
             if pola['ruch'] or pola['bicie'] or pola.get('roszada'):
                 return False
+
         return True
 
     def sprawdzCzyMat(self):

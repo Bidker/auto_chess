@@ -57,3 +57,9 @@ class NarzedziaSzukaniaBierek(object):
 
     def dajBierkiPoSlowieKluczowym(self, slowo):
         return [bierka for bierka in self.lista_obiektow if slowo in bierka.nazwa]
+
+    def dajNieruszoneBierkiBezKroli(self):
+        return [bierka for bierka in self.lista_obiektow if not bierka.czy_poruszona and 'krol' not in bierka.nazwa]
+
+    def dajBierkiBezKroli(self):
+        return [bierka for bierka in self.lista_obiektow if 'krol' not in bierka.nazwa]

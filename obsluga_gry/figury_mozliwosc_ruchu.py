@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .config import lista_szerokosci, lista_wysokosci, warunki_biale, warunki_czarne
 from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji, czyWszpolrzedneWPolu
 from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, zmienListePolNaWspolrzedne
 from tools.narzedzia_pol import zmienListePolNaWspolrzedneZeSprawdzeniem, zmienListeWspolrzednychNaPolaZeSprawdzeniem
@@ -9,6 +8,13 @@ from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_matow import NarzedziaMatow
 from tools.narzedzia_szachow import czyKrolWSzachu
 from tools.narzedzia_wyznaczania_ruchow import NarzedziaWyznaczaniaRuchow
+from .config import (
+    lista_szerokosci,
+    lista_wysokosci,
+    warunki_biale,
+    warunki_czarne,
+    szerokosc_pola,
+)
 
 
 class MozliwoscRuchuBierki(object):
@@ -81,12 +87,12 @@ class MozliwoscRuchuBierki(object):
             if warunki_biale in obiekt_bierki.nazwa:
                 mozliwe_ruchy.append({
                     'x': obiekt_bierki.pozycja_x,
-                    'y': obiekt_bierki.pozycja_y - 100*ruch
+                    'y': obiekt_bierki.pozycja_y - szerokosc_pola*ruch
                 })
             else:
                 mozliwe_ruchy.append({
                     'x': obiekt_bierki.pozycja_x,
-                    'y': obiekt_bierki.pozycja_y + 100*ruch
+                    'y': obiekt_bierki.pozycja_y + szerokosc_pola*ruch
                 })
         mozliwe_ruchy = zmienListeWspolrzednychNaPolaZeSprawdzeniem(mozliwe_ruchy)
         mozliwe_ruchy = self.sprawdzCzyZawadzaPrzeciwnik(mozliwe_ruchy)
@@ -337,9 +343,9 @@ class MozliwoscRuchuBierki(object):
     def ustawWysokoscBiciaOJeden(self, cyfra_planszy, pola_atakowane, nazwa_bierki):
         index = lista_wysokosci.index(cyfra_planszy)
         for j, pole in enumerate(pola_atakowane):
-            if warunki_biale in nazwa_bierki and index != 0:
+            if warunki_biale in nazwa_bierki and index > 0:
                 pola_atakowane[j] = pole + lista_wysokosci[index - 1]
-            elif warunki_czarne in nazwa_bierki and index != len(lista_wysokosci):
+            elif warunki_czarne in nazwa_bierki and index < len(lista_wysokosci):
                 pola_atakowane[j] = pole + lista_wysokosci[index + 1]
         return pola_atakowane
 
@@ -357,10 +363,10 @@ class MozliwoscRuchuBierki(object):
         return ret
 
     def zmniejszWspolrzednaOXSetekPx(self, wspolrzedna, x):
-        return wspolrzedna - x*100
+        return wspolrzedna - x*szerokosc_pola
 
     def zwiekszWspolrzednaOXSetekPx(self, wspolrzedna, x):
-        return wspolrzedna + x*100
+        return wspolrzedna + x*szerokosc_pola
 
     def wykreslPolaBitePrzezPrzeciwnikow(self, obiektKrola, mozliwe_ruchy):
         if warunki_biale in obiektKrola.nazwa:

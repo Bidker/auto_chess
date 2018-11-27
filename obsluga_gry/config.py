@@ -8,6 +8,11 @@ warunki_czarne = 'czarny'
 lista_szerokosci = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 lista_wysokosci = ['8', '7', '6', '5', '4', '3', '2', '1']
 
+szerokosc_ekranu = 800
+wysokosc_ekranu = szerokosc_ekranu
+szerokosc_pola = szerokosc_ekranu/8
+srodek_pola = szerokosc_pola/2
+
 slownik_bierek = {
     'pion': [],
     'skoczek': [],
