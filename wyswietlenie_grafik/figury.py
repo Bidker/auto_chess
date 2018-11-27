@@ -77,7 +77,7 @@ class Figury(games.Sprite):
 
     def update(self):
         if games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony:
-            if KolejnoscRuchu.kolej_na in self.nazwa:
+            if KolejnoscRuchu.kolej_na in self.nazwa:  # TODO zmienić na warunki_biale
                 self.usunPodswietloneRuchy()
                 self.podswietlMozliweRuchy()
                 self.zmienZaznaczenia()
