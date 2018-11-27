@@ -67,4 +67,4 @@ def uruchomAlgorytm():
     wybierzIWykonajNajlepszyRuch()
 
     koniec = datetime.datetime.now() - czas
-    # print('koniec = ', str(koniec))
+    print('koniec = ', str(koniec))
