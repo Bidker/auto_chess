@@ -4,14 +4,6 @@
 
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from algorytm.faza_gry import FazaGry
-from algorytm.stale_wartosci import (
-    debiut,
-    gra_srodkowa,
-    wczesna_koncowka,
-    koncowka,
-    matowanie,
-    lista_pol_centralnych,
-)
 
 
 class BazowaKlasaWartosci(object):
