@@ -7,6 +7,7 @@ from .pseudoposuniecia import wykonajPseudoruch, wykonajPseudobicie, wykonajPseu
 from .obliczanie_wartosci_pozycyjnej.kontroler import dajWartoscPozycyjna
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_pol import zmienWspolrzedneNaPole
+from obsluga_gry.warunki_wygranej import WarunkiWygranej
 from obsluga_gry.config import warunki_czarne
 
 
@@ -42,6 +43,9 @@ def uruchomAlgorytm():
             bierka.zmienUstawienieBierki(wspolrzedne, pole)
         elif typ == 'roszada':
             bierka.wykonajRoszade(wspolrzedne, pole)
+
+        ww = WarunkiWygranej()
+        ww.sprawdzWarunkiWygranej()
 
     fg = FazaGry()
     fg.sprawdzFazeGry()
