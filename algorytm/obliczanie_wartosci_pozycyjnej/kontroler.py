@@ -7,20 +7,35 @@ from .skladniki.goniec import Goniec
 from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
 from .skladniki.krol import Krol
-from .skladniki.matowanie import Matowanie
-from .skladniki.inne_aspekty import InneAspekty'''
+from .skladniki.matowanie import Matowanie'''
+from .skladniki.inne_aspekty import InneAspekty
 from algorytm.faza_gry import FazaGry
+from obsluga_gry.config import warunki_biale, warunki_czarne
 
 
 def dajWartoscPozycyjna():
     kwp = KontrolerWartosciPozycyjnych()
-    return kwp.dajWartoscPozycyjnaCzarnych() - kwp.dajWartoscPozycyjnaBialych()
+    return kwp.dajCalkowitaWartoscPozycyjna()
 
 
 class KontrolerWartosciPozycyjnych(object):
+    roszada_wykonana = {
+        warunki_biale: False,
+        warunki_czarne: False,
+    }
+
+    def dajCalkowitaWartoscPozycyjna(self):
+        czarne = self.dajWartoscPozycyjnaCzarnych()
+        biale = self.dajWartoscPozycyjnaBialych()
+        print('wartosc bialych: ' + str(biale) + 'czarnych ' + str(czarne))
+        return czarne - biale
 
     def dajWartoscPozycyjnaCzarnych(self):
-        return 0
+        ia = InneAspekty(warunki_czarne)
+        inne_aspekty_pozycji = ia.dajWartoscPozycyjna()
+        return inne_aspekty_pozycji
 
     def dajWartoscPozycyjnaBialych(self):
-        return 0
+        ia = InneAspekty(warunki_biale)
+        inne_aspekty_pozycji = ia.dajWartoscPozycyjna()
+        return inne_aspekty_pozycji

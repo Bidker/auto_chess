@@ -38,6 +38,7 @@ class Figury(games.Sprite):
 
     def wykonajRoszade(self, wspolrzedne, pozycja):
         from tools.narzedzia_figur import NarzedziaSzukaniaBierek
+        from algorytm.obliczanie_wartosci_pozycyjnej.kontroler import KontrolerWartosciPozycyjnych
 
         nsb = NarzedziaSzukaniaBierek()
         szerokosc = 'a' if pozycja[0] == 'c' else 'h'
@@ -47,6 +48,8 @@ class Figury(games.Sprite):
         wieza = nsb.dajBierkePoPolu(szerokosc+pozycja[1])
         wieza.poruszBierka(nowe_wspolrzedne, nowe_pole)
         self.zmienUstawienieBierki(wspolrzedne, pozycja)
+
+        KontrolerWartosciPozycyjnych.roszada_wykonana[self.kolor] = True
 
     def poruszBierka(self, wspolrzedne, pozycja):
         self.pozycja = pozycja
