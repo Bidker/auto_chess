@@ -63,13 +63,16 @@ class WarunkiWygranej(object):
             return False
         return True
 
-    def dajZagrozonegoKrola(self):
+    def dajZagrozonegoKrola(self, zmien_wartosci=True):
         for bierka in self.bierki_ruszajace:
             zagrozony_krol = self.sprawdzCzyKrolZagrozonyPrzezBierke(bierka)
             if zagrozony_krol:
-                self._zmienWartosciKlasy(zagrozony_krol, bierka)
+                if zmien_wartosci:
+                    self._zmienWartosciKlasy(zagrozony_krol, bierka)
                 return zagrozony_krol
-        self._zmienWartosciKlasy()
+        if zmien_wartosci:
+            self._zmienWartosciKlasy()
+        return False
 
     def sprawdzCzyKrolZagrozonyPrzezBierke(self, bierka):
         mrb = MozliwoscRuchuBierki(bierka)

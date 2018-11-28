@@ -17,3 +17,6 @@ gra_srodkowa = 'gra srodkowa'
 wczesna_koncowka = 'wczesna koncowka'
 koncowka = 'koncowka'
 matowanie = 'matowanie'
+
+# centrum szachownicy
+lista_pol_centralnych = ["c4", "c5", "d4", "d5", "e4", "e5", "f4", "f5"]

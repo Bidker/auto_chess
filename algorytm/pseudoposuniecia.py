@@ -3,6 +3,7 @@
 
 from tools.narzedzia_pol import zmienWspolrzedneNaPole, wyznaczWspolrzednePoPozycji
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
+from .obliczanie_wartosci_pozycyjnej.kontroler import KontrolerWartosciPozycyjnych
 
 from contextlib import contextmanager
 
@@ -29,23 +30,28 @@ def wykonajPseudoroszade(bierka, ruch):
     wieza = nsb.dajBierkePoPolu(szerokosc+pozycja[1])
     with wykonajPseudoruch(wieza, nowe_wspolrzedne):
         with wykonajPseudoruch(bierka, ruch):
+            KontrolerWartosciPozycyjnych.roszada_wykonana[bierka.kolor] = True
             yield
+            KontrolerWartosciPozycyjnych.roszada_wykonana[bierka.kolor] = False
 
 
 @contextmanager
 def wykonajPseudoruch(bierka, ruch):
-    pozycje_wyjsciowe = {
+    dane_wyjsciowe = {
         'x': bierka.pozycja_x,
         'y': bierka.pozycja_y,
         'pozycja': bierka.pozycja,
+        'poruszona': bierka.czy_poruszona
     }
 
     bierka.pozycja = zmienWspolrzedneNaPole(x=ruch['x'], y=ruch['y'])
     bierka.pozycja_x = ruch['x']
     bierka.pozycja_y = ruch['y']
+    bierka.czy_poruszona = True
 
     yield
 
-    bierka.pozycja = pozycje_wyjsciowe['pozycja']
-    bierka.pozycja_x = pozycje_wyjsciowe['x']
-    bierka.pozycja_y = pozycje_wyjsciowe['y']
+    bierka.pozycja = dane_wyjsciowe['pozycja']
+    bierka.pozycja_x = dane_wyjsciowe['x']
+    bierka.pozycja_y = dane_wyjsciowe['y']
+    bierka.czy_poruszona = dane_wyjsciowe['poruszona']
