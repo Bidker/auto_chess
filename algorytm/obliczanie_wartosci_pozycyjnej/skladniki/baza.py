@@ -16,14 +16,6 @@ from algorytm.stale_wartosci import (
 
 class BazowaKlasaWartosci(object):
 
-    funkcje_obliczajace_wartosc = {
-        debiut: [],
-        gra_srodkowa: [],
-        wczesna_koncowka: [],
-        koncowka: [],
-        matowanie: [],
-    }
-
     def __init__(self, kolor):
         self.nsb = NarzedziaSzukaniaBierek()
         self.lista_bierek = self.nsb.dajBierkiPoSlowieKluczowym(kolor)
