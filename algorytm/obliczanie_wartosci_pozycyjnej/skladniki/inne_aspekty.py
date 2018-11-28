@@ -4,7 +4,7 @@
 
 from tools.narzedzia_pol import zmienWspolrzedneNaPole
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
-from obsluga_gry.config import figury_pola_startowe, wajunki_biale, warunki_czarne
+from obsluga_gry.config import figury_pola_startowe, warunki_biale, warunki_czarne
 from algorytm.stale_wartosci import (
     debiut,
     gra_srodkowa,

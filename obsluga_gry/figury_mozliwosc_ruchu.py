@@ -345,7 +345,7 @@ class MozliwoscRuchuBierki(object):
         for j, pole in enumerate(pola_atakowane):
             if warunki_biale in nazwa_bierki and index > 0:
                 pola_atakowane[j] = pole + lista_wysokosci[index - 1]
-            elif warunki_czarne in nazwa_bierki and index < len(lista_wysokosci):
+            elif warunki_czarne in nazwa_bierki and index < len(lista_wysokosci)-1:
                 pola_atakowane[j] = pole + lista_wysokosci[index + 1]
         return pola_atakowane
 

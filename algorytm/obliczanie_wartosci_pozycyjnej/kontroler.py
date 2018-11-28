@@ -25,10 +25,7 @@ class KontrolerWartosciPozycyjnych(object):
     }
 
     def dajCalkowitaWartoscPozycyjna(self):
-        czarne = self.dajWartoscPozycyjnaCzarnych()
-        biale = self.dajWartoscPozycyjnaBialych()
-        print('wartosc bialych: ' + str(biale) + 'czarnych ' + str(czarne))
-        return czarne - biale
+        return self.dajWartoscPozycyjnaCzarnych() - self.dajWartoscPozycyjnaBialych()
 
     def dajWartoscPozycyjnaCzarnych(self):
         ia = InneAspekty(warunki_czarne)
