@@ -10,7 +10,6 @@ class BazowaKlasaWartosci(object):
 
     def __init__(self, kolor):
         self.nsb = NarzedziaSzukaniaBierek()
-        self.lista_bierek = self.nsb.dajBierkiPoSlowieKluczowym(kolor)
         self.kolor = kolor
 
     def dajWartoscPozycyjna(self):
