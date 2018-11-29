@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-'''from .skladniki.pion import Pion
-from .skladniki.skoczek import Skoczek
+from .skladniki.pion import Pion
+'''from .skladniki.skoczek import Skoczek
 from .skladniki.goniec import Goniec
 from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
@@ -24,15 +24,17 @@ class KontrolerWartosciPozycyjnych(object):
         warunki_czarne: False,
     }
 
+    lista_klas = [
+        InneAspekty,
+        Pion,
+    ]
+
     def dajCalkowitaWartoscPozycyjna(self):
-        return self.dajWartoscPozycyjnaCzarnych() - self.dajWartoscPozycyjnaBialych()
+        return self.dajWartosciPozycyjnePoKolorze(warunki_czarne) - self.dajWartosciPozycyjnePoKolorze(warunki_biale)
 
-    def dajWartoscPozycyjnaCzarnych(self):
-        ia = InneAspekty(warunki_czarne)
-        inne_aspekty_pozycji = ia.dajWartoscPozycyjna()
-        return inne_aspekty_pozycji
-
-    def dajWartoscPozycyjnaBialych(self):
-        ia = InneAspekty(warunki_biale)
-        inne_aspekty_pozycji = ia.dajWartoscPozycyjna()
-        return inne_aspekty_pozycji
+    def dajWartosciPozycyjnePoKolorze(self, kolor):
+        wartosci = 0
+        for klasa in self.lista_klas:
+            obiekt = klasa(kolor)
+            wartosci += obiekt.dajWartoscPozycyjna()
+        return wartosci

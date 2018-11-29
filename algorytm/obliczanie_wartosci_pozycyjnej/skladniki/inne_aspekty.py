@@ -40,6 +40,10 @@ class InneAspekty(BazowaKlasaWartosci):
         ],
     }
 
+    def __init__(self, kolor):
+        super(InneAspekty, self).__init__(kolor)
+        self.lista_bierek = self.nsb.dajBierkiPoSlowieKluczowym(kolor)
+
     @staticmethod
     def obliczPunktyZaPozycje(**kwargs):
         self = kwargs['self']
