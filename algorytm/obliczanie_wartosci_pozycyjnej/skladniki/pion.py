@@ -52,9 +52,7 @@ class Pion(BazowaKlasaWartosci):
         super(Pion, self).__init__(kolor)
         self.lista_pionow = self.nsb.dajBierkiPoSlowieKluczowym(kolor+'_pion')
 
-    @staticmethod
-    def sprawdzIzolowanePiony(**kwargs):
-        self = kwargs['self']
+    def sprawdzIzolowanePiony(self):
         znak = '2' if self.kolor == warunki_biale else '7'
         wartosc = 0
 
@@ -75,9 +73,7 @@ class Pion(BazowaKlasaWartosci):
 
         return wartosc
 
-    @staticmethod
-    def sprawdzZdublowanePiony(**kwargs):
-        self = kwargs['self']
+    def sprawdzZdublowanePiony(self):
         slownik_kolumn = {}
         wartosc = 0
 
@@ -92,9 +88,7 @@ class Pion(BazowaKlasaWartosci):
 
         return wartosc
 
-    @staticmethod
-    def doliczPktZaCentrum(**kwargs):
-        self = kwargs['self']
+    def doliczPktZaCentrum(self):
         wartosc = 0
 
         for pion in self.lista_pionow:
@@ -105,9 +99,7 @@ class Pion(BazowaKlasaWartosci):
 
         return wartosc
 
-    @staticmethod
-    def sprawdzOdlegloscDoCentrum(**kwargs):
-        self = kwargs['self']
+    def sprawdzOdlegloscDoCentrum(self):
         wartosc = 0
 
         for pion in self.lista_pionow:
@@ -115,9 +107,7 @@ class Pion(BazowaKlasaWartosci):
 
         return wartosc
 
-    @staticmethod
-    def ocenaDebiutowa(**kwargs):
-        self = kwargs['self']
+    def ocenaDebiutowa(self):
         wartosc = 0
         poz_pionow_przed_kr_i_hetm = ['d2', 'e2'] if self.kolor == warunki_biale else ['d7', 'e7']
 
@@ -131,9 +121,7 @@ class Pion(BazowaKlasaWartosci):
 
         return wartosc
 
-    @staticmethod
-    def wplywKoncaPlanszy(**kwargs):
-        self = kwargs['self']
+    def wplywKoncaPlanszy(self):
         ostatnia_linia = '8' if self.kolor == warunki_biale else '1'
         warunki = 0
 

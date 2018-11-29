@@ -16,5 +16,5 @@ class BazowaKlasaWartosci(object):
         wartosc = 0
         for nazwa_funkcji in self.funkcje_obliczajace_wartosc[FazaGry.obecny_etap]:
             funkcja = getattr(self, nazwa_funkcji)
-            wartosc += funkcja.__call__(self=self)
+            wartosc += funkcja()
         return wartosc
