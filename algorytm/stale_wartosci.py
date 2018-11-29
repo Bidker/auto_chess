@@ -20,3 +20,5 @@ matowanie = 'matowanie'
 
 # centrum szachownicy
 lista_pol_centralnych = ["c4", "c5", "d4", "d5", "e4", "e5", "f4", "f5"]
+scisle_centrum = ["d4", "d5", "e4", "e5"]
+okolice_centrum = ["c4", "c5", "d3", "d6", "e3", "e6", "f4", "f5"]

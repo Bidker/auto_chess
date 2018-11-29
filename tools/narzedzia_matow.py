@@ -69,6 +69,8 @@ class NarzedziaMatow(object):
         elif self._dajIksowy(self.ww.zagrozony_krol):
             return self._dajOdpowiedniaLinieRuchuProstego()
 
+        return []
+
     def _dajOdpowiedniaLinieRuchuKrzyzowego(self):
         listy_ruchow = self.mrb.dajListyRuchowKrzyzowych(self.kryjaca)
         return self._dajListeDlaProstych(listy_ruchow)
