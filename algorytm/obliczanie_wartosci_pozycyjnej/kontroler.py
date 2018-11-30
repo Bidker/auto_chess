@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .skladniki.pion import Pion
-'''from .skladniki.skoczek import Skoczek
-from .skladniki.goniec import Goniec
+from .skladniki.skoczek import Skoczek
+'''from .skladniki.goniec import Goniec
 from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
 from .skladniki.krol import Krol
@@ -27,6 +27,7 @@ class KontrolerWartosciPozycyjnych(object):
     lista_klas = [
         InneAspekty,
         Pion,
+        Skoczek,
     ]
 
     def dajCalkowitaWartoscPozycyjna(self):
@@ -35,6 +36,7 @@ class KontrolerWartosciPozycyjnych(object):
     def dajWartosciPozycyjnePoKolorze(self, kolor):
         wartosci = 0
         for klasa in self.lista_klas:
-            obiekt = klasa(kolor)
-            wartosci += obiekt.dajWartoscPozycyjna()
+            if len(klasa.funkcje_obliczajace_wartosc[FazaGry.obecny_etap]):
+                obiekt = klasa(kolor)
+                wartosci += obiekt.dajWartoscPozycyjna()
         return wartosci
