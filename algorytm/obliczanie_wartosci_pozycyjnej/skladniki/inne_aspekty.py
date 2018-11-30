@@ -44,9 +44,7 @@ class InneAspekty(BazowaKlasaWartosci):
         super(InneAspekty, self).__init__(kolor)
         self.lista_bierek = self.nsb.dajBierkiPoSlowieKluczowym(kolor)
 
-    @staticmethod
-    def obliczPunktyZaPozycje(**kwargs):
-        self = kwargs['self']
+    def obliczPunktyZaPozycje(self):
         wartosc = 0
 
         for bierka in self.lista_bierek:
@@ -59,9 +57,7 @@ class InneAspekty(BazowaKlasaWartosci):
                 wartosc += 3
         return wartosc
 
-    @staticmethod
-    def wzorLevego(**kwargs):
-        self = kwargs['self']
+    def wzorLevego(self):
         hetman = self.nsb.dajBierkiPoSlowieKluczowym(self.kolor+'_hetman')
 
         D = 0
@@ -81,8 +77,7 @@ class InneAspekty(BazowaKlasaWartosci):
 
         return 20*D - (15*U + K*C)
 
-    @staticmethod
-    def sprawdzCzyMat(**kwargs):
+    def sprawdzCzyMat(self):
         from obsluga_gry.warunki_wygranej import WarunkiWygranej
 
         ww = WarunkiWygranej()
