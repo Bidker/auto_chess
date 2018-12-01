@@ -107,7 +107,7 @@ class InneAspekty(BazowaKlasaWartosci):
         if wieze[0].czy_poruszona:
             return sprawdzPoPozycji(wieze[0])
 
-        if wieze[1].czy_poruszona:
+        if len(wieze) == 2 and wieze[1].czy_poruszona:
             return sprawdzPoPozycji(wieze[1])
 
         return 20

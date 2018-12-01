@@ -6,9 +6,8 @@ from .skladniki.skoczek import Skoczek
 '''from .skladniki.goniec import Goniec
 from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
-from .skladniki.krol import Krol
-from .skladniki.matowanie import Matowanie'''
-from .skladniki.inne_aspekty import InneAspekty
+from .skladniki.krol import Krol'''
+from .skladniki.inne_aspekty import InneAspekty  # trzeba dodać matowanie
 from algorytm.faza_gry import FazaGry
 from obsluga_gry.config import warunki_biale, warunki_czarne
 

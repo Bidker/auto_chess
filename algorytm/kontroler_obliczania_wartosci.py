@@ -5,6 +5,7 @@ from .faza_gry import FazaGry
 from .ocena_materialna import dajWartoscMaterialna
 from .pseudoposuniecia import wykonajPseudoruch, wykonajPseudobicie, wykonajPseudoroszade
 from .obliczanie_wartosci_pozycyjnej.kontroler import dajWartoscPozycyjna
+from .obsluga_algorytmu import ObslugaAlgorytmu
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_pol import zmienWspolrzedneNaPole
 from obsluga_gry.warunki_wygranej import WarunkiWygranej
@@ -29,6 +30,8 @@ def uruchomAlgorytm():
         })
 
     def wybierzIWykonajNajlepszyRuch():
+        if not len(lst_wartosci):
+            return
         lst_wartosci.sort(key=lambda x: x['wartosc'], reverse=True)
         bierka = lst_wartosci[0]['bierka']
         wspolrzedne = lst_wartosci[0]['wspolrzedne']
@@ -70,5 +73,6 @@ def uruchomAlgorytm():
 
     wybierzIWykonajNajlepszyRuch()
 
+    ObslugaAlgorytmu.zniszczKomunikat()
     koniec = datetime.datetime.now() - czas
     print('czas obliczania = ', str(koniec))
