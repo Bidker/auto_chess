@@ -9,6 +9,7 @@ from tools.narzedzia_pol import myszNadObiektem, wyznaczWspolrzednePoPozycji
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale, warunki_czarne, szerokosc_ekranu
+from obsluga_gry.warunki_wygranej import WarunkiWygranej
 
 
 class Figury(games.Sprite):
@@ -22,7 +23,7 @@ class Figury(games.Sprite):
         self.kolor = warunki_biale if self.pozycja_y > szerokosc_ekranu/2 else warunki_czarne
         self.nazwa = self.kolor + '_' + figura
         self.ikona = self.nadajIkone()
-        self.mozliwe_ruchy = {'ruch': [], 'bicie': []}
+        self.mozliwe_ruchy = {'ruch': [], 'bicie': [], 'roszada': []}
         self.czy_poruszona = False
         self.czy_zbita = False
         self.zaznaczony = False
@@ -79,13 +80,28 @@ class Figury(games.Sprite):
         self.destroy()
 
     def update(self):
+        from algorytm.kontroler_obliczania_wartosci import uruchomAlgorytm
+        from algorytm.obsluga_algorytmu import ObslugaAlgorytmu
+
+        if (
+            KolejnoscRuchu.kolej_na == warunki_czarne and
+            not WarunkiWygranej.koniec_gry and
+            not ObslugaAlgorytmu.czy_uruchomiony
+        ):
+            ObslugaAlgorytmu.czy_uruchomiony = True
+            uruchomAlgorytm()
+            self.usunPodswietloneRuchy()
+
         if (
             games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony and
-            KolejnoscRuchu.kolej_na == warunki_biale and warunki_biale in self.nazwa
+            KolejnoscRuchu.kolej_na == warunki_biale and warunki_biale in self.nazwa and
+            not ObslugaAlgorytmu.czy_uruchomiony
         ):
             self.usunPodswietloneRuchy()
             self.podswietlMozliweRuchy()
             self.zmienZaznaczenia()
+
+        ObslugaAlgorytmu.czy_uruchomiony = False
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola

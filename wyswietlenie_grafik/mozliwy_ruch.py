@@ -54,13 +54,11 @@ class PodswietlMozliwePola(games.Sprite):
             self.poUpdate()
 
     def poUpdate(self):
-        from algorytm.kontroler_obliczania_wartosci import uruchomAlgorytm
+        from algorytm.obsluga_algorytmu import ObslugaAlgorytmu
 
         ww = WarunkiWygranej()
-        czy_koniec_gry = ww.sprawdzWarunkiWygranej()
-
-        if KolejnoscRuchu.kolej_na == warunki_czarne and not czy_koniec_gry:
-            uruchomAlgorytm()
+        ww.sprawdzWarunkiWygranej()
+        ObslugaAlgorytmu.wyswietlKomunikat()
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):

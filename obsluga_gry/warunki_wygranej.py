@@ -14,6 +14,7 @@ from obsluga_gry.etapy_gry import koniecGry
 class WarunkiWygranej(object):
     zagrozony_krol = None
     bierka_bijaca = None
+    koniec_gry = False
 
     def __init__(self):
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
@@ -28,14 +29,13 @@ class WarunkiWygranej(object):
             if self.sprawdzCzyMat():
                 kolor = self.kolor_ruszajacych.capitalize()
                 komunikat = 'Szach mat! ' + kolor + ' wygrał!'
+                self.koniec_gry = True
                 self.wyswietlKomunikat(komunikat, koniecGry)
-                return True
             else:
                 self.wyswietlKomunikat('Szach!')
         elif self.sprawdzCzyPat():
+            self.koniec_gry = True
             self.wyswietlKomunikat('Pat!', koniecGry)
-            return True
-        return False
 
     def sprawdzCzyPat(self):
         if (
