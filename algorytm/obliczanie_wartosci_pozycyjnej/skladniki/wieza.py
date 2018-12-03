@@ -5,4 +5,10 @@ from .baza import BazowaKlasaWartosci
 
 
 class Wieza(BazowaKlasaWartosci):
-    pass
+    funkcje_obliczajace_wartosc = {
+        debiut: [],
+        gra_srodkowa: [],
+        wczesna_koncowka: [],
+        koncowka: [],
+        matowanie: [],
+    }
