@@ -29,12 +29,12 @@ class WarunkiWygranej(object):
             if self.sprawdzCzyMat():
                 kolor = self.kolor_ruszajacych.capitalize()
                 komunikat = 'Szach mat! ' + kolor + ' wygrał!'
-                self.koniec_gry = True
+                WarunkiWygranej.koniec_gry = True
                 self.wyswietlKomunikat(komunikat, koniecGry)
             else:
                 self.wyswietlKomunikat('Szach!')
         elif self.sprawdzCzyPat():
-            self.koniec_gry = True
+            WarunkiWygranej.koniec_gry = True
             self.wyswietlKomunikat('Pat!', koniecGry)
 
     def sprawdzCzyPat(self):

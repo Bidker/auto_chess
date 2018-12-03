@@ -61,7 +61,7 @@ class Figury(games.Sprite):
 
     def nadajIkone(self):
         nazwa_ikony = 'wyswietlenie_grafik/Grafiki/'
-        nazwa_ikony += self.nazwa + '.jpg'
+        nazwa_ikony += self.nazwa + '.png'
         return nazwa_ikony
 
     def stworzDuszka(self):
@@ -88,9 +88,10 @@ class Figury(games.Sprite):
             not WarunkiWygranej.koniec_gry and
             not ObslugaAlgorytmu.czy_uruchomiony
         ):
-            ObslugaAlgorytmu.czy_uruchomiony = True
             uruchomAlgorytm()
+            ObslugaAlgorytmu.czy_uruchomiony = False
             self.usunPodswietloneRuchy()
+            return
 
         if (
             games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony and
@@ -100,8 +101,6 @@ class Figury(games.Sprite):
             self.usunPodswietloneRuchy()
             self.podswietlMozliweRuchy()
             self.zmienZaznaczenia()
-
-        ObslugaAlgorytmu.czy_uruchomiony = False
 
     def usunPodswietloneRuchy(self):
         from .mozliwy_ruch import PodswietlMozliwePola

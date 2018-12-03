@@ -3,8 +3,8 @@
 
 from .skladniki.pion import Pion
 from .skladniki.skoczek import Skoczek
-'''from .skladniki.goniec import Goniec
-from .skladniki.wieza import Wieza
+from .skladniki.goniec import Goniec
+'''from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
 from .skladniki.krol import Krol'''
 from .skladniki.inne_aspekty import InneAspekty  # trzeba dodać matowanie
@@ -27,6 +27,7 @@ class KontrolerWartosciPozycyjnych(object):
         InneAspekty,
         Pion,
         Skoczek,
+        Goniec,
     ]
 
     def dajCalkowitaWartoscPozycyjna(self):

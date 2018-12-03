@@ -62,14 +62,14 @@ class PodswietlMozliwePola(games.Sprite):
 
 
 class PodswietlMozliwyRuch(PodswietlMozliwePola):
-    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie.jpg'
+    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie.png'
 
     def __init__(self, wspolrzedne):
         super(PodswietlMozliwyRuch, self).__init__(PodswietlMozliwyRuch, wspolrzedne)
 
 
 class PodswietlMozliweBicie(PodswietlMozliwePola):
-    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie_bicia.jpg'
+    ikona = 'wyswietlenie_grafik/Grafiki/podswietlenie_bicia.png'
 
     def __init__(self, wspolrzedne):
         super(PodswietlMozliweBicie, self).__init__(PodswietlMozliweBicie, wspolrzedne)
