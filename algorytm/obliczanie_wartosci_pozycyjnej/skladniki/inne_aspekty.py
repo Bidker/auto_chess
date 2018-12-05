@@ -22,10 +22,12 @@ class InneAspekty(BazowaKlasaWartosci):
         debiut: [
             'obliczPunktyZaPozycje',
             'wzorLevego',
+            'sprawdzCzyMat',
         ],
         gra_srodkowa: [
             'obliczPunktyZaPozycje',
             'wzorLevego',
+            'sprawdzCzyMat',
         ],
         wczesna_koncowka: [
             'obliczPunktyZaPozycje',
@@ -80,9 +82,11 @@ class InneAspekty(BazowaKlasaWartosci):
     def sprawdzCzyMat(self):
         from obsluga_gry.warunki_wygranej import WarunkiWygranej
 
-        ww = WarunkiWygranej()
-        if ww.dajZagrozonegoKrola(zmien_wartosci=False) and ww.sprawdzCzyMat():
-            return 20000
+        ww = WarunkiWygranej(self.kolor)
+        if ww.dajZagrozonegoKrola(zmien_wartosci=False):
+            if ww.sprawdzCzyMat():
+                # mniejsza od 0 ponieważ sprawdzenie czy ruch dał mata dopiero przy sprawdzeniu kolejnego półruchu
+                return -20000
 
         return 0
 

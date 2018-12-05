@@ -30,8 +30,6 @@ def uruchomAlgorytm():
         })
 
     def wybierzIWykonajNajlepszyRuch():
-        if not len(lst_wartosci):
-            return
         lst_wartosci.sort(key=lambda x: x['wartosc'], reverse=True)
         bierka = lst_wartosci[0]['bierka']
         wspolrzedne = lst_wartosci[0]['wspolrzedne']
