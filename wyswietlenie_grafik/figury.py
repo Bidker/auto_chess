@@ -94,7 +94,7 @@ class Figury(games.Sprite):
         if (
             games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony and
             KolejnoscRuchu.kolej_na == warunki_biale and warunki_biale in self.nazwa and
-            not ObslugaAlgorytmu.czy_uruchomiony
+            not ObslugaAlgorytmu.czy_uruchomiony and not self.czy_zbita
         ):
             self.usunPodswietloneRuchy()
             self.podswietlMozliweRuchy()
