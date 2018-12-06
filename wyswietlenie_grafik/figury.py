@@ -90,8 +90,6 @@ class Figury(games.Sprite):
         ):
             uruchomAlgorytm()
             ObslugaAlgorytmu.czy_uruchomiony = False
-            self.usunPodswietloneRuchy()
-            return
 
         if (
             games.mouse.is_pressed(0) and myszNadObiektem(self) and not self.zaznaczony and

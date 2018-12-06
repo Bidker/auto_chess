@@ -16,10 +16,12 @@ class WarunkiWygranej(object):
     bierka_bijaca = None
     koniec_gry = False
 
-    def __init__(self):
+    def __init__(self, kolor=None):
+        if not kolor:
+            kolor = KolejnoscRuchu.kolej_na
         self.szukanie_bierek = NarzedziaSzukaniaBierek()
-        self.kolor_ruszajacych = warunki_biale if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_czarne
-        self.kolor_broniacych = warunki_czarne if warunki_czarne == KolejnoscRuchu.kolej_na else warunki_biale
+        self.kolor_ruszajacych = warunki_biale if warunki_czarne == kolor else warunki_czarne
+        self.kolor_broniacych = warunki_czarne if warunki_czarne == kolor else warunki_biale
         self.bierki_ruszajace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(self.kolor_ruszajacych)
         self.bierki_broniace = self.szukanie_bierek.dajBierkiPoSlowieKluczowym(self.kolor_broniacych)
 
@@ -54,13 +56,17 @@ class WarunkiWygranej(object):
 
     def sprawdzCzyMat(self):
         mozliwe_pola = {'ruch': [], 'bicie': []}
+        prawdziwy_zagrozony = WarunkiWygranej.zagrozony_krol
+        self.dajZagrozonegoKrola()
         for bierka in self.bierki_broniace:
             mrb = MozliwoscRuchuBierki(bierka)
             pola = mrb.sprawdzMozliweRuchy()
             mozliwe_pola['ruch'].extend(pola['ruch'])
             mozliwe_pola['bicie'].extend(pola['bicie'])
         if mozliwe_pola['ruch'] or mozliwe_pola['bicie']:
+            WarunkiWygranej.zagrozony_krol = prawdziwy_zagrozony
             return False
+        WarunkiWygranej.zagrozony_krol = prawdziwy_zagrozony
         return True
 
     def dajZagrozonegoKrola(self, zmien_wartosci=True):
