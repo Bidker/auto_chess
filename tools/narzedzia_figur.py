@@ -70,3 +70,10 @@ class NarzedziaSzukaniaBierek(object):
             if slowo_kluczowe in bierka.nazwa and kolumna in bierka.pozycja:
                 lst_bierek.append(bierka)
         return lst_bierek
+
+    def dajBierkiZPolPoSlowie(self, slowo_kluczowe, lst_pol):
+        lst_bierek = []
+        for bierka in self.lista_obiektow:
+            if slowo_kluczowe in bierka.nazwa and bierka.pozycja in lst_pol:
+                lst_bierek.append(bierka)
+        return lst_bierek
