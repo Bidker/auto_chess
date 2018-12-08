@@ -7,8 +7,10 @@ from .skladniki.goniec import Goniec
 from .skladniki.wieza import Wieza
 from .skladniki.hetman import Hetman
 from .skladniki.krol import Krol
-from .skladniki.inne_aspekty import InneAspekty  # trzeba dodać matowanie
+from .skladniki.inne_aspekty import InneAspekty
+from .skladniki.matowanie import Matowanie
 from algorytm.faza_gry import FazaGry
+from algorytm.stale_wartosci import matowanie
 from obsluga_gry.config import warunki_biale, warunki_czarne
 
 
@@ -34,7 +36,10 @@ class KontrolerWartosciPozycyjnych(object):
     ]
 
     def dajCalkowitaWartoscPozycyjna(self):
-        return self.dajWartosciPozycyjnePoKolorze(warunki_czarne) - self.dajWartosciPozycyjnePoKolorze(warunki_biale)
+        wartosc = self.dajWartosciPozycyjnePoKolorze(warunki_czarne) - self.dajWartosciPozycyjnePoKolorze(warunki_biale)
+        if FazaGry.obecny_etap == matowanie:
+            wartosc += Matowanie().dajWartoscPozycyjna()
+        return wartosc
 
     def dajWartosciPozycyjnePoKolorze(self, kolor):
         wartosci = 0

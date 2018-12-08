@@ -102,19 +102,21 @@ class Wieza(BazowaKlasaWartosci):
         return wartosc
 
     def poloczoneWieze(self):
-        odleglosc = dajOdlegloscMiedzyPolami(self.lista_wiez[0].pozycja, self.lista_wiez[1].pozycja)
-        if odleglosc == 1:
-            return 20
+        if len(self.lista_wiez) >= 2:
+            odleglosc = dajOdlegloscMiedzyPolami(self.lista_wiez[0].pozycja, self.lista_wiez[1].pozycja)
+            if odleglosc == 1:
+                return 20
         return 0
 
     def zdublowaneWieze(self):
-        if (
-            self.lista_wiez[0].pozycja[0] == self.lista_wiez[1].pozycja[0] or
-            self.lista_wiez[0].pozycja[1] == self.lista_wiez[1].pozycja[1]
-        ):
-            nm = NarzedziaMatow(self.lista_wiez[0])
-            if nm.sprawdzKrycieBierek(self.lista_wiez[1]):
-                return 20
+        if len(self.lista_wiez) >= 2:
+            if (
+                self.lista_wiez[0].pozycja[0] == self.lista_wiez[1].pozycja[0] or
+                self.lista_wiez[0].pozycja[1] == self.lista_wiez[1].pozycja[1]
+            ):
+                nm = NarzedziaMatow(self.lista_wiez[0])
+                if nm.sprawdzKrycieBierek(self.lista_wiez[1]):
+                    return 20
         return 0
 
     def wiezaNaPrzedostatniejLini(self):

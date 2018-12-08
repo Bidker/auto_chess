@@ -18,7 +18,7 @@ def dajOdlegloscPolaDoCentrum(pole):
     pole = naprawPole(pole)
     idx_szerokosci = lista_szerokosci.index(pole[0])
     idx_wysokosci = lista_wysokosci.index(pole[1])
-    return fabs(3.5-idx_szerokosci) + fabs(3.5-idx_wysokosci)
+    return -(fabs(3.5-idx_szerokosci) + fabs(3.5-idx_wysokosci))
 
 
 def dajOdlegloscMiedzyPolami(pole_a, pole_b):
@@ -30,7 +30,7 @@ def dajOdlegloscMiedzyPolami(pole_a, pole_b):
     idx_wsksc_a = lista_wysokosci.index(pole_a[1])
     idx_wsksc_b = lista_wysokosci.index(pole_b[1])
 
-    return fabs(idx_szrksc_a-idx_szrksc_b) + fabs(idx_wsksc_a-idx_wsksc_b)
+    return -(fabs(idx_szrksc_a-idx_szrksc_b) + fabs(idx_wsksc_a-idx_wsksc_b))
 
 
 def zmienListePolNaWspolrzedneZeSprawdzeniem(lista_pol):
