@@ -40,7 +40,7 @@ class Hetman(BazowaKlasaWartosci):
 
     def odlegloscHetmanaOdCentrum(self):
         wspolczynnik = {
-            debiut: -2,
+            debiut: -4,
             wczesna_koncowka: 2,
             koncowka: 4,
         }

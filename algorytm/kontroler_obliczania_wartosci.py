@@ -12,6 +12,11 @@ from obsluga_gry.warunki_wygranej import WarunkiWygranej
 from obsluga_gry.config import warunki_czarne
 
 
+class WartoscPlanszy(object):
+    wartosc_materialna = None
+    wartosc_pozycyjna = None
+
+
 def uruchomAlgorytm():
     from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 
@@ -20,10 +25,10 @@ def uruchomAlgorytm():
     # sa trzymane w liscie slownikow, gdzie wartosc bedze wartoscia ruchu, bierka, pozycja wspolrzednymi i typ ruchu
 
     def zapiszWartosci(bierka, ruch, typ):
-        wartosc_pozycyjna = dajWartoscPozycyjna()
-        wartosc_materialna = dajWartoscMaterialna()
+        WartoscPlanszy.wartosc_pozycyjna = dajWartoscPozycyjna()
+        WartoscPlanszy.wartosc_materialna = dajWartoscMaterialna()
         lst_wartosci.append({
-            'wartosc': wartosc_pozycyjna+wartosc_materialna,
+            'wartosc': WartoscPlanszy.wartosc_pozycyjna+WartoscPlanszy.wartosc_materialna,
             'bierka': bierka,
             'wspolrzedne': ruch,
             'typ_ruchu': typ,
@@ -73,4 +78,4 @@ def uruchomAlgorytm():
 
     ObslugaAlgorytmu.zniszczKomunikat()
     koniec = datetime.datetime.now() - czas
-    print('czas obliczania = ', str(koniec))
+    print('Czas obliczania w fazie ' + FazaGry.obecny_etap + ' = ' + str(koniec))

@@ -73,6 +73,8 @@ class InneAspekty(BazowaKlasaWartosci):
                 ('skoczek' in bierka.nazwa or 'goniec' in bierka.nazwa or 'wieza' in bierka.nazwa)
             ):
                 U += 1
+        if not len(hetman) or not hetman[0].czy_poruszona:
+            U = 0
 
         K = self._dajWartoscDlaRoszady()
         C = self._dajWartoscZaWrogiegoHetmana()
@@ -103,10 +105,13 @@ class InneAspekty(BazowaKlasaWartosci):
             return 0
 
         krol = self.nsb.dajBierkiPoSlowieKluczowym(self.kolor+'_krol')[0]
-        if krol.czy_poruszona:
+        wieze = self.nsb.dajBierkiPoSlowieKluczowym(self.kolor+'_wieza')
+
+        if krol.czy_poruszona or not len(wieze):
             return 20
 
-        wieze = self.nsb.dajBierkiPoSlowieKluczowym(self.kolor+'_wieza')
+        if len(wieze) == 2 and not wieze[0].czy_poruszona and not wieze[1].czy_poruszona:
+            return 3
 
         if wieze[0].czy_poruszona:
             return sprawdzPoPozycji(wieze[0])
