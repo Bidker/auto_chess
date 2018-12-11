@@ -5,6 +5,7 @@ from livewires import games, color
 
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_pol import zmienListeWspolrzednychNaPola, czyPoleNaBiciu
+from tools.narzedzia_statystyk import NarzedziaStatystyk
 from obsluga_gry.figury_mozliwosc_ruchu import MozliwoscRuchuBierki
 from obsluga_gry.kolejnosc_ruchu import KolejnoscRuchu
 from obsluga_gry.config import warunki_biale, warunki_czarne
@@ -38,6 +39,8 @@ class WarunkiWygranej(object):
         elif self.sprawdzCzyPat():
             WarunkiWygranej.koniec_gry = True
             self.wyswietlKomunikat('Pat!', koniecGry)
+        if WarunkiWygranej.koniec_gry:
+            NarzedziaStatystyk.wyswietlCzasy()
 
     def sprawdzCzyPat(self):
         if (

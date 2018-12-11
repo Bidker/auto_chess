@@ -19,7 +19,7 @@ class FazaGry(object):
     def sprawdzFazeGry(self):
         lst_nieporuszonych = self.nsb.dajNieruszoneBierkiBezKroli()
 
-        if len(lst_nieporuszonych) >= 20:
+        if len(lst_nieporuszonych) >= 18:
             FazaGry.obecny_etap = debiut
         else:
             now = NarzedziaObliczaniaWartosci()
