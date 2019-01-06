@@ -21,12 +21,12 @@ class InneAspekty(BazowaKlasaWartosci):
     funkcje_obliczajace_wartosc = {
         debiut: [
             'obliczPunktyZaPozycje',
-            'wzorLevego',
+            'wzorLevygo',
             'sprawdzCzyMat',
         ],
         gra_srodkowa: [
             'obliczPunktyZaPozycje',
-            'wzorLevego',
+            'wzorLevygo',
             'sprawdzCzyMat',
         ],
         wczesna_koncowka: [
@@ -59,7 +59,7 @@ class InneAspekty(BazowaKlasaWartosci):
                 wartosc += 3
         return wartosc
 
-    def wzorLevego(self):
+    def wzorLevygo(self):
         hetman = self.nsb.dajBierkiPoSlowieKluczowym(self.kolor+'_hetman')
 
         D = 0

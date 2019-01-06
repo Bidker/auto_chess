@@ -70,7 +70,7 @@ class Goniec(BazowaKlasaWartosci):
                 wartosc += wartosci_bierek[bierka.nazwa]
 
             # obliczanie OM i OW
-            wartosc += self._obliczWartoscOM(goniec)
+            wartosc += self._obliczWartoscOMiOW(goniec)
 
             # obliczanie DL
             mrb = MozliwoscRuchuBierki(goniec)
@@ -78,7 +78,7 @@ class Goniec(BazowaKlasaWartosci):
 
         return wspolczynnik[FazaGry.obecny_etap] * wartosc
 
-    def _obliczWartoscOM(self, goniec):
+    def _obliczWartoscOMiOW(self, goniec):
         wartosc = 0
         for bierka in self.lista_sojusznikow:
             if 'pion' in bierka.nazwa:
