@@ -8,6 +8,7 @@ from .obliczanie_wartosci_pozycyjnej.kontroler import dajWartoscPozycyjna
 from .obsluga_algorytmu import ObslugaAlgorytmu
 from tools.narzedzia_figur import NarzedziaSzukaniaBierek
 from tools.narzedzia_pol import zmienWspolrzedneNaPole
+from tools.narzedzia_statystyk import NarzedziaStatystyk
 from obsluga_gry.warunki_wygranej import WarunkiWygranej
 from obsluga_gry.config import warunki_czarne
 
@@ -50,9 +51,6 @@ def uruchomAlgorytm():
         elif typ == 'roszada':
             bierka.wykonajRoszade(wspolrzedne, pole)
 
-        ww = WarunkiWygranej()
-        ww.sprawdzWarunkiWygranej()
-
     fg = FazaGry()
     fg.sprawdzFazeGry()
     lst_brk_cz = nsb.dajBierkiPoSlowieKluczowym(warunki_czarne)
@@ -79,3 +77,7 @@ def uruchomAlgorytm():
     ObslugaAlgorytmu.zniszczKomunikat()
     koniec = datetime.datetime.now() - czas
     print('Czas obliczania w fazie ' + FazaGry.obecny_etap + ' = ' + str(koniec))
+    NarzedziaStatystyk.zapiszCzasWykonania(koniec)
+
+    ww = WarunkiWygranej()
+    ww.sprawdzWarunkiWygranej()

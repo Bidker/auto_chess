@@ -40,12 +40,3 @@ figury_pola_startowe = {
         'krol': ['e8'],
     },
 }
-
-figury_wagi = {
-    'pion': 1,
-    'skoczek': 3,
-    'goniec': 3,
-    'wieza': 4.5,
-    'hetman': 8,
-    'krol': None,
-}

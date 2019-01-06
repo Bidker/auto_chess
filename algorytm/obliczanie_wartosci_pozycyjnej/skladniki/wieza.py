@@ -129,7 +129,7 @@ class Wieza(BazowaKlasaWartosci):
                 wartosc += 27
                 kolor_wroga = warunki_biale if self.kolor == warunki_czarne else warunki_biale
                 krol_wroga = self.nsb.dajBierkiPoSlowieKluczowym(kolor_wroga+'_krol')[0]
-                if ostatnia_lini in akrol_wroga.pozycja:
+                if ostatnia_linia in krol_wroga.pozycja:
                     wartosc += 13
 
         return wartosc
